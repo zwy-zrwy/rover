@@ -1,0 +1,39 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>消息推送</h2>
+      <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">消息推送</a></li>
+            <li><a href="index.php?act=wechat&op=wx_corn_list">推送列表</a></li>
+            <li class=""><a href="index.php?act=wechat&op=wx_user">测试会员</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form name="theForm" method="post" action="index.php?act=wechat&op=wx_corn&id={$corn.id}">
+        <table class="table">
+        <tbody>
+        <tr>
+          <td>文章ID:</td>
+          <td>
+            <input type="text" size="100" name="artid" value="{$corn.content}" />
+            <p>直接填写文章编号多个使用“,”分割</p>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            <input type="submit" value="确定" class="btn" />
+          </td>
+        </tr>
+        </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

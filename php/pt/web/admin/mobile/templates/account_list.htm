@@ -1,0 +1,91 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>会员帐户变动明细</h2>
+      <p><a class="btn" href="index.php?act=account_log&op=add&user_id={$smarty.get.user_id}">调节会员帐户</a></p>
+      <div class="tab_navs">
+          <ul>
+            <li{if $account_type eq ''} class="cur"{/if}><a href="index.php?act=account_log&op=list&user_id={$smarty.get.user_id}">所有帐户</a></li>
+          <li{if $account_type eq 'user_money'} class="cur"{/if}><a href="index.php?act=account_log&op=list&account_type=user_money&user_id={$smarty.get.user_id}">可用资金帐户</a></li>
+          <li{if $account_type eq 'frozen_money'} class="cur"{/if}><a href="index.php?act=account_log&op=list&account_type=frozen_money&user_id={$smarty.get.user_id}">冻结资金帐户</a></li>
+          <li{if $account_type eq 'rank_points'} class="cur"{/if}><a href="index.php?act=account_log&op=list&account_type=rank_points&user_id={$smarty.get.user_id}">等级积分帐户</a></li>
+          <li{if $account_type eq 'pay_points'} class="cur"{/if}><a href="index.php?act=account_log&op=list&account_type=pay_points&user_id={$smarty.get.user_id}">消费积分帐户</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight_box">
+      <p class="desc">
+        <span>当前会员:{$user.nickname}</span>
+        <span>可用资金帐户:{$user.formated_user_money}</span>
+        <span> 冻结资金帐户:{$user.formated_frozen_money}</span>
+        <span>等级积分帐户:{$user.rank_points}</span>
+        <span>消费积分帐户:{$user.pay_points}</span>
+      </p>
+    </div>
+    <div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th width="20%">帐户变动时间</th>
+          <th width="30%">帐户变动原因</th>
+          <th>可用资金帐户</th>
+          <th>冻结资金帐户</th>
+          <th>等级积分帐户</th>
+          <th>消费积分帐户</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$account_list item=account}
+        <tr>
+          <td>{$account.change_time}</td>
+          <td>{$account.change_desc|escape:html}</td>
+          <td align="right">
+            {if $account.user_money gt 0}
+              <span style="color:#0000FF">+{$account.user_money}</span>
+            {elseif $account.user_money lt 0}
+              <span style="color:#FF0000">{$account.user_money}</span>
+            {else}
+              {$account.user_money}
+            {/if}
+          </td>
+          <td align="right">
+            {if $account.frozen_money gt 0}
+              <span style="color:#0000FF">+{$account.frozen_money}</span>
+            {elseif $account.frozen_money lt 0}
+              <span style="color:#FF0000">{$account.frozen_money}</span>
+            {else}
+              {$account.frozen_money}
+            {/if}
+          </td>
+          <td align="right">
+            {if $account.rank_points gt 0}
+              <span style="color:#0000FF">+{$account.rank_points}</span>
+            {elseif $account.rank_points lt 0}
+              <span style="color:#FF0000">{$account.rank_points}</span>
+            {else}
+              {$account.rank_points}
+            {/if}
+          </td>
+          <td align="right">
+            {if $account.pay_points gt 0}
+              <span style="color:#0000FF">+{$account.pay_points}</span>
+            {elseif $account.pay_points lt 0}
+              <span style="color:#FF0000">{$account.pay_points}</span>
+            {else}
+              {$account.pay_points}
+            {/if}
+          </td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+
+
+      <div class="pagination">
+        {$pager}
+      </div>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

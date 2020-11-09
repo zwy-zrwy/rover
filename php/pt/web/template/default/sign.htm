@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>签到有礼</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/sign.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<script type="text/javascript">
+  $(function() {
+    var dateArray = {$a};
+    var signFun = function() {
+
+         // 假设已经签到的
+        
+        var $dateBox = $("#js-qiandao-list"),
+            $currentDate = $(".current-date"),
+            $qiandaoBnt = $("#js-just-qiandao"),
+            _html = '',
+            _handle = true,
+            myDate = new Date();
+        $currentDate.text(myDate.getFullYear() + '年' + parseInt(myDate.getMonth() + 1) + '月' + myDate.getDate() + '日');
+
+        var monthFirst = new Date(myDate.getFullYear(), parseInt(myDate.getMonth()), 1).getDay();
+
+        var d = new Date(myDate.getFullYear(), parseInt(myDate.getMonth() + 1), 0);
+        var totalDay = d.getDate(); //获取当前月的天数
+
+        for (var i = 0; i < 42; i++) {
+            _html += ' <li><font></font><div class="qiandao-icon"></div></li>'
+        }
+        $dateBox.html(_html) //生成日历网格
+
+        var $dateLi = $dateBox.find("li");
+        var $dateFont = $dateBox.find("font");
+        for (var i = 0; i < totalDay; i++) {
+            $dateLi.eq(i + monthFirst).addClass("date" + parseInt(i + 1));
+            $dateFont.eq(i + monthFirst).text(parseInt(i + 1));
+            for (var j = 0; j < dateArray.length; j++) {
+                if (i == dateArray[j]) {
+                    $dateLi.eq(i + monthFirst).addClass("qiandao");
+                }
+            }
+        } //生成当月的日历且含已签到
+
+        $(".date" + myDate.getDate()).addClass('able-qiandao');
+
+        $dateBox.on("click", "li", function() {
+                if ($(this).hasClass('able-qiandao') && _handle) {
+                    $(this).addClass('qiandao');
+                    $.ajax({
+                        type: 'POST',
+                        data: {},
+                        url: 'index.php?c=sign&a=sign',
+                        dataType: 'json',
+                        success: function(data){
+                            if(data.err == 0){
+                                $qiandaoBnt.addClass('actived');
+                                $qiandaoBnt.text('已签到');
+                                $(".date" + myDate.getDate()).addClass('qiandao');
+                                layer.open({content: data.message,skin: 'msg',time: 2});
+                                _handle = false;
+                            }else{
+                               layer.open({content: data.message,skin: 'msg',time: 2});
+                            }
+                        }
+                    });
+                    
+                }
+            }) //签到
+
+        $qiandaoBnt.on("click", function() {
+            if (_handle) {
+                $.ajax({
+                    type: 'POST',
+                    data: {},
+                    url: 'index.php?c=sign&a=sign',
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.err == 0){
+                            $qiandaoBnt.addClass('actived');
+                            $qiandaoBnt.text('已签到');
+                            $(".date" + myDate.getDate()).addClass('qiandao');
+                            layer.open({content: data.message,skin: 'msg',time: 2});
+                            _handle = false;
+                        }else{
+                           layer.open({content: data.message,skin: 'msg',time: 2});
+                        }
+                    }
+                });
+            }
+        }); //签到
+
+        function qiandaoFun(data) {
+            if(data.err == 0){
+                $qiandaoBnt.addClass('actived');
+                $qiandaoBnt.text('已签到');
+                $(".date" + myDate.getDate()).addClass('qiandao');
+                layer.open({content: data.message,skin: 'msg',time: 2});
+                _handle = false;
+            }else{
+               layer.open({content: data.message,skin: 'msg',time: 2});
+            }
+            
+        }
+    }();
+})
+
+</script>
+</head>
+<body >
+<section class="container">
+  <div class="qiandao-banner">{insert name='ads' id=3 num=1}</div>
+  <div class="qiandao-box">
+    <div class="qiandao-top">
+      <div class="current-date">2016年1月6日</div>
+      <div class="just-qiandao {if $qiandao eq 1}actived{/if}" id="js-just-qiandao">{if $qiandao eq 1}已签到{else}立即签到{/if}</div>
+    </div>
+    <div class="qiandao-main" id="js-qiandao-main">
+      <ul class="qiandao-week"><li>日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li></ul>
+      <ul class="qiandao-list" id="js-qiandao-list">
+      </ul>
+    </div>
+  </div>
+  <div class="qiandao-rules">
+    <h4>签到规则</h4>
+    <p>签到赠送{$options.sign_points}分</p>
+    <p>连续签到每天增加{$options.sign_increase_points}分</p>
+    <p>每天最高赠送{$options.sign_max_points}分</p>
+  </div>
+</section>
+{include file="inc/wx_config.htm"}
+</body>
+</html>

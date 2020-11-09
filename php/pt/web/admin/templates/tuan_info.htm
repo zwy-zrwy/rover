@@ -1,0 +1,97 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>团购详情</h2>
+    </div>
+    <div class="main_bd">
+      <div class="tuan_info">
+        <div class="code"><img src="../api/qrcode.php?c=share&extension_id={$tuan_info[0].extension_id}"></div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>团购信息</th>
+            </tr>
+            <tr>
+              <td>
+                <ul>
+                  <li>团购编号：{$tuan_info[0].extension_id}
+                  <span class="label">{if $tuan_info[0][extension_code] eq 'miao'}秒杀{elseif $tuan_info[0][extension_code] eq 'lottery'}抽奖{/if}</span>
+                  </li>
+                  <li>团购状态：{$lang.ts.$tuan_info[0].tuan_status}</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <ul>
+                  <li>开团时间：{$tuan_info[0].start_time}</li>
+                  <li>结束时间：{$tuan_info[0].end_time}</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>商品信息</th>
+          </tr>
+          <tr>
+            <td>
+              <ul>
+                <li>商品名称：{$tuan_info[0].goods_name}</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>参团信息</th>
+          </tr>
+          <tr>
+            <td>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <th>用户图像</th>
+                    <th>用户昵称</th>
+                    <th>参团时间</th>
+                    <th>订单号码</th>
+                    <th>订单状态</th>
+                    <th>操作</th>
+                  </tr>
+                  {foreach from=$tuan_info item=tuan}
+                  <tr>
+                    <td>
+                      <img src="{$tuan.headimgurl}" width="50">
+                    </td>
+                    <td>{$tuan.nickname}{if $tuan.tuan_first eq 1}团长{else}团员{/if}</td>
+                    <td>{$tuan.start_time}</td>
+                    <td><a href="index.php?act=order&op=info&order_id={$tuan.order_id}">{$tuan.order_sn}</td>
+                    <td>{$tuan.status}</td>
+                    <td></td>
+                  </tr>
+                  {/foreach}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="tfoot">
+            <td>
+              <a href="JavaScript:void(0);" class="btn" onclick="history.go(-1)"><span>返回</span></a>
+              {if $tuan_info[0][tuan_status] == 2  && $tuan_info[0][pay_status] == 2 && $tuan_info[0][order_status] == 1 && $tuan_info[0][shipping_status] == 0}
+                <a href="index.php?act=tuan&op=tuan_refund&extension_id={$tuan_info[0][extension_id]}" class="btn" ><span>退款</span></a>
+              {/if}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

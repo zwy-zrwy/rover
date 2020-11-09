@@ -1,0 +1,44 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>支付方式</h2>
+			<div class="tab_navs">
+			 <ul>
+				  <li class="cur"><a href="javascript:void(0);">支付方式</a></li>
+				</ul>
+			</div>
+	  </div>
+		<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>支付方式名称</th>
+          <th>显示</th>
+          <th>排序</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$pay_list item=pay}
+        <tr>
+          <td>{$pay.pay_name}</td>
+          <td class="binding" width="50">
+            <span><i class="fa {if $pay.enabled}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_enabled', {$pay.pay_id})"></i></span>
+          </td>
+          <td>
+            <span class="edit" onclick="edit(this, 'edit_order', {$pay.pay_id} ,'payment')" class="editable">{$pay.pay_order}</span>
+          </td>
+          <td>
+            {if $pay.pay_id gt 1}
+            <a href="index.php?act=payment&op=edit&code={$pay.pay_code}">修改</a>
+            {/if}
+          </td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

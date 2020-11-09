@@ -1,0 +1,160 @@
+{include file="header.htm"}
+<script src="static/js/laydate/laydate.js"></script>
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>优惠券管理</h2>
+      <div class="tab_navs">
+        <ul>
+          <li ><a href="index.php?act=coupon&op=bonus_type">管理</a></li>
+          <li  class="cur"><a href="javascript:void(0);">{if $form_act eq 'insert'}新增{else}修改{/if}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form class="form-horizontal" action="index.php?act=coupon" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+        <table class="table">
+          <tbody>
+          <tr>
+            <td>类型名称</td>
+            <td><input type="text" name="type_name" value="{$bonus_arr.type_name}" /></td>
+          </tr>
+          <tr>
+            <td>优惠券类型</td>
+            <td>
+              <label class="radio-inline"><input type="radio" name="send_type" value="0" {if $bonus_arr.send_type eq 0} checked="true" {/if} onclick="showunit(0)" />用户发放</label>
+              <label class="radio-inline"><input type="radio" name="send_type" value="1" {if $bonus_arr.send_type eq 1} checked="true" {/if} onclick="showunit(1)" />商品发放</label>
+              <label class="radio-inline"><input type="radio" name="send_type" value="2" {if $bonus_arr.send_type eq 2} checked="true" {/if} onclick="showunit(2)" />订单发放</label>
+              <label class="radio-inline"><input type="radio" name="send_type" value="3" {if $bonus_arr.send_type eq 3} checked="true" {/if} onclick="showunit(3)" />线下发放</label>
+              <label class="radio-inline"><input type="radio" name="send_type" value="4" {if $bonus_arr.send_type eq 4} checked="true" {/if} onclick="showunit(4)" />关注发放</label>
+              <label class="radio-inline"><input type="radio" name="send_type" value="5" {if $bonus_arr.send_type eq 5} checked="true" {/if} onclick="showunit(5)" />团长优惠</label>
+              <label class="radio-inline"><input type="radio" name="send_type" value="6" {if $bonus_arr.send_type eq 6} checked="true" {/if} onclick="showunit(6)" />积分兑换</label>
+            </td>
+          </tr>
+          <tr>
+            <td>优惠券金额</td>
+            <td><input type="text" name="type_money" value="{$bonus_arr.type_money}" /> 此券可抵的金额</td>
+          </tr>
+          <tr id="min_goods_amount">
+            <td>订单金额</td>
+            <td><input type="text" name="min_goods_amount" value="{$bonus_arr.min_goods_amount}" /> 订单满多少可用</td>
+          </tr>
+          
+          <tr id="order_off" {if $bonus_arr.send_type neq 2} style="display:none;"{/if}>
+            <td>订单下限</td>
+            <td><input type="text" name="min_amount" value="{$bonus_arr.min_amount}" /> 满多少可送此券</td>
+          </tr>
+          <tr id="exc_off" {if $bonus_arr.send_type neq 6} style="display:none;"{/if}>
+            <td>所需积分</td>
+            <td><input type="text" name="integral" value="{$bonus_arr.integral}" /> 兑换此券需要的积分</td>
+          </tr>
+          {if $form_act eq 'insert'}
+          <tr id="goods_off_key" {if $bonus_arr.send_type neq 5} style="display:none;"{/if}>
+            <td>商品关键字：</td>
+            <td>
+              <input type='text' name='keyword' maxlength="20" value='{$seckill.cat_name|escape:html}' size='27' />
+              <input type="button" value="搜索" class="btn" onclick="searchGoods()">
+            </td>
+          </tr>
+          {/if}
+          <tr id="goods_off_name" {if $bonus_arr.send_type neq 5} style="display:none;"{/if}>
+            <td>优惠商品</td>
+            <td>
+              <select name="goods_id" id="source_select" >
+                <option {if $bonus_arr.goods_id} value = "{$bonus_arr.goods_id}" {else} value="0" {/if}>{if $bonus_arr.goods_name}{$bonus_arr.goods_name}{else}请先搜索商品生成选项列表{/if}</option>
+              </select> 
+            </td>
+          </tr>
+          <tr>
+            <td>发放日期</td>
+            <td>
+              <input name="send_start_date" type="text" id="send_start_date" value='{$bonus_arr.send_start_date}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+              -
+              <input name="send_end_date" type="text" id="send_end_date" value='{$bonus_arr.send_end_date}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+            </td>
+          </tr>
+          <tr>
+            <td>使用日期</td>
+            <td>
+              <input name="use_start_date" type="text" id="use_startdate" value='{$bonus_arr.use_start_date}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+              -
+              <input name="use_end_date" type="text" id="use_enddate" value='{$bonus_arr.use_end_date}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <input type="submit" value="确定" class="btn" />
+        <input type="hidden" name="op" value="{$form_act}" />
+        <input type="hidden" name="type_id" value="{$bonus_arr.type_id}" />
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}
+<script type="text/javascript">
+var send_type = '{$bonus_arr.send_type}';
+window.onload = function() {
+  if(send_type)
+  {
+    showunit(send_type);
+  }
+  else
+  {
+    showunit(0);
+  }
+}
+function showunit(eve){
+  if(eve == 0 || eve == 3){
+    $('#send_start_date').attr('disabled',true);
+    $('#send_end_date').attr('disabled',true);
+  }
+  else
+  {
+    $('#send_start_date').attr('disabled',false);
+    $('#send_end_date').attr('disabled',false);
+  }
+  if(eve == 2){
+    $('#order_off').show();
+  }else{
+    $('#order_off').hide();
+  }
+  if(eve == 5){
+    $('#goods_off_key').show();
+    $('#goods_off_name').show();
+    $('#min_goods_amount').hide();
+  }else{
+    $('#goods_off_key').hide();
+    $('#goods_off_name').hide();
+    $('#min_goods_amount').show();
+  }
+  if(eve == 6){
+    $('#exc_off').show();
+  }else{
+    $('#exc_off').hide();
+  }
+}
+function searchGoods(){
+  var keywords = $("input[name='keyword']").val();
+  $.ajax({
+    type: 'POST',
+    data: {keywords},
+    url: 'index.php?act=coupon&op=get_goods_list',
+    dataType: 'json',
+    success: function(data){
+      var html="";
+      if (data.error == 0)
+      {
+        html += "<option value='0'>请选择商品</option>"
+        for (i = 0; i < data.content.length; i++)
+        {
+          html += "<option value="+data.content[i].value+">"+data.content[i].text+"</option>";
+        }
+      }
+      $("#source_select").html(html);
+    }
+  });
+}
+</script>

@@ -1,0 +1,33 @@
+/*我的积分*/
+.can_use_points{padding-top: .2rem; background-color: #f33; color: #fff; text-align: center;}
+.can_use_points .use_points_tit{font-size: .4rem;}
+.can_use_points .points_num{font-size: 1rem;}
+.can_use_points .gain_points{display: inline-block; margin:.2rem auto; padding: 0 .2rem; border: 1px solid #fff; border-radius: .1rem; line-height:.5rem;color: #fff; font-size:.26rem;}
+
+.exchange-list {padding:0 .1rem;}
+.exchange-list .bgc1{border-left: 4px solid #FF7866;}
+.exchange-list .bgc1 .money{color:#FF7866}
+.exchange-list .bgc2{border-left: 4px solid #FFB73B}
+.exchange-list .bgc2 .money{color:#FFB73B}
+
+.coupons-item{position: relative; margin-top: .2rem; border-radius:.1rem; box-shadow: 0 1px 1px #e3e3e3; background-color: #fff; color: #999; display: -webkit-box; -webkit-box-align: center;}
+.coupons-item::before,.coupons-item::after{z-index: 2;content: ''; display: block; position: absolute;left:1.5rem;width: .2rem; height:.2rem; border-radius:50%; background-color: #f4f4f4;}
+.coupons-item::before{top: -.1rem;}
+.coupons-item::after{bottom: -.1rem;}
+.coupons-item .mc-l{display: table-cell; width:1.6rem;height:1.6rem; border-right: 1px dotted #e3e3e3; text-align: center; vertical-align: middle;}
+.coupons-item .mc-r{margin: 0 .2rem; padding-top: .14rem;}
+.coupons-item .money{font-size:.4rem;}
+.coupons-item .money i{font-size:.2rem;}
+.coupons-item .tit{font-size:.3rem; color:#333;}
+.coupons-item .name{text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size:.3rem; padding-right:.6rem; color:#333;}
+.coupons-item .desc{ padding-left: .3rem; font-size:.2rem; position: relative;}
+.coupons-item .date{ padding-left: .3rem; font-size:.2rem; position: relative;}
+.coupons-item .mc-r .desc::before,.coupons-item .mc-r .date::before { width:.3rem; height:.3rem; font-family: iconfont; position: absolute; left: 0; top: 0;}
+.coupons-item .mc-r .desc::before{ content: "\e626"; }
+.coupons-item .mc-r .date::before{ content: "\e654"; }
+.coupons-item p{margin-bottom:5px; min-height: 12px;}
+
+.coupons-item .integral { display: block; height: .5rem;line-height: .5rem; font-size: 0.22rem; overflow: hidden;}
+.coupons-item .integral b { color: #f33; font-size: .3rem; }
+.coupons-item .btn { float: right; height: .5rem;line-height: .5rem; padding:0 .2rem; border-radius:.1rem 0; background-color:#f33; color: #fff; font-size: .26rem; position: absolute; right:0; bottom:0; }
+

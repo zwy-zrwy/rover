@@ -1,0 +1,62 @@
+{include file="header.htm"}
+<div class="main">
+    <div class="col_main">
+	    <div class="main_hd">
+		    <h2>优惠券管理</h2>
+			<div class="tab_navs">
+			    <ul>
+				    <li class="cur"><a href="javascript:void(0);">管理</a></li>
+					<li><a href="index.php?act=coupon&amp;op=add">新增</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr class="thead">
+          <th>类型名称</th>
+          <th>发放类型</th>
+          <th>金额</th>
+          <th>订单下限</th>
+          <th>发放数量</th>
+          <th>使用数量</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$type_list item=type}
+        <tr  id="remove_{$type.type_id}">
+          <td class="first-cell"><span onclick="edit(this, 'edit_type_name', {$type.type_id})">{$type.type_name|escape:html}</span></td>
+          <td>{$type.send_by}</td>
+          <td align="right">{$type.type_money}</td>
+          <td align="right">{$type.min_amount}</td>
+          <td align="right"><span>{$type.send_count}</span></td>
+          <td align="right">{$type.use_count}</td>
+          <td align="right">
+            <a href="index.php?act=coupon&amp;op=bonus_list&amp;bonus_type={$type.type_id}">查看</a>
+            {if $type.send_type eq 3}
+            <a href="index.php?act=coupon&amp;op=gen_excel&tid={$type.type_id}">报表</a>
+            {/if}
+            {if $type.send_type eq 0 || $type.send_type eq 1 || $type.send_type eq 3}
+            <a href="index.php?act=coupon&amp;op=send&amp;id={$type.type_id}&amp;send_by={$type.send_type}">发放</a>
+            {/if}
+            
+            <a href="index.php?act=coupon&amp;op=edit&amp;type_id={$type.type_id}">修改</a>
+            <a  href="javascript:" onclick="remove({$type.type_id}, 'remove')">删除</a>
+          </td>
+        </tr>
+          {foreachelse}
+        <tr class="no_data">
+          <td colspan="10">暂无记录</td>
+        </tr>
+          {/foreach}
+          </tbody>
+      </table>
+      <div class="pagination">{$pager}</div>
+		</div>
+	</div>
+</div>
+		
+
+
+{include file="footer.htm"}

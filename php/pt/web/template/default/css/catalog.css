@@ -1,0 +1,24 @@
+html,body { height: 100%; }
+.searchbox { width: 100%; max-width: 750px; position: fixed; top: 0; left: 50%; -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); height: 44px; color: #555; font-size: 1.7rem; text-align: center; line-height: 44px; background-color: #fff; z-index: 99; border-bottom: 1px solid #e5e5e5; }
+.search { background: #fff; height: 44px; }
+.search .submit { background-position: -8px -8px; width: 44px; height: 44px; background-image: url(../images/search_bar_sprites.png); background-size: 44px auto; background-repeat: no-repeat; }
+.search input { vertical-align: top; outline: none; background: transparent; border: none; font-size:.24rem; height: 44px; width: 100%; max-width: 90%; }
+
+
+.cat_menu { width: 100%; max-width: 750px; min-width: 320px; position: fixed; left: 50%; top: 45px; bottom:1rem; -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); -webkit-overflow-scrolling: touch; background-color: #fafafa; z-index: 1; }
+.cat_menu ul { width: 1.6rem; }
+.cat_menu li { height:.8rem; line-height:.8rem; padding-left: 14px; font-size: .26rem; border-bottom: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.cat_menu li.active { color: #ff2741; border-right: 1px solid #fff; background-color: #FFF; }
+
+
+
+.cat_list { height: 100%; margin-left: 1.6rem; margin-top: 45px; position: relative; z-index: 2; background-color: #fff; -webkit-overflow-scrolling: touch; }
+.cat_list .all { display: block; height: 35px; background: #E71F19; font-size: .28rem; line-height: 35px; text-align: center; border-radius: 3px; }
+.cat_list dl { }
+.cat_list dt { height:.8rem; padding:0 .2rem; line-height:.8rem; font-size:.26rem; color: #333; }
+.cat_list dt a { float: right; color: #999; }
+.cat_list dd { overflow: hidden; }
+.cat_list dd a { display: block; float: left; width: 33.3333%; min-height: 94px; margin-top: 6px; text-align: center; }
+.cat_list dd img { display: block; width: 62px; height: 62px; margin: 0 auto; }
+.cat_list dd span { display: block; width: 100%; text-align: center; font-size: 1.2rem; color: #7d7d7d; padding: 8px 0; }
+

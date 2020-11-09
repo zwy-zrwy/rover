@@ -1,0 +1,81 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+      {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>团购管理</h2>
+      <div class="tab_navs">
+          <ul>
+            <li{if $filter.composite_status eq -1} class="cur"{/if}><a href="index.php?act=tuan&op=tuan_list">全部</a></li>
+            <li{if $filter.composite_status eq 1} class="cur"{/if}><a href="index.php?act=tuan&op=tuan_list&status=1">拼团中</a></li>
+            <li{if $filter.composite_status eq 2} class="cur"{/if}><a href="index.php?act=tuan&op=tuan_list&status=2">拼团成功</a></li>
+            <li{if $filter.composite_status eq 3} class="cur"{/if}><a href="index.php?act=tuan&op=tuan_list&status=3">拼团失败(待退款)</a></li>
+            <li{if $filter.composite_status eq 4} class="cur"{/if}><a href="index.php?act=tuan&op=tuan_list&status=4">拼团失败(已退款)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <div class="top_s">
+        <form method="get" action="index.php">
+          <input type="hidden" name="act" value="{$action}">
+          <input type="hidden" name="op" value="{$operation}">
+          <label>团购编号</label>
+          <input class="txt2" type="text" name="extension_id" value="{$filter.extension_id}">
+          <label>团购状态</label>
+          <select name="status" id="status">
+            <option value="-1">请选择</option>
+            <option value="1"{if $filter.composite_status eq 1} selected{/if}>拼团中</option>
+            <option value="2"{if $filter.composite_status eq 2} selected{/if}>拼团成功</option>
+            <option value="3"{if $filter.composite_status eq 3} selected{/if}>拼团失败(待退款)</option>
+            <option value="4"{if $filter.composite_status eq 4} selected{/if}>拼团失败(已退款)</option>
+          </select>
+          <input type="submit" value="搜索" class="btn" />
+        </form>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th width="120">团购编号</th>
+          <th width="80">团长</th>
+          <th width="60">参团人数</th>
+          <th width="80">拼团时间</th>
+          <th width="60">拼团状态</th>
+          <th width="50">操作</th>
+        <tr>
+        </thead>
+        <tbody>
+        {foreach from=$tuan_list item=tuan}
+        <tr>
+          <td>{$tuan.extension_id}</td>
+          <td>{$tuan.buyer|escape}</td>
+          <td>{$tuan.tuan_num}</td>
+          <td>{$tuan.start_time}<br/>{$tuan.end_time}</td>
+          <td>{$lang.ts.$tuan.tuan_status}</td>
+          <td>
+           <a href="index.php?act=tuan&op=tuan_info&extension_id={$tuan.extension_id}">查看</a>
+          </td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler">
+        {if $lottery.status eq 3}
+          
+          {if $lottery.lottery_status eq 1}
+            <a class="btn" href="index.php?act=lottery&op=luck_users&id={$lottery_id}">查看中奖用户</a>
+          {else}
+            <a class="btn" href="index.php?act=lottery&op=luck_start&id={$lottery_id}">随机抽奖</a>
+            <a class="btn" href="index.php?act=lottery&op=luck_start&id={$lottery_id}&luck_user=1">内定抽奖</a>
+          {/if}
+        {/if}
+            
+        </div>
+        {$pager}
+      </div>  
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

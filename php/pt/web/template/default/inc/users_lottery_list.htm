@@ -1,0 +1,26 @@
+<div class="tuan-item">
+    {if $lists.tuan_statu eq 2 && $lists.lottery_status eq 1}
+    <div class="tuan-stamp">
+        {if $lists.is_luck eq 1}
+        <i class="ico-stamp ico-stamp-winner"></i>
+        {else}
+        <i class="ico-stamp ico-stamp-lost"></i>
+        {/if}
+    </div>
+    {/if}
+    <div class="goods-img">
+        <a href="{$lists.goods_url}"><img src="{$lists.goods_img}"></a>
+    </div>
+    <div class="goods-info">
+        <div class="mt_g_name"><a href="{$lists.goods_url}">{$lists.goods_name}</a></div>
+        <p class="mt_g_price">
+            <span class="mt_g_number">{$lists.tuan_num}人团</span>
+            <span>{$lists.goods_price}</span>
+        </p>
+        <span class="mt_status_txt" id="j_status_{$lists.order_id}">{$lists.tuan_status}</span>
+    </div>
+    <div class="tuan-status">
+        <a href="index.php?c=share&tuan_id={$lists.tuan_id}">查看团详情</a>
+        <a href="index.php?c=user&a=order_detail&order_id={$lists.order_id}">查看订单详情</a>
+    </div>
+</div>

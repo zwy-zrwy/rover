@@ -1,0 +1,71 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>退货单列表</h2>
+      <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">管理</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <div class="top_s">
+        <form method="get" action="index.php">
+          <input type="hidden" name="act" value="{$action}">
+          <input type="hidden" name="op" value="{$operation}">
+          <label>原订单号</label>
+          <input type="text" name="order_sn" value="{$filter.order_sn}">
+          <label>收货人</label>
+          <input type="text" name="consignee" value="{$filter.consignee}">
+          <input type="submit" value="搜索" class="btn" />
+        </form>
+      </div>
+
+
+      <table class="table">
+        <tr class="thead">
+          <th align=left><input onclick='checkAll(this, "back_id")' type="checkbox"/>序号</th>
+          <th>原订单号</th>
+          <!--<th >退货/返修商品</th>-->
+          <th>申请时间</th>
+          <th>应退金额</th>
+          <th>实退金额</th>
+          <th>收货人</th>
+          <!--<th><a href="javascript:listTable.sort('update_time', 'DESC'); ">签收时间</a>{$sort_update_time}</th>-->
+          <th>退换状态</th>
+          <th>申请人</th>
+          <th>操作</th>
+        </tr>
+        {foreach from=$back_list item=back key=dkey}
+        <tr>
+          <td><input type="checkbox" name="back_id[]" value="{$back.back_id}" />{$back.back_id}</td>
+          <td>{$back.order_sn}</td>
+          <!--<td >
+            <a href="/index.php?c=goods&id={$back.goods_id}" target="_blank">{$back.goods_name}</a><br />
+          </td>-->
+          <td align="center" nowrap="nowrap">{$back.add_time}</td>
+          <td>{$back.refund_money_1}</td>
+          <td>{$back.refund_money_2}</td>
+          <td>{$back.consignee|escape}<br/>{$back.mobile}</td>
+          <td align="center" nowrap="nowrap">{$back.status_back_val}</td>
+          <td align="center" nowrap="nowrap">{$back.consignee}</td>
+          <td align="center" nowrap="nowrap">
+             <a href="index.php?act=back&op=back_info&back_id={$back.back_id}">查看</a>
+             <!--<a onclick="{if(confirm('您确定要删除吗？')){return true;}return false;}" href="index.php?act=back&op=remove_back&remove_back=1&back_id={$back.back_id}">删除</a>-->
+          </td>
+        </tr>
+        {/foreach}
+      </table>
+      <div class="pagination">
+        <div class="handler">
+          <form method="post" action="order.php?act=operate" name="listForm" onsubmit="return check()">
+            <!--<input name="remove_back" type="submit" id="btnSubmit3" value="删除" class="btn" disabled="true" onclick="{if(confirm('您确定要删除吗？')){return true;}return false;}" />-->
+          </form>
+        </div>
+        {$pager}
+      </div>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

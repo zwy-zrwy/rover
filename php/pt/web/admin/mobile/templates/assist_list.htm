@@ -1,0 +1,48 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>助力活动</h2>
+    	<div class="tab_navs">
+    	  <ul>
+    		  <li class="cur"><a href="javascript:void(0);">助力管理</a></li>
+    			<li><a href="index.php?act=assist&amp;op=assist_add">添加助力</a></li>
+    		</ul>
+    	</div>
+	  </div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr class="thead">
+          <th width="50">ID</th>
+          <th>商品名称</th>
+          <th width="160">活动时间</th>
+          <th width="80">已秒</th>
+          <th width="140">状态</th>
+          <th width="100">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$assist_list item=assist}
+        <tr id="remove_{$assist.assist_id}">
+          <td>{$assist.assist_id}</td>
+          <td>{$assist.goods_name}</td>
+          <td>{$assist.assist_start_time}<br/>{$assist.assist_end_time}</td>
+          <td>{$assist.assist_sales}</td>
+          <td>{$assist.status}</td>
+          <td>
+            <a href="index.php?act=assist&amp;op=assist_edit&amp;id={$assist.assist_id}">修改</a>
+            <a  href="javascript:" onclick="remove({$assist.assist_id}, 'remove')" title="{$lang.remove}">删除</a>
+          </td>
+        </tr>
+
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        {$pager}
+      </div>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

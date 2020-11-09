@@ -1,0 +1,38 @@
+<a href="{:url('admin/category/add')}" class="layui-btn layui-btn-sm layui-btn-warm"><i class="layui-icon">&#xe654;</i>添加</a>
+<table class="layui-table">
+    <thead>
+    <tr><th>ID</th><th>图片</th><th>节点名称</th><th>父节点</th><th>状态</th><th>操作</th></tr></thead>
+    <tbody>
+    {volist name='data' id='vo'}
+    <tr>
+        <td>{$vo.id}</td><td width="60px"><img src="/uploads/{$vo.pic}" alt="" height="40px" width="60px"></td><td>{$vo.name}</td><td>顶级分类</td><td>{if $vo.status eq 1}启用{else}禁用{/if}</td>
+        <td width="200px" >
+            <a href="{:url('admin/category/edit',['id'=>$vo.id])}" class="layui-btn layui-btn-sm  layui-btn-normal"><i class="layui-icon">&#xe6b2;</i>编辑</a>
+            <a href="{:url('admin/category/del',['id'=>$vo.id])}" class="layui-btn  layui-btn-sm layui-btn-danger"><i class="layui-icon">&#xe640;</i>删除</a>
+        </td>
+    </tr>
+
+    {volist name='$vo.sub' id ='sub'}
+    <tr>
+        <td>{$sub.id}</td><td><img src="/uploads/{$sub.pic}" alt="" height="40px" width="60px"></td><td>-------{$sub.name}</td><td>{$sub.cname}</td><td>{if $sub.status eq 1}启用{else}禁用{/if}</td>
+        <td width="200px" >
+            <a href="{:url('admin/category/edit',['id'=>$sub.id])}" class="layui-btn layui-btn-sm  layui-btn-normal"><i class="layui-icon">&#xe6b2;</i>编辑</a>
+            <a href="{:url('admin/category/del',['id'=>$sub.id])}" class="layui-btn  layui-btn-sm layui-btn-danger"><i class="layui-icon">&#xe640;</i>删除</a>
+        </td>
+    </tr>
+    {volist name='$sub.sub' id ='cat'}
+    <tr>
+        <td>{$cat.id}</td><td><img src="/uploads/{$cat.pic}" alt="" height="40px" width="60px"></td><td>-------------||--------{$cat.name}</td><td>{$cat.cname}</td><td>{if $cat.status eq 1}启用{else}禁用{/if}</td>
+        <td width="200px" >
+            <a href="{:url('admin/category/edit',['id'=>$cat.id])}" class="layui-btn layui-btn-sm  layui-btn-normal"><i class="layui-icon">&#xe6b2;</i>编辑</a>
+            <a href="{:url('admin/category/del',['id'=>$cat.id])}" class="layui-btn  layui-btn-sm layui-btn-danger"><i class="layui-icon">&#xe640;</i>删除</a>
+        </td>
+    </tr>
+    {/volist}
+    {/volist}
+    {/volist}
+    </tbody>
+</table>
+
+
+

@@ -1,0 +1,64 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>管理员日志</h2>
+      <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">管理</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <div class="top_s">
+        <form name="Form2" action="index.php" method="get">
+          <input type="hidden" name="act" value="admin_logs">
+          <input type="hidden" name="op" value="batch_drop">
+          <label>删除日志</label>
+          <select class="querySelect" name="log_date">
+            <option value='0'>选择清除的日期</option>
+            <option value='1'>一周之前</option>
+            <option value='2'>一个月之前</option>
+            <option value='3'>三个月之前</option>
+            <option value='4'>半年之前</option>
+            <option value='5'>一年之前</option>
+          </select>
+          <input name="drop_type_date" type="submit" value="确定" class="btn" />
+        </form>
+      </div>
+      <form method="POST" action="index.php?act=admin_logs" name="listForm">
+      <table class="table">
+        <thead>
+        <tr>
+          <th width="60"><input onclick='checkAll(this, "checkboxes")' type="checkbox">
+          ID</th>
+          <th width="80">操作者</th>
+          <th width="180">操作日期</th>
+          <th width="100">IP地址</th>
+          <th>操作记录</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$log_list item=list}
+        <tr>
+          <td><input name="checkboxes[]" type="checkbox" value="{$list.log_id}" />{$list.log_id}</td>
+          <td>{$list.user_name|escape:html}</td>
+          <td>{$list.log_time}</td>
+          <td>{$list.ip_address}</td>
+          <td>{$list.log_info}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler">
+            <input type="hidden" name="op" value="batch_drop">
+            <input name="drop_type_id" type="submit" id="btnSubmit" value="删除"  class="btn" />
+          </form>
+        </div>
+        {$pager}
+      </div>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

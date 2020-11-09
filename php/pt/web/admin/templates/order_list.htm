@@ -1,0 +1,94 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+      {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>订单管理</h2>
+			<div class="tab_navs">
+			    <ul>
+				    <li{if $filter.composite_status eq -1} class="cur"{/if}><a href="index.php?act=order&op=order_list">全部</a></li>
+            <li{if $filter.composite_status eq 1} class="cur"{/if}><a href="index.php?act=order&op=order_list&status=1">待付款</a></li>
+            <li{if $filter.composite_status eq 2} class="cur"{/if}><a href="index.php?act=order&op=order_list&status=2">待发货</a></li>
+            <li{if $filter.composite_status eq 3} class="cur"{/if}><a href="index.php?act=order&op=order_list&status=3">待核销</a></li>
+            <li{if $filter.composite_status eq 4} class="cur"{/if}><a href="index.php?act=order&op=order_list&status=4">已删除</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="main_bd">
+      <div class="top_s">
+        <form method="get" action="index.php">
+          <input type="hidden" name="act" value="{$action}">
+          <input type="hidden" name="op" value="{$operation}">
+          <label>订单号</label>
+          <input class="txt2" type="text" name="order_sn" value="{$filter.order_sn}">
+          <label>收货人</label>
+          <input class="txt-short" type="text" name="consignee" value="{$filter.consignee}">
+          <label>手机号</label>
+          <input class="txt-short" type="text" name="mobile" value="{$filter.mobile}">
+          <label>订单状态</label>
+          <select name="status" id="status">
+            <option value="-1">请选择</option>
+            <option value="0"{if $filter.composite_status eq 0} selected{/if}>待确认</option>
+            <option value="1"{if $filter.composite_status eq 1} selected{/if}>付款中</option>
+            <option value="3"{if $filter.composite_status eq 3} selected{/if}>待核销</option>
+            <option value="2"{if $filter.composite_status eq 2} selected{/if}>待发货</option>
+            <option value="4"{if $filter.composite_status eq 4} selected{/if}>已删除</option>
+          </select>
+          <input type="submit" value="搜索" class="btn" />
+        </form>
+      </div>
+      <form method="post" action="index.php?act=order&op=operate" name="listForm">
+      {foreach from=$order_list item=order key=okey}
+      <table class="table order" id="remove_{$order.order_id}">
+        <thead>
+        <tr class="thead">
+          <th colspan="7">
+            <input type="checkbox" name="order_id[]" value="{$order.order_sn}"/>
+            <span>订单号：{$order.order_sn}<i class="label">{if $order.extension_code eq "tuan"}团{elseif $order.extension_code eq "miao"}秒{elseif $order.extension_code eq "lottery"}奖{elseif $order.extension_code eq "assist"}助{/if}</i></span>
+            <span>下单时间：{$order.add_time}</span>
+            <span>收货人：{$order.consignee|escape}</span>
+            <span>手机：{$order.mobile|escape}</span>
+            <span>{if $order.store_id}取货门店：{$order.store_name|escape}{else}收货地址：{$order.address|escape}{/if}</span>
+          </th>
+        <tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td width="70"><img src="../{$order.goods_img}" width="50"/></td>
+          <td class="goods_name">
+            <h3>{$order.goods_name}</h3>
+            <p>{if $order.goods_attr}规格：{$order.goods_attr}{/if}</p>
+          </td>
+          <td width="100">{$order.goods_price}</td>
+          <td width="100">{$order.goods_number}</td>
+          <td class="bl br" width="150">{$order.formated_total_fee}</td>
+
+          <td class="br" width="150">{$order.order_status_name}</td>
+          <td width="150">
+           <a href="index.php?act=order&op=info&order_id={$order.order_id}">查看</a>
+           {if $order.can_remove}
+           <a href="javascript:;" onclick="remove({$order.order_id},  'remove_order')">删除</a>
+           {/if}
+           <br >
+           <span>{$order.back_type}{$order.status_back}</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      {/foreach}
+      
+      <div class="pagination">
+        <div class="handler">
+          <input onclick='checkAll(this, "checkboxes")' type="checkbox"/>全选 
+            <input name="print" type="submit" id="btnSubmit4" value="打印订单" class="btn"  onclick="this.form.target = '_blank'" />
+            <input name="batch" type="hidden" value="1" />
+        </div>
+        {$pager}
+      </div>
+      </form>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

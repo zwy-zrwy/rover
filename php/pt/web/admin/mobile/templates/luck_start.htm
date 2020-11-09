@@ -1,0 +1,27 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>开始抽奖</h2>
+    	<div class="tab_navs">
+    	  <ul>
+    		  <li class="cur"><a href="javascript:void(0);">请选择中奖用户</a></li>
+    	</div>
+	  </div>
+  	<div class="main_bd">
+    <form action="index.php?act=lottery" method="post" name="theForm" id="theForm" enctype="multipart/form-data">
+      <div class="zjuser">
+        <ul>
+          {foreach from=$succ item=user}
+          <li><input type="checkbox" name="zjuser[]" value="{$user.order_id}" id="user_{$user.user_id}"><label for="user_{$user.user_id}">{$user.nickname}</label></li>
+          {/foreach}
+        </ul>
+      </div>
+      <input type="hidden" name="id" value="{$lottery_id}">
+      <input type="hidden" name="op" value="luck_start">
+      <div class="btn" onclick="$('#theForm').submit();">抽奖</div>
+      </form>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

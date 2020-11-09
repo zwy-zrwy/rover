@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>商品详情</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/goods.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/comment.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/swiper.min.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<script src="{$template_path}js/swiper.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/jquery.lazyload.js?v={$aos_version}"></script>
+<script src="{$template_path}js/aotime.js?v={$aos_version}"></script>
+</head>
+<body>
+{include file="inc/header.htm"}
+<div class="box-hide"></div>
+<section id="container" class="container pdb" style="display:none">
+  {if $goods.goods_video}
+  <video controls="" x5-playsinline="" playsinline="" webkit-playsinline="" poster="{$album[0].album_img}" width="100%" height="100%" preload="auto">
+    <source src="{$goods.goods_video}" type="video/mp4">
+  </video>
+  {else}
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <!-- {foreach from=$album item=album}-->
+      <div class="swiper-slide"><img src="{$album.album_img}" alt="{$goods.goods_name}" /></div>
+      <!--{/foreach}-->
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+  {/if}
+  {if $goods.goods_number eq 0}
+  <div class="soldout"></div>
+  {/if}
+  <div class="goods_info">
+    <div class="goods_bar">
+      <font>{$tuan_price_formated}</font>{if $show_marketprice}<del>{$goods.market_price}</del>{/if}<span>已团{$sales}件{if $tuan_price_num eq 1 }·{$min_tuan_num}人团{/if}</span>
+    </div>
+    <div class="goods_name">{$goods.goods_name}</div>
+    <div class="goods_brief">{$goods.goods_brief}</div>
+  </div>
+  <!--{if $tuan_price_num gt 1 } -->
+  <div class="tuan_price_list">
+    <ul>
+      <li><p>团购人数</p><p>团购价格</p></li>
+      <!-- {foreach from=$tuan_price_list item=price_list} -->
+      <li><p>{$price_list.number}人团</p><p>{$price_list.format_price}</p></li>
+      <!-- {/foreach} -->
+    </ul>
+  </div>
+  <!--{/if}-->
+  <!--{if $goods_label}-->
+  <div class="goods-label" onclick="openLabel()">
+    <ul>
+      <!-- {foreach from=$goods_label item=label name=label} -->
+      {if $smarty.foreach.label.index lt 4}
+      <li>{$label.label_name}</li>
+      {/if}
+      <!-- {/foreach} -->
+    </ul>
+  </div>
+  <!--{/if}-->
+  <div class="invite-tip">支付开团并邀请{$difference}人参团，人数不足自动退款</div>
+  {insert name='tuan_ing' id=$goods_id}
+
+
+  <!-- {if $comments.count} -->
+  <div class="detail-comments">
+    <h3><a href="index.php?c=comment&id={$goods_id}">用户评价<span>共{$comments.count}条评论</span></a></h3>
+    <div class="comments-list">
+        <!-- {foreach from=$comments.list item=comment} -->
+        <dl>
+          <dt><img src="{$comment.headimgurl}"></dt>
+          <dd class="name">
+            <font>{$comment.nickname}</font>
+            <span>
+              {if $comment.comment_rank eq 1}
+              <i></i>
+              {elseif $comment.comment_rank eq 2}
+              <i></i><i></i>
+              {elseif $comment.comment_rank eq 3}
+              <i></i><i></i><i></i>
+              {elseif $comment.comment_rank eq 4}
+              <i></i><i></i><i></i><i></i>
+              {elseif $comment.comment_rank eq 5}
+              <i></i><i></i><i></i><i></i><i></i>
+              {/if}
+            </span>
+          </dd>
+          <dd class="time">{$comment.add_time}</dd>
+          <dd class="content">{$comment.content}</dd>
+          {if $comment.goods_attr}
+          <dd class="spec">规格：{$comment.goods_attr}</dd>
+          {/if}
+        </dl>
+        <!-- {/foreach} -->
+    </div>
+  </div>
+  <!--{/if}-->
+  <div class="goods_desc">{$goods_desc}</div>
+  {include file="inc/rand_goods.htm"}
+  <div class="dropload-noData"><span>亲,已经加载完了</span></div>
+  <div class="fot-buy fixed">
+    <a href="index.php" class="pd_item"><i class="iconfont">&#xe62c;</i>首页</a>
+    {insert name='collect' id=$goods_id}
+    <a href="{if $kefu_select eq 1}http://wpa.qq.com/msgrd?v=3&uin={$kefu}&site=qq&menu=yes&from=message&isappinstalled=0{else}{$kefu}{/if}" class="pd_item"><i class="iconfont">&#xe685;</i>客服</a>
+    {if $goods.goods_number eq 0}
+    <a href="javascript:;" class="buy-disable">已抢光</a>
+    {else}
+    <a href="
+    javascript:openSku({$goods_id},0)" class="buy-now">{$goods.shop_price_formated}<br/>单独购买</a>
+    <a href="javascript:openSku({$goods_id},1)" class="add-cart">{$tuan_price_formated}<br/>{$min_tuan_num}{if $max_tuan_num > $min_tuan_num} - {$max_tuan_num}{/if}人团</a>
+    {/if}
+  </div>
+</section>
+  <div class="goods-sku fixed" id="sku">
+    <div class="goodinfo">
+      <dl>
+        <dt><img id="sku_img" src="{$goods.goods_img}" alt="{$goods.goods_name|escape:html}"></dt>
+        <dd>
+          <h3>{$goods.goods_name}</h3>
+          <p id="sku_price" class="price">{$tuan_price}</p>
+          <p id="sku_value"></p>
+        </dd>
+      </dl>
+      <a href="javascript:;" class="box-close" onclick="skuClose()"></a>
+    </div>
+    <div class="sku-box">
+      {if $goods_sku}
+      <h3>规格</h3>
+      <ul>
+        {foreach from=$goods_sku item=sku key=key}
+        <li><input type="radio" name="sku" value="{$sku.attr_id}"{if $key eq 0} checked{/if} id="sku_{$sku.attr_id}" data-value="{$sku.attr_value}" data-price="{$sku.attr_price}" data-num="{$sku.product_number}" data-img="{$sku.attr_img}" onclick="changeSku({$sku.attr_id})" /><label for="sku_{$sku.attr_id}" id="sku_{$key}">{$sku.attr_value}</label></li>
+        {/foreach}
+      </ul>
+      {/if}
+    </div>
+    <div class="good-num">
+      <h3>购买数量 (库存 <b id="sku_num">{$goods.goods_number}</b>)</h3>
+      <span class="num-plus" onClick="goods_add();"></span>
+      <input name="number" class="num-form" type="text" value="1" id="number"  required>
+      <span class="num-minus num-disable" onClick="goods_cut();"></span>
+    </div>
+    <div class="sku-ok"><a href="javascript:;" id="sku-ok">确定</a></div>
+  </div>
+  <input type="hidden" id="rec_type" name="rec_type" value="0" />
+  <input type="hidden" id="good_price" name="good_price" value="{$goods.shop_price}" />
+  <input type="hidden" id="tuan_price" name="tuan_price" value="{$tuan_price}" />
+  <input type="hidden" id="qrcode" name="qrcode" value="{$code_logo}" />
+  <input type="hidden" id="restrictions" name="restrictions" value="{$goods.restrictions}" />
+  <input type="hidden" id="canbuy" name="canbuy" value="{$canbuy}" />
+  <input type="hidden" id="subscribe" name="subscribe" value="{insert name='subscribe'}" />
+
+<!--{if $goods_label}-->
+<div id="label" class="goods-label-box fixed">
+  <a href="javascript:;" class="box-close" onclick="labelClose()"></a>
+  <h2>服务说明</h2>
+  <ul>
+    <!-- {foreach from=$goods_label item=label} -->
+    <li>
+        <h3>{$label.label_name}</h3>
+        <p>{$label.label_desc}</p>
+    </li>
+    <!-- {/foreach} -->
+  </ul>
+</div>
+<!--{/if}-->
+<script type="text/javascript">
+  window.onload = function() {
+    $('#loading').css('display','none'); 
+    $('#container').css('display','');
+    var swiper = new Swiper('.swiper-container', {
+      pagination: '.swiper-pagination',
+      paginationClickable: true,
+      loop: true,
+      autoplay: 2500,
+      autoplayDisableOnInteraction: false
+    });
+    setInterval("order_time_ajax()",5000);
+    var is_subscribe = $("input[name='subscribe']").val();
+    var canbuy = $("input[name='canbuy']").val();
+    if (canbuy == 1 && is_subscribe == 0){
+      subscribe();
+    } 
+  }
+  var sku = $("input[name='sku']:checked").val();
+
+  $("img.lazy").lazyload({effect: "fadeIn"});
+</script>
+{include file="inc/wx_config.htm"}
+{if $stats_code}{$stats_code}{/if}
+</body>
+</html>

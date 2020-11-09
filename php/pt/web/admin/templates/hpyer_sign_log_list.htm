@@ -1,0 +1,52 @@
+{include file="header.htm"}
+<script src="static/js/laydate/laydate.js"></script>
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>每日签到</h2>
+      <div class="tab_navs">
+        <ul>
+          <li ><a href="index.php?act=sign">签到管理</a></li>
+          <li class="cur"><a href="javascript:void(0);">签到日志</a></li>
+        </ul>
+      </div>
+    </div>
+ 
+    <div class="main_bd">
+      <form method="post" action="index.php?act=sign&op=sign_log_list" name="theForm">
+        昵称:
+        <input type="text" id="user_name" name="user_name" value="{$user_name}" />
+        <input type="submit" value="搜索" class="btn" />
+      </form>
+      <form method="POST" action="hpyer.php?act=drop_sign_log" name="listForm">
+        <table class="table">
+          <tr>
+            <th width="10%">ID</th>
+            <th width="25%">昵称</th>
+            <th width="25%">积分</th>
+            <th width="20%">签到日期</th>
+            <th width="20%">操作</th>
+          </tr>
+          {foreach from=$list item=item}
+          <tr id="remove_{$item.id}">
+            <td>{$item.id}</td>
+            <td align="center">{$item.nickname}</td>
+            <td align="center">{$item.points}</td>
+            <td align="center">{$item.add_time|default:N/A}</td>
+            <td align="center">
+              <a href="javascript:" onclick="remove({$item.id}, 'remove_sign_log')">删除</a>
+            </td>
+          </tr>
+          {/foreach}
+        </table>
+        <div class="pagination">
+          {$pager}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

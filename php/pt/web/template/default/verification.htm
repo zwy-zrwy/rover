@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>核销</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body>
+{include file="inc/header.htm"}
+<section id="container" class="container pdb" style="display:none">
+  <div class="hexiao">
+      <ul>
+          <li>产品名称：{$order.goods_name}</li>
+          <li>产品规格：{$order.goods_attr}</li>
+          <li>产品数量：{$order.goods_number}</li>
+          <li>支付时间：{$order.add_time}</li>
+          <li>取货门店：{$order.store_name} {$order.arranged_time}</li>
+          {if $order.arranged_time}
+          <li>核销时间：{$order.arranged_time}</li>
+          <li>核销人：{$user}</li>
+          <li class="bnt">
+            <p style="color:red;text-align:center;font-size:18px; width:100%;">该订单之前已经核销过了</p>
+            <p style="color:red;text-align:center;font-size:18px; width:100%;">请勿重复提货 ！！！</p>
+          </li>
+          {else}
+          <li class="bnt"><a href="{$aos_url}index.php?c=verification&a=confirm&id={$order.order_id}">确认核销</a></li>
+          {/if}
+      </ul>
+  </div>
+  {include file='inc/footer.htm'}
+</section>
+</body>
+</html>

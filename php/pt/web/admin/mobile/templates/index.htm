@@ -1,0 +1,12 @@
+{include file="header.htm"}
+{foreach from=$menus item=menu key=k}
+<div class="menu-box">
+    <h3><i class="icon_menu_{$k}"></i>{$menu.label}</h3>
+    <ul class="menu-list">
+        {foreach from=$menu.children item=child key=key}
+        <li><a href="index.php?act={$child.action}&op={$child.key}"><i class="icon_{$key}"></i><p>{$child.label}</p></a></li>
+        {/foreach}
+    </ul>
+</div>
+{/foreach}
+{include file="footer.htm"}

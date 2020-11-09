@@ -1,0 +1,71 @@
+{include file="header.htm"}
+<div class="main">
+    <div class="col_side">
+        {include file="side_menu.htm"}
+    </div>
+    <div class="col_main">
+      <div class="main_hd">
+        <h2>操作备注</h2>
+      <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">管理</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+<form name="theForm" method="get" action="index.php" onsubmit="return check()">
+<div class="list-div">
+<table>
+  <tr>
+    <th width="120">操作备注</th>
+    <td><textarea name="action_note" cols="60" rows="3">{$action_note}</textarea>
+    {if $require_note}<span class="require-field">*</span>{/if}</td>
+  </tr>
+  {if $show_cancel_note}
+  <tr>
+    <th>取消原因</th>
+    <td><textarea name="cancel_note" cols="60" rows="3" id="cancel_note">{$cancel_note}</textarea>
+      <span class="require-field">*</span>（会记录在商家给客户的留言中）</td>
+  </tr>
+  {/if}
+  {if $show_invoice_no}
+  <tr>
+    <th>发货单号</th>
+    <td><input name="invoice_no" type="text" size="30" /></td>
+  </tr>
+  {/if}
+  {if $show_refund}
+  <tr>
+    <th>退款方式：</th>
+    <td><!--<p>{if !$anonymous}<label><input type="radio" name="refund" value="1" />退回用户余额</label><br>{/if}
+      <label><input type="radio" name="refund" value="2" />{$lang.create_user_account}</label><br>-->
+      <label><input name="refund" type="radio" value="3" />
+      不处理，误操作时选择此项</label><br>
+    </p></td>
+  </tr>
+  <tr>
+    <th>退款说明：</th>
+    <td><textarea name="refund_note" cols="60" rows="3" id="refund_note">{$refund_note}</textarea></td>
+  </tr>
+  {/if}
+  <tr>
+    <td colspan="2">
+      <div align="center">
+        <input type="submit" name="submit" value="确认" class="button" />
+        <input type="button" name="back" value="返回" class="button" onclick="history.back()" />
+        <input type="hidden" name="order_id" value="{$order_id}" />
+        <input type="hidden" name="operation" value="{$operation}" />
+        <input type="hidden" name="act" value="order" />
+        <input type="hidden" name="op" value="{if $batch}batch_operate_post{else}operate_post{/if}" />
+        </div></td>
+  </tr>
+</table>
+</div>
+</form>
+
+
+
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/common.js"></script>
+</div></div></div>
+{include file="footer.htm"}

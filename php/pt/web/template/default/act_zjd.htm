@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<title>砸金蛋</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/act.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body class="zjd">
+<section class="container">
+  <div class="banner">
+    <div id="hammer"><img src="{$template_path}images/zjd/hammer.png"></div>
+    <div id="f"><img src="{$template_path}images/zjd/img1.png" /></div>
+    <img class="img" src="{$template_path}images/zjd/banner.jpg"/>
+    <div id="banner">
+      <dl>
+        <dt>
+          <a href="javascript:;"><img src="{$template_path}images/zjd/egg.png" ></a>
+          <a href="javascript:;"><img src="{$template_path}images/zjd/egg.png" ></a>
+          <a href="javascript:;"><img src="{$template_path}images/zjd/egg.png" ></a>
+          <a href="javascript:;"><img src="{$template_path}images/zjd/egg.png" ></a>
+          <a href="javascript:;"><img src="{$template_path}images/zjd/egg.png" ></a>
+          <a href="javascript:;"><img src="{$template_path}images/zjd/egg.png" ></a>
+          <a href="javascript:;"><img src="{$template_path}images/zjd/egg.png" ></a>
+        </dt>
+        <dd></dd>
+      </dl>
+    </div>
+  </div>
+  <div class="actbox">
+    <dl>
+      <dt>剩余次数</dt>
+      <dd><p>你还可抽奖的次数：<span class="num">{$awardNum}</span></p></dd>
+    </dl>
+    <dl>
+      <dt>活动规则</dt>
+      <dd><p>{$act.content}</p></dd>
+    </dl>
+    <dl>
+      <dt>奖项设置</dt>
+      <dd>
+        {foreach from=$prize item=prize}
+        <p>{$prize.title}---{$prize.awardname} ---奖品数量：{$prize.num}</p>
+        {/foreach}
+      </dd>
+    </dl>
+    {if $award}
+    <dl>
+      <dt>中奖记录</dt>
+      <dd>
+        {foreach from=$award item=award}
+        <p>{$award.nickname}---{$award.class_name}</p>
+        {/foreach}
+      </dd>
+    </dl>
+    {/if}
+    {if $uid}
+    <dl>
+      <dt>我的中奖记录</dt>
+      <dd>
+        <p>兑奖截止{$act.overymd}</p>
+        {foreach from=$award item=award}
+        {if $award.uid eq $uid}
+        <p>{$award.nickname}---{$award.class_name}---{$award.code}</p>
+        {/if}
+        {/foreach}
+      </dd>
+    </dl>
+    {/if}
+  </div>
+
+
+
+
+  
+
+      
+
+    <div id="mask"></div>
+    <div id="dialog" class="yes">
+        <div id="content"></div>
+        <button id="close">关闭</button>
+    </div>
+</section>
+<script>
+    $(function () {
+        var timer, forceStop;
+        var wxch_Marquee = function (id) {
+            try {
+                document.execCommand("BackgroundImageCache", false, true)
+            } catch (e) {};
+            var container = document.getElementById(id),
+                original = container.getElementsByTagName("dt")[0],
+                clone = container.getElementsByTagName("dd")[0],
+                speed = arguments[1] || 10;
+            clone.innerHTML = original.innerHTML;
+            var rolling = function () {
+                if (container.scrollLeft == clone.offsetLeft) {
+                    container.scrollLeft = 0
+                } else {
+                    container.scrollLeft++
+                }
+            };
+            this.stop = function () {
+                clearInterval(timer)
+            };
+            timer = setInterval(rolling, speed);
+            container.onmouseover = function () {
+                clearInterval(timer)
+            };
+            container.onmouseout = function () {
+                if (forceStop) return;
+                timer = setInterval(rolling, speed)
+            }
+        };
+        var wxch_stop = function () {
+            clearInterval(timer);
+            forceStop = true
+        };
+        var wxch_start = function () {
+            forceStop = false;
+            wxch_Marquee("banner", 20)
+        };
+        wxch_Marquee("banner", 20);
+        var $egg;
+        $("#banner a").on('click', function () {
+            wxch_stop();
+            $egg = $(this);
+            var offset = $(this).position(),
+                $hammer = $("#hammer");
+            $hammer.animate({
+                left: (offset.left + 30)
+            }, 1000, function () {
+                $(this).addClass('hit');
+                $("#f").css('left', offset.left).show();
+                $egg.find('img').attr('src', '{$template_path}images/zjd/egg2.png');
+                setTimeout(function () {
+                    act_result.call(window)
+                }, 500)
+            })
+        });
+        $("#mask").on('click', function () {
+            $(this).hide();
+            $("#dialog").hide();
+            $egg.find('img').attr('src', '{$template_path}images/zjd/egg.png');
+            $("#f").hide();
+            $("#hammer").css('left', '-1.48rem').removeClass('hit');
+            wxch_start()
+        });
+        $("#close").click(function () {
+            $("#mask").trigger('click')
+        });
+        function act_result() {
+            $.getJSON("index.php?c=act&a=ajax&aid={$aid}", function (data) {
+                $("#mask").show();
+                if (data.msg === 1) {
+                    $("#content").html("恭喜你获得<br>"+data.prize+"<br>请在我的中奖纪录中<br>凭借兑奖码联系我们兑奖");
+                    $("#dialog").attr("class", 'yes').show();
+                    $(".num").text(data.num - 1);
+                    setTimeout(function () {location.reload()}, 6000)//yyy添加
+                } else if (data.msg === 0) {
+                    $("#content").html(data.prize);
+                    $("#dialog").attr("class", 'no').show();
+                    $(".num").text(data.num - 1);
+                } else if (data.msg == 2) {
+                    $("#content").html(data.prize);
+                    $("#dialog").attr("class", 'no').show()
+                };
+            })
+        }
+    });
+</script>
+{include file="inc/wx_config.htm"}
+{if $stats_code}{$stats_code}{/if}
+</body>
+</html>

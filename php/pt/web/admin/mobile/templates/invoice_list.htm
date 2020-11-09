@@ -1,0 +1,58 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>批量发货</h2>
+  	</div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>订单号</th>
+          <th>收货人</th>
+          <th>电话</th>
+          <th>配送方式</th>
+          <th>快递单号</th>
+        </tr>
+        </thead>
+        <tbody>
+        <form name="theForm" action="index.php?act=invoice&op=post" method="post">
+        {foreach from=$order_list item=order name=order}
+        <tr>
+          <td>{$order.order_id}<input type="hidden" name="order_id[]" value="{$order.order_id}"/></td>
+          <td>{$order.order_sn}<span class="label">{if $order.extension_code eq "tuan"}团{elseif $order.extension_code eq "miao"}秒{elseif $order.extension_code eq "lottery"}奖{elseif $order.extension_code eq "assist"}助{/if}</span></td>
+          <td>{$order.consignee}</td>
+          <td>{$order.mobile}</td>
+          <td>
+            <select name="shipping_id[]">
+              <option value="0">请选择快递</option>
+              {foreach from=$shipping_list item=shipping}
+              <option value="{$shipping.shipping_id}">{$shipping.shipping_name}</option>
+              {/foreach}
+            </select>
+            {if $smarty.foreach.order.first}<a class="btn" href="javascript:sync();">同步以下</a>{/if}
+          </td>
+          <td><input name="invoice_no[]" type="text" value="" /></td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler">
+            <input name="submit" type="submit" value="批量发货" class="btn" />
+            <a class="btn" href="index.php?act=invoice&op=export">导出订单</a>
+          </form>
+        </div>
+        {$pager}
+      </div>
+		</div>
+	</div>
+</div>
+<script>
+function sync() {
+  var first_value = $('select:first').val();
+  $('select:gt(0)').val(first_value);
+}
+</script>
+{include file="footer.htm"}

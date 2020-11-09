@@ -1,0 +1,10 @@
+<div class="menu_box">
+    {foreach from=$menus item=menu key=k}
+    <dl>
+        <dt><i class="icon_menu_{$k}"></i>{$menu.label}</dt>
+        {foreach from=$menu.children item=child key=key}
+        <dd{if $action eq 'wechat' || $action eq 'app'}{if $child.key eq $operation} class="cur"{/if}{else}{if $child.action eq $action} class="cur"{/if}{/if}><a href="index.php?act={$child.action}&op={$child.key}">{$child.label}</a></dd>
+        {/foreach}
+    </dl>
+    {/foreach}
+</div>

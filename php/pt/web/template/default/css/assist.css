@@ -1,0 +1,44 @@
+.assist-top { position: relative; }
+.assist-top img { width: 100%; display: block; }
+.assist-top .rules { position: absolute; top: 0; right: .2rem; width: .6rem;height:.5rem; line-height:.5rem; border-radius:0 0 .3rem .3rem; background-color: #e4c017; color: #a17400; font-size: .2rem;text-align: center;}
+.assist-list { background-color: #fff; padding:0 .2rem; }
+.assist-list dl { border-bottom: #f5f5f5 1px solid; padding:.2rem 0; overflow: hidden; position: relative; }
+.assist-list dt { position: absolute; left:0; top: .2rem; }
+.assist-list dt img { width: 1.6rem; height: 1.6rem; }
+.assist-list dd.info-box { padding-left: 1.8rem; }
+.assist-list dd .time { padding: .05rem 0 .05rem .24rem; font-size: .22rem; color: #eeae0b; position: relative; }
+.assist-list dd .time:before { position: absolute; left: 0; top: .05rem; font-family: iconfont; content: "\e654"; font-size: .22rem; }
+.assist-list dd .join-name { height: .6rem; line-height: .3rem; font-size: .24rem; overflow: hidden; }
+.assist-list dd .info { font-size: .24rem; }
+.assist-list dd .info font {  }
+.assist-list dd .info span { float: right; }
+.assist-list dd .price { line-height: .5rem; margin-top: .1rem; }
+.assist-list dd .price span { padding-right: .2rem; color: #f33; font-size: .32rem; }
+.assist-list dd .price font { font-size: .22rem; }
+.assist-list dd .btn { float: right; padding: 0 .3rem 0 .2rem; color: #fff; font-size: .26rem; border-radius: 0.06rem; position: relative; }
+.assist-list dd .btn::after { position: absolute; right: .16rem; top: .18rem; width: .12rem; height: .12rem; border-top: 1px solid #fff; border-right: 1px solid #fff; display: inline-block; transform: rotate(45deg); -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); content: '';}
+.assist-list dd .btn.ok { background-color:#f33; }
+.assist-list dd .btn.no { background-color:#cdcdcd; }
+
+.assist-user { display: block; padding:0 .3rem 0 .46rem; background-color: #fff; height: .8rem; line-height: .8rem; margin-bottom: .2rem; position: relative; }
+.assist-user span { float: right; font-size: .24rem; color: #919191; }
+.assist-user::before { position: absolute; left: 0; top:-.05rem; font-family: 'iconfont'; font-size: .4rem; color: #eeae0b; content: "\e66a"; }
+.assist-user::after { position: absolute; right: .18rem; top: .34rem; width: .12rem; height: .12rem; border-top: 1px solid #919191; border-right: 1px solid #919191; display: inline-block; transform: rotate(45deg); content: ''; }
+
+.assist-address { display: none; bottom:0; z-index:101;background-color:#fff; }
+.assist-address .address { padding:.2rem; position: relative; }
+.assist-address .address h3 { line-height: .8rem; text-align: center; font-size: .3rem; border-bottom: #eee 1px solid; }
+.assist-address .address dl { background-color: #fff; padding: .15rem 0; border-bottom: #eee 1px solid; position: relative; }
+.assist-address .address dl::after { position: absolute; right: .18rem; top: .5rem; width: .12rem; height: .12rem; border-top: 1px solid #919191; border-right: 1px solid #919191; display: inline-block; transform: rotate(45deg); content: ''; }
+.assist-address .address dl a { display: block; position: relative; }
+.assist-address .address dt { line-height: .5rem; font-size: .3rem; }
+.assist-address .address dt span { float: right; padding-right: .5rem; font-size: .24rem; color: #f33; }
+.assist-address .address dd { color: #666; }
+
+/*去弹窗padding*/
+.layui-m-layercont { padding:0; }
+.rules-box { padding:0 .4rem .4rem; }
+.rules-box p { text-align: left; margin-top: .2rem; font-size: .26rem; color: #58595b; }
+.assist_img { width: 100%; position: relative; }
+.assist_img p { display: block; width: 100%; text-align: center; position: absolute; left: 0; top: -1rem; font-size: .32rem; color: #fff; }
+.assist_img img { width: 100%; display: block; border-radius: .1rem; }

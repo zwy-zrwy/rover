@@ -1,0 +1,60 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>配送区域</h2>
+			<div class="tab_navs">
+			   <ul>
+				  <li class="cur"><a href="javascript:void(0);">列表</a></li>
+					<li><a href="index.php?act=shipping_area&amp;op=add">添加</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th><input type="checkbox" onclick="checkAll(this, 'areas')" />ID</th>
+          <th>配送区域名称</th>
+          <th>所辖地区</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <form method="post" action="index.php?act=shipping_area" name="listForm" onsubmit="return confirm('您确定要删除选定的配送区域吗？')">
+        <tbody>
+        {foreach from=$areas item=area}
+        <tr id="remove_{$area.shipping_area_id}">
+          <td>
+            <input type="checkbox" name="areas[]" value="{$area.shipping_area_id}" />{$area.shipping_area_id}
+          </td>
+          <td>
+            <span onclick="listTable.edit(this, 'edit_area', '{$area.shipping_area_id}'); return false;">{$area.shipping_area_name|escape:"html"}</a>
+          </td>
+          <td>{$area.shipping_area_regions}</td>
+          <td>
+            <a href="index.php?act=shipping_area&amp;op=edit&id={$area.shipping_area_id}">修改</a>
+            <a href="javascript:;" onclick="remove({$area.shipping_area_id},'remove_area')">删除</a>
+          </td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+
+
+      <div class="pagination">
+        <div class="handler">
+          
+            <input type="hidden" name="op" value="multi_remove" />
+            <input type="hidden" name="shipping" value="{$smarty.get.shipping}" />
+            <input type="submit" value="删除"  id="btnSubmit" class="btn" />
+          </form>
+        </div>
+        {$pager}
+      </div>
+
+		</div>
+	</div>
+</div>
+
+
+{include file="footer.htm"}

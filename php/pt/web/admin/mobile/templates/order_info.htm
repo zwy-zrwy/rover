@@ -1,0 +1,234 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>订单管理</h2>
+    </div>
+    <div class="main_bd">
+      <form action="index.php?act=order&op=operate" method="post" name="theForm">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>基本信息</th>
+            </tr>
+            <tr>
+              <td>
+                <ul>
+                  <li>订单编号：{$order.order_sn}<span class="label">{if $order.extension_code eq "tuan"}团{elseif $order.extension_code eq "miao"}秒{elseif $order.extension_code eq "lottery"}奖{elseif $order.extension_code eq "assist"}助{/if}</span></li>
+                  <li>订单状态：{$order.status}</li>
+                  <li>购买用户：{$order.nickname}</li>
+                  <li>下单时间：{$order.formated_add_time}</li>
+                  <li>支付方式：{$order.pay_name}</li>
+                  <li>付款时间：{$order.pay_time}</li>
+                  <li>配送方式：{$order.shipping_name}</li>
+                  <li>发货时间：{$order.shipping_time}</li>
+                  <li>发货单号：{$order.invoice_no}</li>
+                </ul>
+              </td>
+            </tr>
+          <tbody>
+        </table>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>客户留言：{$order.postscript}</td>
+            </tr>
+          <tbody>
+        </table>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>收货人信息</th>
+            </tr>
+            <tr>
+              <td>
+                <ul>
+                  <li>姓名：{$order.consignee|escape}</li>
+                  <li>手机：{$order.mobile|escape}</li>
+                  <li>地址：{$order.region} {$order.address|escape}</li>
+                </ul>
+              </td>
+            </tr>
+          <tbody>
+        </table>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>商品信息</th>
+            </tr>
+            <tr>
+              <td>
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th>商品名称 </th>
+                      <th>货号</th>
+                      <th>价格</th>
+                      <th>数量</th>
+                      <th>规格</th>
+                      <th>库存</th>
+                      <th>小计</th>
+                    </tr>
+                    {foreach from=$goods_list item=goods}
+                    <tr>
+                      <td>{$goods.goods_name}</td>
+                      <td>{if $goods.product_sn}{$goods.product_sn}{else}{$goods.goods_sn}{/if}</td>
+                      <td>{$goods.formated_goods_price}</td>
+                      <td>{$goods.goods_number}</td>
+                      <td>{$goods.goods_attr|nl2br}</td>
+                      <td>{$goods.product_number}</td>
+                      <td>{$goods.formated_subtotal}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                      <td colspan="7">
+                        {if $order.total_weight}商品总重量：{/if}
+                        {if $order.total_weight}{$order.total_weight}{/if}
+                        合计：
+                        {$order.formated_goods_amount}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          <tbody>
+        </table>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>费用信息</th>
+            </tr>
+            <tr>
+              <td>
+                <p>商品总金额{$order.formated_goods_amount}
+            + 配送费用{$order.formated_shipping_fee}
+                - 已付款金额{$order.formated_money_paid}
+            - 使用优惠券 {$order.formated_bonus} = {if $order.order_amount >= 0}应付款金额：{$order.formated_order_amount}
+            {else}应退款金额：{$order.formated_money_refund}
+           {if !$node_info} <input name="refund" type="button" value="退款" onclick="location.href='index.php?act=order&op=process&func=load_refund&anonymous={if $order.user_id <= 0}1{else}0{/if}&order_id={$order.order_id}&refund_amount={$order.money_refund}'" />{/if}
+            {/if}</p>
+              </td>
+            </tr>
+          <tbody>
+        </table>
+
+
+
+      <table width="100%" cellpadding="3" cellspacing="1">
+        <tr>
+          <td colspan="4">
+            <div align="center">
+              <input type="button" onclick="window.open('index.php?act=order&op=info&order_id={$order.order_id}&print=1')" class="btn" value="打印订单"  {if $node_info}disabled{/if}/>
+          </div></td>
+        </tr>
+      </table>
+
+
+
+
+
+
+      <table class="table">
+        <tr>
+          <th colspan="6">操作信息</th>
+        </tr>
+        <tr>
+          <td><div align="right">操作备注</div></td>
+        <td colspan="5"><textarea name="action_note" cols="80" rows="3" {if $node_info}disabled{/if} ></textarea></td>
+          </tr>
+        <tr>
+          <td><div align="right"></div>
+            <div align="right">可执行的操作：</div></td>
+          <td colspan="5">
+
+              
+              {if $operable_list.refund}
+                未退款
+              {/if}
+              {if $operable_list.tuan}
+                待成团
+              {/if}
+              {if $operable_list.unrefund}
+                已退款
+              {/if}
+              {if $operable_list.verifi}
+                待核销
+              {/if}
+              {if $operable_list.unverifi}
+                已核销
+              {/if}
+              {if $operable_list.confirm}
+            <input name="confirm" type="submit" value="确认" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.pay}
+              <input name="pay" type="submit" value="付款" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.unpay}
+              <input name="unpay" type="submit" class="btn" value="设为未付款" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.to_shipping}
+              <select name="shipping_id">
+                {foreach from="$shipping_list" item="shipping"}
+                <option value="{$shipping.shipping_id}">{$shipping.shipping_name}</option>
+                {/foreach}
+              </select>
+              <input type="text" name="invoice_no" placeholder="请输入快递单号">
+
+              <input name="to_shipping" type="submit" value="一键发货" class="btn" />
+              {/if}{if $operable_list.prepare}
+              <input name="prepare" type="submit" value="配货" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.split}
+              <input name="ship" type="submit" value="生成发货单" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.unship}
+              <input name="unship" type="submit" value="未发货" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.receive}
+              <input name="receive" type="submit" value="已收货" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.cancel}
+              <input name="cancel" type="submit" value="取消" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.invalid}
+              <input name="invalid" type="submit" value="无效" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.return}
+              <input name="return" type="submit" value="退货" class="btn" {if $node_info}disabled{/if} />
+              {/if} {if $operable_list.to_delivery}
+              <input name="to_delivery" type="submit" value="去发货" class="btn" {if $node_info}disabled{/if}/>
+              <input name="order_sn" type="hidden" value="{$order.order_sn}" />
+              {/if} <input name="after_service" type="submit" value="售后" class="btn" {if $node_info}disabled{/if} />{if $operable_list.remove}
+              <input name="remove" type="submit" value="删除" class="btn" onClick="return window.confirm('删除订单将清除该订单的所有信息。您确定要这么做吗？');" {if $node_info}disabled{/if}/>
+              {/if}
+              {if $order.order_status eq 1}
+              <a href="index.php?act=order&op=refund&order_id={$order.order_id}" onClick="return window.confirm('您确认要给订单退款吗？');"  class="btn" />退款</a>
+              {/if}
+              {if $order.extension_code eq "tuan"}备注：团购活动未处理为成功前，不能发货{/if}
+              {if $agency_list}
+              <input name="assign" type="submit" value="指派给" class="btn" onclick="return assignTo(document.forms['theForm'].elements['agency_id'].value)" {if $node_info}disabled{/if} />
+              {/if}
+              <input name="order_sn" type="hidden" value="{$order.order_sn}" />
+              <input name="order_id" type="hidden" value="{$smarty.request.order_id}"></td>
+          </tr>
+        <tr>
+          <th>操作者</th>
+          <th>操作时间</th>
+          <th>订单状态</th>
+          <th>付款状态</th>
+          <th>发货状态</th>
+          <th>备注</th>
+        </tr>
+        {foreach from=$action_list item=action}
+        <tr>
+          <td><div align="center">{$action.action_user}</div></td>
+          <td><div align="center">{$action.action_time}</div></td>
+          <td><div align="center">{$action.order_status}</div></td>
+          <td><div align="center">{$action.pay_status}</div></td>
+          <td><div align="center">{$action.shipping_status}</div></td>
+          <td>{$action.action_note|nl2br}</td>
+        </tr>
+        {/foreach}
+      </table>
+
+
+
+
+
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

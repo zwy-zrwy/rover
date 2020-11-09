@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>助力享免单</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/assist.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<script src="{$template_path}js/dropload.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/jquery.lazyload.js?v={$aos_version}"></script>
+<script src="{$template_path}js/aotime_day.js?v={$aos_version}"></script>
+</head>
+<body>
+<div class="box-hide"></div>
+{include file="inc/header.htm"}
+<section id="container" class="container pdb" style="display:none">
+    <div class="assist-top">
+        <img src="{$template_path}images/assist_banner.png"/>
+        <div class="rules" onclick="rules()">规则</div>
+    </div>
+    <a class="assist-user" href="index.php?c=user&a=assist">我的免单<span>点击查看</span></a>
+    <div class="assist-list"></div>
+    <input type="hidden" name="act_id" value=''>
+    <input type="hidden" name="address_id" value=''>
+  <div class="assist-address fixed" id="address">
+    <div class="address">
+      <h3>选择收货地址</h3>
+      {foreach from=$address_list item=address}
+      <dl {if $address.off neq '1'}onclick="json_done({$address.address_id})"{/if}>
+        <dt>{$address.consignee|escape}&nbsp;&nbsp;{$address.mobile}{if $address.off eq '1'}<span>(不支持配送)</span>{/if}</dt>
+        <dd>{$address.area} {$address.address|escape}</dd>
+      </dl>
+      {/foreach}
+      <dl>
+        <dt><a href="index.php?c=assist&a=address">新增收货地址</a></dt>
+        <dd></dd>
+      </dl>
+      <a href="javascript:;" class="box-close" onclick="closeAddress()"></a>
+    </div>
+  </div>
+    {include file="inc/footer.htm"}
+</section>
+<script>
+  window.onload = function() {
+    $('#loading').css('display','none'); 
+    $('#container').css('display','');
+  }
+function rules()
+{
+  layer.open({
+    title:'助力享免单规则',
+    content: '<div class="rules-box">{$assist_rules}<p>· 本活动最终解释权归{$shop_name}所有</p></div>'
+  }); 
+}
+function openAddress(act_id)
+{
+  $.ajax({
+    type: 'POST',
+    data: {act_id},
+    url: 'index.php?c=assist&a=assist_img_ajax',
+    dataType: 'json',
+    success: function(data){
+      if(data == 1){
+        openImg(act_id,{$smarty.session.user_id})
+      }else if(data == 0){
+        $('input[name="address_id"]').val('');
+        $('input[name="act_id"]').val(act_id);
+        $(".box-hide").show();
+        $("#address").slideDown();
+      }else{
+        layer.open({content:data,skin: 'msg',time: 2});
+      }
+    }
+  });
+}
+function closeAddress()
+{
+  $("#address").slideUp();
+  $(".box-hide").hide();
+}
+function json_done(address_id)
+{
+  var act_id = $('input[name="act_id"]').val();
+  
+  $.ajax({
+      type: 'POST',
+      data: {act_id,address_id},
+      url: 'index.php?c=assist&a=done',
+      dataType: 'json',
+      success: function(data){
+        if(data.error == 0){
+          openImg(act_id,{$smarty.session.user_id});
+          closeAddress();
+        }else{
+          layer.open({content:data.message,skin: 'msg',time: 2});
+        }
+      }
+  });
+}
+function openImg(act_id,user_id)
+{
+  layer.open({
+    content: '<div class="assist_img"><p>长按保存图片，然后分享给好友</p><img src="uploads/assist_img/assist_'+act_id+'_'+user_id+'.jpg"/></div>'
+  });
+}
+$(function(){
+    var tab1LoadEnd = false;
+    var num = 0;
+    var page= 0;
+    var dropload = $('.container').dropload({
+    scrollArea : window,
+    loadDownFn : function(me){
+        // 加载菜单一的数据
+            page++;
+            var counter = page,last = num,amount = 5;
+            $.ajax({
+                type: 'POST',
+                data: {last,amount,page},
+                url: 'index.php?c=assist&a=ajax',
+                dataType: 'json',
+                success: function(data){
+                    var result = '';
+                    num = amount * counter;
+                    last = num;
+                    if(typeof(data.info)!="undefined"){
+                          for(i = 0; i < data.info.length; i++){
+                              result +=data.info[i];  
+                          }
+                        }
+                    // 为了测试，延迟1秒加载
+                    setTimeout(function(){
+                        $('.assist-list').append(result);
+                        $("img.lazy_"+page).lazyload({effect: "fadeIn"});
+                        $(".aotime").each(function(){
+                          $(this).aotime();
+                        });
+                        if(last >= data.count){
+                            // 数据加载完
+                            tab1LoadEnd = true;
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 每次数据加载完，必须重置
+                        me.resetload();
+                    },1);
+
+                },
+                error: function(xhr, type){
+                    //layer.open({content: 'Ajax error!',skin: 'msg',time: 2});
+                    // 即使加载出错，也得重置
+                    me.resetload();
+                }
+            });
+        }
+    })
+})
+</script>
+{include file="inc/wx_config.htm"}
+{if $stats_code}{$stats_code}{/if}
+</body>
+</html>

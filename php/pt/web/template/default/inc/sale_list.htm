@@ -1,0 +1,22 @@
+{if $goods.goods_id}
+<li class="tuan-item">
+  <div class="goods-image">
+    <a href="{$goods.url}"><img class="lazy_{$page}" data-original="{$goods.tuan_img}" src="uploads/images/no_picture.jpg"></a>
+    {if $goods.sales}<span class="sales">已团{$goods.sales}件</span>{/if}
+  </div>
+  <p class="goods-name"><a href="{$goods.url}">{$goods.goods_name}</a></p>
+  <div class="detail">
+    <div class="left-side">
+      <span class="tuan-num">{$goods.min_number}{if $goods.max_number gt $goods.min_number}-{$goods.max_number}{/if}人团</span>
+      <span class="sale-price">{$goods.tuan_price}</span>
+    </div>
+    <div class="enter-button"><a href="{$goods.url}">去开团</a></div>
+    <div class="local-groups">
+      {foreach from=$goods.ing item=ing}
+      <div class="avatar"><img src="{$ing.headimgurl}"></div>
+      {/foreach}
+    </div>
+  </div>
+</li>
+{/if}
+  

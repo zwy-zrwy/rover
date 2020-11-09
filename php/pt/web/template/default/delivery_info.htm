@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>物流信息</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body>
+<section class="container">
+{if $delivery_info.success}
+  <div class="delivery_info">
+    <dl>
+      <dt><img src="{$delivery_info.ico}"></dt>
+      <dd>
+        <h3>物流状态：{if $delivery_info.status eq 3}在途{elseif $delivery_info.status eq 4}揽件{elseif $delivery_info.status eq 5}疑难{elseif $delivery_info.status eq 6}签收{elseif $delivery_info.status eq 7}退签{elseif $delivery_info.status eq 8}派件{elseif $delivery_info.status eq 9}退回{else}物流单号暂无结果{/if}</h3>
+        <p>物流公司：{$delivery_info.company}</p>
+        <p>运单号码：{$delivery_info.nu}</p>
+        <p>物流电话：{$delivery_info.phone}</p>
+      </dd>
+    </dl>
+  </div>
+	<div class="track-rcol">
+		<div class="track-list">
+			<ul>
+			    {foreach from=$delivery_info.data item=item name=name}
+				<li{if $smarty.foreach.name.first} class="first"{/if}>
+					<i class="node-icon"></i>
+					<p class="txt">{$item.context}</p>
+					<p class="time">{$item.time}</p>
+				</li>
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+{else}
+<p class="no-delivery">{$delivery_info.reason}</p>
+{/if}
+</section>
+{include file="inc/wx_config.htm"}
+{if $stats_code}{$stats_code}{/if}
+</body>
+</html>

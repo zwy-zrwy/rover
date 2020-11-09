@@ -1,0 +1,84 @@
+/*砸金蛋*/
+.zjd {background: url(../images/zjd/acbg.jpg) repeat; width:100%;}
+.banner {width: 100%;position: relative;}
+.banner .img { width: 100%; }
+#f {position: absolute;bottom: 1.4rem;left: 0;z-index: 2;display: none;}
+#f img {width:1.58rem;}
+#hammer {position: absolute;top: 94px;left:-1.48rem;height:1.74rem;width:1.48rem;z-index: 3;}
+#hammer img {height:1.74rem;width:1.48rem;}
+#hammer.hit {transform: rotate(-30deg);-ms-transform: rotate(-30deg);-moz-transform: rotate(-30deg);-webkit-transform: rotate(-30deg);-o-transform: rotate(-30deg);}
+#banner { position: absolute; left: 0; bottom: .6rem; overflow: hidden; }
+#banner img { display: block;width:1.58rem;height: 1.87rem;}
+#banner a {margin-right:.4rem;}
+#banner dl, #banner dt, #banner dd, #banner a {float: left;}
+#banner dl {width: 1000%;}
+
+/*刮刮卡*/
+.ggk {background: url(../images/ggk/activity-scratch-card-bg.jpg);}
+.cover{width:100%;margin: 0 auto;position: relative;}
+.cover img{width:100%;}
+#scratchpad,#prize{position: absolute;width:150px;height:40px;line-height:40px;bottom:.7rem;left: 2rem;text-align: center;font-size: 14px;color:#333;}
+
+/*大转盘*/
+.dzp { background:url(../images/dzp/bg.png);}
+#dzp{width:5.4rem;height:5.4rem;background: url(../images/dzp/1.png) no-repeat;background-size: 5.4rem auto;overflow: hidden;margin: 0 auto; position:relative;}
+#dzp .inner{height:5.1rem;width:5.1rem;background:url(../images/dzp/2.png);margin: 0 auto;background-size: 5.1rem auto;position: relative;}
+#dzp #zhen{height:4rem;width:2rem;position: absolute;left: 50%;top:.55rem;margin-left: -1rem;background-image: url(../images/dzp/3.png);background-repeat: no-repeat;background-size: cover;}
+
+#mask{position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 5;background: rgba(0,0,0,.4);display: none;}
+		#dialog{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			height: 100px;
+			width: 276px;
+			margin-left: -150px;
+			margin-top: -50px;
+			border: 2px solid #306931;
+			padding: 10px;
+			background-color: #fff;
+			display: none;
+			z-index: 6;
+			font-weight: bold;
+			font-size: 20px;
+		}
+		#dialog.yes{
+			color: #900;
+			background-image: url(../images/dzp/y.png);
+			background-position: right bottom;
+			background-repeat: no-repeat;
+			-webkit-background-size:100px auto ;
+			background-size:100px auto ;
+		}
+		#dialog.yes a{ display: block;}
+		#dialog.no{ color: #333;}
+		#dialog.no button{ display: block;}
+		#content{
+			text-align: center;
+		}
+		#dialog button,#dialog a{
+			display: none;
+			font-size: 14px;
+			position: absolute;
+			bottom: 10px;
+			left: 50%;
+			height: 30px;
+			width: 80px;
+			line-height: 30px;
+			margin-left: -40px;
+			background-color: #2C6C4E;
+			border: none;
+			color: #fff;
+			text-align: center;
+		}
+
+
+
+
+
+.actbox { padding:0 .3rem .3rem; }
+.actbox dl { margin-top: .3rem; border-radius:.1rem; background-color: #FEF8B2; box-shadow: 0 0 6px rgba(0, 0, 0, 0.5); }
+.actbox dt {padding: .05rem .2rem;background-color:#AF5419;border-radius: .1rem .1rem 0 0;color: #fff;}
+.actbox dd {padding:.1rem .2rem;color: #444;}
+.actbox dd p { padding: .1rem 0;  }
+.actbox .red {color: #f33; }

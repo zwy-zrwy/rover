@@ -1,0 +1,23 @@
+<dl>
+  <dt><img class="lazy_{$page}" data-original="{$lists.goods_img}" src="uploads/images/no_picture.jpg"></dt>
+  <dd class="info-box">
+    <h3 class="join-name">{$lists.goods_name}</h3>
+    {if $lists.tuan_status eq 1}
+    <p class="time">
+      还剩<span class="aotime" data="{$lists.aotime}"></span>
+    </p>
+    {/if}
+    <p class="info"><font>需{$lists.assist_tuan_num}人助力</font><span>
+    {if $lists.tuan_status eq 4}助力失败{elseif $lists.cha_num < 1}助力成功{else}还差{$lists.cha_num}人{/if}</span></p>
+    <p class="price">
+      <span>{$lists.assist_price}</span>
+      {if $lists.tuan_status eq 4}
+      <a href="javascript:;" class="btn no">助力失败</a>
+      {elseif $lists.cha_num < 1}
+      <a href="javascript:;" class="btn no">助力成功</a>
+      {else}
+      <a href="javascript:openAddress({$lists.act_id})" class="btn ok">继续分享</a>
+      {/if}
+    </p>
+  </dd>
+</dl>

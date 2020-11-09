@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>退款售后</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body>
+<section class="container">
+  <div id="order-detail" class="with-bottom-buttons">
+    
+    <div class="head-block">
+      <dl>
+        <dt class="order-received"></dt>
+        <dd class="details">
+          <h3 class="msg-tag">
+            {if $order_back.back_type == 1}
+              退货退款
+            {else if $order_back.back_type == 4}
+              退款（无需退货）
+            {/if}
+          </h3>
+          <p class="msg-content">{$back_order.status_back}({$back_order.status_refund})</p>
+        </dd>
+      </dl>
+    </div>
+    <div class="address-block">
+      <dl>
+        <dt><i class="iconfont">{if $back_order.shipping_id eq 1}&#xe752;{else}&#xe6c2;{/if}</i></dt>
+        <dd>
+          <h3>{$back_order.consignee|escape}<font>{$back_order.mobile|escape}</font></h3>
+          <p>{if $back_order.shipping_id eq 1}{$back_order.store_name}{else}{$back_order.area} {$back_order.address}{/if}</p>
+        </dd>
+      </dl>
+    </div>
+
+    <div class="goods-block">
+      <dl>
+        <dt><img src="{$back_order.goods_img}"></dt>
+        <dd>
+          <h3>{$back_order.goods_name}</h3>
+          <p>规格：{$back_order.goods_attr}</p>
+        </dd>
+        <dd class="rside"><font>{$back_order.goods_price}</font>x{$back_order.goods_number}</dd>
+      </dl>
+    </div>
+    <div class="currency-block">
+      应退：<i>￥</i><font>{$back_order.refund_money_1}</font><span></span>
+    </div>
+    <div class="currency-block">
+      实退：<i>￥</i><font>{$back_order.refund_money_2}</font><span></span>
+    </div>
+
+    <div class="contact-block">
+      <div class="contact-item">
+        <i class="iconfont">&#xe620;</i>
+        <a href="{if $kefu_select eq 1}http://wpa.qq.com/msgrd?v=3&uin={$kefu}&site=qq&menu=yes&from=message&isappinstalled=0{else}{$kefu}{/if}">联系卖家</a>
+      </div>
+      <div class="contact-item">
+        <i class="iconfont">&#xe7eb;</i>
+        <a href="tel:{$service_phone}">拨打电话</a>
+      </div>
+      <div class="middle-line"></div>
+    </div>
+    <div class="order-detail">
+      <p>订单编号：{$order.order_sn}</p>
+      <p>支付方式：{$order.pay_name}</p>
+      <p>下单时间：{$order.formated_add_time}</p>
+      {if $order.extension_code eq "tuan" && $order.tuan_status > 0}
+      <p>开团时间：{$order.formated_pay_time}</p>
+      {if $order.tuan_status eq 2}
+      <p>成团时间：{$order.suc_tuan_time}</p>
+      {/if}
+      {/if}
+      {if $order.shipping_time}
+      <p>发货时间：{$order.shipping_time}</p>
+      <p>快递方式：{$order.shipping_name}</p>
+      <p>运单编号：{$order.invoice_no}</p>
+      {/if}
+    </div>
+
+  </div>
+
+</section>		  
+</body>
+</html>

@@ -1,0 +1,56 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>优惠券管理</h2>
+      <div class="tab_navs">
+        <ul>
+          <li class="cur"><a href="javascript:void(0);">管理</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form method="POST" action="index.php?act=coupon&op=batch&bonus_type={$smarty.get.bonus_type}" name="listForm">
+      <table class="table">
+        <tr>
+          <th>
+            <input onclick='checkAll(this, "checkboxes")' type="checkbox">
+            编号</th>
+          <th>优惠券序列号</th>
+          <th>优惠券类型</th>
+          <th>订单号</th>
+          <th>使用会员</th>
+          <th>使用时间</th>
+          <th>操作</th>
+        </tr>
+        {foreach from=$bonus_list item=bonus}
+        <tr id="remove_{$bonus.bonus_id}">
+          <td><input value="{$bonus.bonus_id}" name="checkboxes[]" type="checkbox">{$bonus.bonus_id}</td>
+          <td>{$bonus.bonus_sn}</td>
+          <td>{$bonus.type_name}</td>
+          <td>{$bonus.order_sn}</td>
+          <td>{$bonus.nickname}</td>
+          <td>{$bonus.used_time}</td>
+          <td>
+            <a  href="javascript:" onclick="remove({$bonus.bonus_id}, 'remove_bonus')">删除</a>
+          </td>
+        </tr>
+        {foreachelse}
+        <tr><td class="no-records" colspan="7">{$lang.no_records}</td></tr>
+        {/foreach}
+      </table>
+
+      <div class="pagination">
+        <div class="handler">
+        </div>
+        {$pager}
+      </div>
+        <input type="submit" name="drop" id="btnSubmit" value="删除" class="btn" />
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

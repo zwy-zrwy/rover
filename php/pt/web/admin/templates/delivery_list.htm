@@ -1,0 +1,83 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+      {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>发货单管理</h2>
+			<div class="tab_navs">
+			    <ul>
+				    <li class="cur"><a href="javascript:void(0);">发货单管理</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="main_bd">
+      <div class="top_s">
+        <form method="get" action="index.php">
+          <input type="hidden" name="act" value="{$action}">
+          <input type="hidden" name="op" value="{$operation}">
+          <label>发货单流水号</label>
+          <input class="txt" type="text" name="delivery_sn" value="{$filter.delivery_sn}">
+          <label>订单号</label>
+          <input class="txt" type="text" name="order_sn" value="{$filter.order_sn}">
+          <label>收货人</label>
+          <input class="txt-short" type="text" name="consignee" value="{$filter.consignee}">
+          <label>发货单状态</label>
+          <select name="status" id="status">
+            <option value="-1" selected="selected">请选择</option>
+            <option value="0"{if $filter.status eq 0} selected{/if}>已发货</option>
+            <option value="1"{if $filter.status eq 1} selected{/if}>退货</option>
+            <option value="2"{if $filter.status eq 2} selected{/if}>正常</option>
+          </select>
+          <input type="submit" value="搜索" class="btn" />
+        </form>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>
+            <input onclick='checkAll(this, "delivery_id")' type="checkbox" {if $node_info}disabled{/if}/>发货单流水号
+          </th>
+          <th>订单号</th>
+          <th>下单时间</th>
+          <th>收货人</th>
+          <th>发货时间</th>
+          <th>发货单状态</th>
+          <th>操作人</th>
+          <th>操作</th>
+        <tr>
+        </thead>
+        <tbody>
+        <form method="post" action="index.php?act=delivery&op=operate" name="listForm" onsubmit="return check()">
+        {foreach from=$delivery_list item=delivery key=dkey}
+        <tr>
+          <td><input type="checkbox" name="delivery_id[]" value="{$delivery.delivery_id}" {if $node_info}disabled{/if} />{$delivery.delivery_sn}</td>
+          <td>{$delivery.order_sn}<br /></td>
+          <td>{$delivery.add_time}</td>
+          <td>{$delivery.consignee|escape}</td>
+          <td>{$delivery.update_time}</td>
+          <td>{$delivery.status_name}</td>
+          <td>{$delivery.action_user}</td>
+          <td>
+           <a href="index.php?act=delivery&op=delivery_info&delivery_id={$delivery.delivery_id}">查看</a>
+           <!--{if !$node_info}
+           <a onclick="{if(confirm('您确定要删除吗？')){return true;}return false;}" href="index.php?act=delivery&op=operate&remove_invoice=1&delivery_id={$delivery.delivery_id}" >删除</a>
+           {/if}-->
+          </td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler">
+          
+            <!--<input name="remove_invoice" type="submit"  value="删除" class="btn" onclick="{if(confirm('您确定要删除吗？')){return true;}return false;}" />-->
+          </form>
+        </div>
+        {$pager}
+      </div>
+		</div>
+	</div>
+</div>
+{include file="page.htm"}

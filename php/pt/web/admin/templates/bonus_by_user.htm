@@ -1,0 +1,144 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+      {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>按用户发放</h2>
+    </div>
+    <div class="main_bd">
+      <form name="theForm" action="index.php?act=coupon" method="post" onsubmit="return validate();">
+        关键字
+        <input type="text" name="keyword" size="30" />
+        <input type="button" name="search" class="btn" value="搜索" onclick="searchUser();" />
+        <table cellspacing='1' cellpadding='3'>
+          <tr>
+            <th>会员列表</th>
+            <th>操作</th>
+            <th>给下列用户发放优惠券</th>
+          </tr>
+          <tr>
+            <td width="45%" align="center">
+              <select name="user_search[]" id="user_search" size="15" style="width:260px;height:255px" ondblclick="addUser()" multiple="true">
+              </select>
+            </td>
+            <td align="center">
+              <p><input type="button" value="&gt;" onclick="addUser()" class="btn" /></p>
+              <br/>
+              <p><input type="button" value="&lt;" onclick="delUser()" class="btn" /></p>
+            </td>
+            <td width="45%" align="center">
+              <select name="user[]" id="user" multiple="true" size="15" style="width:260px;height:255px" ondblclick="delUser()">
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" colspan="3"><input type="submit" name="send_user" value="确认发送" class="btn" /></td>
+          </tr>
+        </table>
+        <input type="hidden" name="id" value="{$id}" />
+        <input type="hidden" name="op" value="send_by_user" />
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}
+<script type="text/javascript">
+  function searchUser(){
+    var keywords = $("input[name='keyword']").val();
+    $.ajax({
+      type: 'get',
+      data: {keywords},
+      url: 'index.php?act=coupon&op=search_users',
+      dataType: 'json',
+      success: function(data){
+        var html="";
+        if (data.error == 0)
+        {
+          for (i = 0; i < data.content.length; i++)
+          {
+            html += "<option value="+data.content[i].user_id+">"+data.content[i].nickname+"</option>";
+          }
+        }
+        $("#user_search").html(html);
+      }
+    });
+  }
+  function addUser()
+  {
+      //var src = $('#user_search');
+      var src = document.getElementById('user_search');
+      var dest = document.getElementById('user');
+      //var dest = $('#user');
+//alert(src.options);
+      var _html = '';
+      for (var i = 0; i < src.options.length; i++)
+      {
+          if (src.options[i].selected)
+          {
+              var exist = false;
+              for (var j = 0; j < dest.options.length; j++)
+              {
+                  if (dest.options[j].value == src.options[i].value)
+                  {
+                      exist = true;
+                      break;
+                  }
+              }
+              if (!exist)
+              {
+                var opt = document.createElement('OPTION');
+                  opt.value = src.options[i].value;
+                  opt.text = src.options[i].text;
+                  dest.options.add(opt);
+              }
+          }
+      }
+      dest.append(_html);
+  }
+
+  function delUser()
+  {
+      var dest = document.getElementById('user');
+
+      for (var i = dest.options.length - 1; i >= 0 ; i--)
+      {
+          if (dest.options[i].selected)
+          {
+              dest.options[i] = null;
+          }
+      }
+  }
+  var submiting = false;
+  function validate()
+  {
+    if(!submiting)
+    {
+      var idArr = new Array();
+      var dest = document.getElementById('user');
+      for (var i = 0; i < dest.options.length; i++)
+      {
+          dest.options[i].selected = "true";
+          idArr.push(dest.options[i].value);
+      }
+      if (idArr.length <= 0)
+      {
+          //alert(user_name_empty);
+          return false;
+      }
+      else
+      {
+          submiting = true;
+          return true;
+      }
+    }
+    else
+    {
+      layer.msg('Submitting...');
+      return false;
+    }
+  }
+</script>
+</body>
+</html>

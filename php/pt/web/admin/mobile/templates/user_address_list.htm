@@ -1,0 +1,30 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>会员管理</h2>
+      <div class="tab_navs">
+        <ul>
+          <li class="cur"><a href="javascript:void(0);">收货地址</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <table class="table">
+       <tr>
+        <th>姓名</th>
+        <th>电话</th>
+        <th>地址</th>
+      </tr>
+      {foreach from=$address item=item}
+      <tr>
+        <td>{$item.consignee|escape}</td>
+        <td>{$item.mobile}</td>
+        <td>{$item.area}{$item.address|escape}</td>
+      </tr>
+      {/foreach}
+      </table>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

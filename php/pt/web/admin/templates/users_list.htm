@@ -1,0 +1,88 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>会员管理</h2>
+			<div class="tab_navs">
+			   <ul>
+				  <li class="cur"><a href="javascript:void(0);">会员管理</a></li>
+				</ul>
+			</div>
+	  </div>
+		<div class="main_bd">
+      <div class="top_s">
+        <form name="theForm" method="get" action="index.php">
+          <input type="hidden" name="act" value="users">
+          <input type="hidden" name="op" value="users_manage">
+          <label>昵称</label></th>
+          <input class="txt" type="text" name="keyword" value="{$filter.keywords}">
+          <label>手机号码</label>
+          <input class="txt" type="text" name="mobile" value="{$filter.mobile}">
+          <input type="submit" value="搜索" class="btn" />
+        </form>
+      </div>
+      <form method="POST" action="" name="listForm" onsubmit="return confirm_bath()">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>
+            <input onclick='checkAll(this, "checkboxes")' type="checkbox">
+            ID
+          </th>
+          <th>图像</th>
+          <th>昵称</th>
+          <th>姓名</th>
+          <th>性别</th>
+          <th>地区</th>
+          <th>手机号</th>
+          <th>佣金</th>
+          <th>操作</th>
+        <tr>
+        </thead>
+        <tbody>
+        {foreach from=$user_list item=user}
+        <tr id="remove_{$user.user_id}">
+          <td class="w24"><input type="checkbox" name="checkboxes[]" value="{$user.user_id}" />{$user.user_id}</td>
+          <td class="w48 picture">
+            <img src="{if $user.headimgurl}{$user.headimgurl}{else}static/images/avatar.png{/if}" width="50">
+          </td>
+          <td>
+            <p class="name"><strong>{$user.nickname|escape}</strong>{if $user.subscribe} <font color="red">(已关注)</font>{/if}</p>
+            <p class="smallfont">注册日期：{$user.reg_time}</p>
+          </td>
+          <td>{$user.realname}</td>
+          <td>{if $user.sex eq 1}男{else}女{/if}</td>
+          <td>{$user.province} {$user.city}</td>
+          <td>{$user.mobile}</td>
+          <td>{$user.dist_amount}</td>
+          <td>
+            <a href="index.php?act=users&op=address_list&id={$user.user_id}">收货地址</a>
+            <a href="index.php?act=account_log&op=list&user_id={$user.user_id}">查看账目明细</a>
+            <a href="javascript:" onclick="remove({$user.user_id}, 'remove')">删除</a>
+          </td>
+        </tr>
+        {/foreach}
+        <tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler">
+          
+            
+        </div>
+        {$pager}
+      </div>
+		</div>
+      <input type="hidden" name="op" value="batch_remove" />
+      <!--<input type="submit" id="btnSubmit" value="删除" disabled="true" class="btn" />-->
+    </form>
+	</div>
+</div>
+{include file="footer.htm"}
+		
+		
+		
+
+

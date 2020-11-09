@@ -1,0 +1,19 @@
+.container { background-color: #4d56a3; }
+.qiandao-banner img { display: block; width: 100%; }
+.qiandao-box { background-color: #FFBD66; border-radius: .1rem; margin: .1rem; padding:.1rem; overflow: hidden; }
+.qiandao-top { overflow: hidden; }
+.current-date{float:left;padding-top:5px;color:#b25d06;font-size:18px}
+.just-qiandao{float:right;width:92px;height:36px;border-radius:4px;background-color:#b25d06;color:#fff;text-align:center;font-size:1pc;line-height:36px;cursor:pointer}
+.just-qiandao:active{background-color:#9c4f01}
+.just-qiandao.actived { background-color: #cdcdcd; }
+.qiandao-main { margin-top: .1rem; overflow: hidden;}
+.qiandao-week { background-color:#FEE684; height:.6rem; margin-bottom: .05rem; border-radius: .1rem .1rem 0 0; }
+.qiandao-week li { float:left; width: 14.2857%; line-height: .6rem; text-align:center; color: #AD560E; font-weight: 700; }
+.qiandao-list li { float: left; width: 14.2857%; line-height: .84rem;  position:relative; }
+.qiandao-list li font { display: block; margin:0 1px 1px 0; background-color:#fff; border-radius:.1rem; text-align: center; color: #AD560E; font-size: .36rem; }
+.qiandao-list li .qiandao-icon{position:absolute;top:.1rem;left:.12rem;z-index:2;display:none;width:.6rem;height:.64rem;background-image:url(../images/qiandao_icon.png); background-repeat: no-repeat; background-size: cover; }
+.qiandao-list li.qiandao .qiandao-icon{display:block;}
+.qiandao-rules { background-color: #FEE684; border-radius: .1rem; margin: .1rem; padding:.1rem; color: #AD560E; overflow: hidden; }
+.qiandao-rules h4 { font-size: .3rem; }
+.qiandao-rules p {  }
+

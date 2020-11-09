@@ -1,0 +1,119 @@
+{include file="header.htm"}
+<script src="static/js/laydate/laydate.js"></script>
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>助力活动</h2>
+      <div class="tab_navs">
+        <ul>
+          <li><a href="index.php?act=assist&op=assist_list">助力管理</a></li>
+          <li class="cur"><a href="javascript:void(0);">{if $form_act eq 'insert'}添加助力{else}修改助力{/if}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form action="index.php?act=assist" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+      <table class="table">
+      {if $form_act eq 'insert'}
+        <tr>
+          <td>关键字：</td>
+          <td>
+            <input type='text' name='keyword' maxlength="20" value='{$assist.cat_name|escape:html}' size='27' />
+            <input type="button" value="搜索" class="btn" onclick="searchGoods()" {if $form_action eq 'update'} disabled="true" {/if}>
+          </td>
+        </tr>
+      {/if}
+        <tr>
+          <td>商品名称：</td>
+          <td>
+            <select name="goods_id" id="source_select" onchange="select_attr()">
+              <option {if $assist.goods_id} value = "{$assist.goods_id}" {else} value="0" {/if}>{if $assist.goods_name}{$assist.goods_name}{else}请先搜索商品生成选项列表{/if}</option>
+            </select>
+          </td>
+        </tr>
+        <tr style="{if !$goods_attr} display:none; {/if}">
+          <td>可选规格：</td>
+          <td id="goods_attr">
+            {foreach from=$goods_attr item=attr name=sku}
+              <input type="radio" name="goods_attr" {if $attr.attr_id eq $assist.goods_attr} checked="true" {/if} value="{$attr.attr_id}" />{$attr.attr_value}
+            {/foreach}
+          </td>
+        </tr>
+        <tr>
+          <td>活动日期：</td>
+          <td>
+            <input name="start_date" type="text" id="start_date" value='{$assist.assist_start_time}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+            -
+            <input name="end_date" type="text" id="end_date" value='{$assist.assist_end_time}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+          </td>
+        </tr>
+        <tr>
+          <td>助力人数：</td>
+          <td><input type="text" name="assist_tuan_num" value='{$assist.assist_tuan_num}' size="50"></td>
+        </tr>
+        <tr>
+          <td>助力库存：</td>
+          <td><input type="text" name="assist_number" value='{$assist.assist_number}' size="50">
+          </td>
+        </tr>
+      </table>
+      {if $form_act eq 'update'}
+        <input type="hidden" name="id" value="{$assist.assist_id}" />
+      {/if}
+      <input type="submit" class="btn" value="确定" />
+      <input type="hidden" name="op" value="{$form_act}" />
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function searchGoods(){
+    var keywords = $("input[name='keyword']").val();
+    $.ajax({
+      type: 'POST',
+      data: {keywords},
+      url: 'index.php?act=coupon&op=get_goods_list',
+      dataType: 'json',
+      success: function(data){
+        var html="";
+        if (data.error == 0)
+        {
+          html += "<option value='0'>请选择商品</option>"
+          for (i = 0; i < data.content.length; i++)
+          {
+            html += "<option value="+data.content[i].value+">"+data.content[i].text+"</option>";
+          }
+        }
+        $("#source_select").html(html);
+        select_attr();
+      }
+    });
+  }
+  function select_attr(){
+    var id = $("#source_select").val();
+    $.ajax({
+      type: 'POST',
+      data: {id},
+      url: 'index.php?act=goods&op=goods_attr',
+      dataType: 'json',
+      success: function(data){
+        var html="";
+        if (data.error == 0)
+        {
+          $("#goods_attr").parent().show();
+          for (i = 0; i < data.content.length; i++)
+          {
+            html += "<input  type='radio' name='goods_attr[]' value="+data.content[i].attr_id+"  />"+data.content[i].attr_value;
+          }
+        }else{
+          $("#goods_attr").parent().hide();
+        }
+        $("#goods_attr").html(html);
+      }
+    });
+  }
+  </script>
+{include file="footer.htm"}

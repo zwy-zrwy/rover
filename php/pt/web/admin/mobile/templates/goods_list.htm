@@ -1,0 +1,44 @@
+{include file="header.htm"}
+<div class="container">
+	 <h2>商品管理</h2>
+
+        <form method="get" action="index.php">
+          <input type="hidden" name="act" value="{$action}">
+          <input type="hidden" name="op" value="{$operation}">
+          <label for="search_goods_name">商品名称</label>
+          <input type="text" value="{$filter.goods_name}" name="search_goods_name" id="search_goods_name" class="txt">
+          <input type="submit" value="搜索" class="btn">
+        </form>
+
+
+
+<div class="goods-list">
+{foreach from=$goods_list item=goods}
+<dl>
+    <dt><img src="../{$goods.goods_img}"></dt>
+    <dd class="info">
+        <p class="name">{$goods.goods_id}{$goods.goods_name|escape:html}</p>
+        <p class="price">单买价：<font>{$goods.shop_price}</font>拼团价：<font><i>¥</i>90</font>
+        </p>
+        
+    </dd>
+    <dd class="comm">
+      <span>单买佣金：<font><i>¥</i>10</font></span>
+      <span>拼团佣金：<font><i>¥</i>8</font></span>
+      <span>上架<i class="fa {if $goods.is_on_sale}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_on_sale', {$goods.goods_id})"></i></span>
+    </dd>
+</dl>
+{/foreach}
+</div>
+
+
+
+
+        {$pager}
+
+
+
+</div>
+
+
+{include file="footer.htm"}

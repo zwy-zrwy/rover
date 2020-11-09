@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<title>大转盘</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/act.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body class="dzp">
+<section class="container">
+  <div id="dzp">
+    <div class="inner">
+      <div id="zhen"></div>
+    </div>
+  </div>
+  <div class="actbox">
+    <dl>
+      <dt>剩余次数</dt>
+      <dd>
+        <p>你还可抽奖的次数：<span class="num">{$awardNum}</span></p>
+      </dd>
+    </dl>
+    <dl>
+      <dt>奖项设置</dt>
+      <dd>
+        {foreach from=$prize item=prize}
+        <p>{$prize.title}---{$prize.awardname}---奖品数量：{$prize.num}</p>
+        {/foreach}
+      </dd>
+    </dl>
+    <dl>
+      <dt>活动规则</dt>
+      <dd>
+        <p>{$act.content}</p>
+      </dd>
+    </dl>
+    <dl>
+      <dt>中奖记录</dt>
+      <dd>
+        {foreach from=$award item=award}
+        <p>{$award.nickname}---{$award.class_name}</p>
+        {/foreach}
+      </dd>
+    </dl>
+    {if $uid}
+    <dl>
+      <dt>我的中奖记录</dt>
+      <dd>
+        <p>兑奖截止{$act.overymd}</p>
+        {foreach from=$award item=award}
+        {if $award.uid eq $uid}
+        <p>{$award.nickname}---{$award.class_name}---{$award.code}</p>
+        {/if}
+        {/foreach}
+      </dd>
+    </dl>
+    {/if}
+  </div>
+
+    <div id="mask"></div>
+    <div id="dialog" class="yes">
+        <div id="content"></div>
+        <a href="javascript:location.reload()">确定</a>
+        <button id="close">关闭</button>
+    </div>
+</section>
+<script>
+    $(function() {
+        var data = [
+            { type : 1 ,msg :'一等奖'},
+            { type : 0 ,msg : '谢谢参与'},
+            { type : 0 ,msg : ''},
+            { type : 0 ,msg : '要加油哦'},
+            { type : 1 ,msg : '三等奖'},
+            { type : 0 ,msg : '运气不够'},
+            { type : 0 ,msg : ''},
+            { type : 0 ,msg : '再接再厉'},
+            { type : 1 ,msg : '二等奖'},
+            { type : 0 ,msg : '祝你好运'},
+            { type : 0 ,msg : ''},
+            { type : 0 ,msg : '不要灰心'}
+        ]
+
+        var tt = null;
+        $("#zhen").click(function() {
+            // 显示结果
+            var $me = $(this);
+            $.getJSON("index.php?c=act&a=ajax&aid={$aid}", function(json){
+                if(json.msg == 2){
+                    $("#content").html(json.prize);
+                    $("#dialog").attr("class",'no').show();
+                }else{
+                    var r = 1440 + 30*(json.r-1);
+                    var style ;
+                    style = '-webkit-transition-delay:1s;-webkit-transition: all 3s;transition: all 3s;-webkit-transform: rotate('+r+'deg);'+'-moz-transition-delay:1s;-moz-transition: all 3s;transition: all 3s;-moz-transform: rotate('+r+'deg);'+'transition-delay:1s;transition: all 3s;transition: all 3s;transform: rotate('+r+'deg);'+'filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);';
+                    $me.attr('style',style);
+                    wxch_show(json);
+                    if(json.num >= 1){
+                        $(".num").text(json.num-1);
+                    }else{
+                        $(".num").text(json.num);
+                    }
+                }
+            });
+        });
+
+        function wxch_show (json) {
+            var angle = 30*(json.r-1);
+            setTimeout(function() {
+                $("#mask").show();
+                $("#zhen").attr('style','-webkit-transform: rotate('+angle+'deg);-moz-transform: rotate('+angle+'deg);transform: rotate('+angle+'deg);')
+                if (json.msg == 1) {
+                    $("#content").html(json.prize);
+                    $("#dialog").attr("class",'yes').show();
+                }else {
+                    $("#content").html(json.prize);
+                    $("#dialog").attr("class",'no').show();
+                }
+            }, 3000);
+        }
+
+        $("#mask").on('click',function() {
+            $(this).hide();
+            $("#dialog").hide();
+        });
+
+        $("#close").click(function() {
+            $("#mask").trigger('click');
+        });
+    });
+</script>
+{include file="inc/wx_config.htm"}
+{if $stats_code}{$stats_code}{/if}
+</body>
+</html>

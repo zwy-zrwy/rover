@@ -1,0 +1,51 @@
+{include file="header.htm"}
+<div class="main">
+    <div class="col_side">
+        {include file="side_menu.htm"}
+    </div>
+    <div class="col_main">
+      <div class="main_hd">
+        <h2>线下发放</h2>
+    </div>
+    <div class="main_bd">
+
+
+
+
+		<form action="index.php?act=coupon" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+		<table class="table">
+		  <tr>
+			<td class="label">类型金额</td>
+			<td>
+			<select name="bonus_type_id">
+			  {html_options options=$type_list selected=$smarty.get.id}
+			</select>
+			</td>
+		  </tr>
+		   <tr>
+			  <td class="label">优惠券数量</td>
+			  <td>
+			  <input type="text" name="bonus_sum" size="30" maxlength="6" />
+			  </td>
+			</tr>
+			<td class="label">&nbsp;</td>
+			<td>提示:优惠券序列号由六位序列号种子加上四位随机数字组成</td>
+		   </tr>
+		   <tr>
+		   <td class="label">&nbsp;</td>
+		   <td>
+			<input type="submit" value="确定" class="btn" />
+		  </td>
+		 </tr>
+		</table>
+		<input type="hidden" name="op" value="send_by_print" />
+		</form>
+
+
+
+
+
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>用户等级</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body id="user">
+{include file="inc/header.htm"}
+<section id="container" class="container" style="display:none">
+  <div class="rank_points">我的等级积分：{$points}</div>
+  <table class="user_rank" cellspacing="1" border="0">
+    <thead>
+    <tr>
+      <th>等级</th>
+      <th>标识</th>
+      <th>积分</th>
+    </tr>
+    </thead>
+    <tbody>
+    {foreach from=$rank item=rank}
+    <tr{if $rank.rank_id eq $rank_id} class="cur"{/if}>
+      <td>{$rank.rank_name}</td>
+      <td><i class="iconfont icon-level-{$rank.rank_id}"></i></td>
+      <td>{$rank.min_points} ~ {$rank.max_points}</td>
+    </tr>
+    {/foreach}
+    </tbody>
+  </table>
+</section>
+{include file="inc/footer.htm"}		  
+</body>
+</html>

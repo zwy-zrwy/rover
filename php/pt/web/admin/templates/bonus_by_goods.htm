@@ -1,0 +1,157 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>按商品发放</h2>
+    </div>
+    <div class="main_bd">
+      <div class="top_s">
+        <form action="javascript:searchGoods()" name="searchForm" >
+          <select name="cat_id">
+            <option value="0">全部分类</option>
+            {$cat_list}
+          </select>
+          <input type="text" name="keyword" size="30" />
+          <input type="submit" value="搜索" class="btn" />
+        </form>
+      </div>
+      <form action="index.php?act=coupon" name="searchForm" method="post" onsubmit="return validate();">
+      <table class="table">
+        <tr>
+          <th>可选商品</th>
+          <th>操作</th>
+          <th>发放此类型优惠券的商品</th>
+        </tr>
+        <tr>
+          <td width="45%" align="center">
+            <select name="source_select" id="source_select" size="20" style="width:90%;height:255px" onclick="addGoods();" multiple="true">
+            </select>
+          </td>
+          <td align="center">
+            <!--<p><input type="button" value="&gt;&gt;" onclick="sz.addItem(true, 'add_bonus_goods', bounsTypeId)" class="btn" /></p>-->
+            <p><input type="button" value="&gt;" onclick="addGoods()" class="btn" /></p>
+            <br/>
+            <p><input type="button" value="&lt;" onclick="delGoods()" class="btn" /></p>
+            <!--<p><input type="button" value="&lt;&lt;" onclick="sz.dropItem(true, 'drop_bonus_goods', bounsTypeId)" class="btn" /></p>-->
+          </td>
+          <td width="45%" align="center">
+            <select name="target_select[]" id="target_select" multiple="true" size="20" style="width:90%;height:255px" onclick="delGoods()">
+              {foreach from=$goods_list item=goods}
+              <option value="{$goods.goods_id}">{$goods.goods_name}</option>
+              {/foreach}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="center">
+            <input type="hidden" name="id" value="{$id}" />
+            <input type="hidden" name="op" value="add_bonus_goods" />
+            <input type="submit" class="btn" value="发放" />
+          </td>
+        </tr>
+      </table>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function searchGoods(){
+    var keywords = $("input[name='keyword']").val();
+    var cat_id = $("select[name='cat_id']").val();
+    $.ajax({
+      type: 'POST',
+      data: {keywords,cat_id},
+      url: 'index.php?act=coupon&op=get_goods_list',
+      dataType: 'json',
+      success: function(data){
+        var html="";
+        if (data.error == 0)
+        {
+          for (i = 0; i < data.content.length; i++)
+          {
+            html += "<option value="+data.content[i].value+">"+data.content[i].text+"</option>";
+          }
+        }
+        $("#source_select").html(html);
+      }
+    });
+  }
+  function addGoods()
+  {
+      //var src = $('#user_search');
+      var src = document.getElementById('source_select');
+      var dest = document.getElementById('target_select');
+      //var dest = $('#user');
+//alert(src.options);
+      var _html = '';
+      for (var i = 0; i < src.options.length; i++)
+      {
+          if (src.options[i].selected)
+          {
+              var exist = false;
+              for (var j = 0; j < dest.options.length; j++)
+              {
+                  if (dest.options[j].value == src.options[i].value)
+                  {
+                      exist = true;
+                      break;
+                  }
+              }
+              if (!exist)
+              {
+                var opt = document.createElement('OPTION');
+                  opt.value = src.options[i].value;
+                  opt.text = src.options[i].text;
+                  dest.options.add(opt);
+              }
+          }
+      }
+      dest.append(_html);
+  }
+  function delGoods()
+  {
+      var dest = document.getElementById('target_select');
+
+      for (var i = dest.options.length - 1; i >= 0 ; i--)
+      {
+          if (dest.options[i].selected)
+          {
+              dest.options[i] = null;
+          }
+      }
+  }
+  var submiting = false;
+  function validate()
+  {
+
+    if(!submiting)
+    {
+      var idArr = new Array();
+      var dest = document.getElementById('target_select');
+      for (var i = 0; i < dest.options.length; i++)
+      {
+          dest.options[i].selected = "true";
+          idArr.push(dest.options[i].value);
+      }
+      if (idArr.length <= 0)
+      {
+          
+          return false;
+      }
+      else
+      {
+          submiting = true;
+          return true;
+      }
+    }
+    else
+    {
+      layer.msg('Submitting...');
+      return false;
+    }
+  }
+</script>
+{include file="footer.htm"}

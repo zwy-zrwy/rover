@@ -1,0 +1,46 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>中奖用户</h2>
+    	<div class="tab_navs">
+    	  
+    	</div>
+	  </div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr class="thead">
+          <th>订单ID</th>
+          <th>用户ID</th>
+          <th>用户昵称</th>
+          <th>手机号</th>
+          
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$lottery_list item=lottery}
+        <tr>
+          <td><a href="index.php?act=order&op=info&order_id={$lottery.order_id}">{$lottery.order_id}</a></td>
+          <td>{$lottery.user_id}</td>
+          <td>{$lottery.nickname}</td>
+          <td>{$lottery.mobile}</td>
+          
+          <td>
+            
+          </td>
+        </tr>
+        {/foreach}
+        <tr >
+          <th colspan="5">{$pager}</th>
+        </tr>
+        </tbody>
+      </table>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

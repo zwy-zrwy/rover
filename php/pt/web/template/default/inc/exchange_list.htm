@@ -1,0 +1,15 @@
+{if $coupon.type_id}
+<dl class="coupons-item {if $coupon.min_goods_amount}bgc1{else}bgc2{/if}">
+    <dt class="mc-l">
+        <p class="money">{$coupon.type_money}</p>
+        <p class="tit">{if $coupon.min_goods_amount}满减券{else}立减券{/if}</p>  
+    </dt>
+    <dd class="mc-r">
+        <p class="name">{$coupon.type_name}</p>
+        <p class="desc">满{$coupon.min_goods_amount}元可用</p>
+        <p class="date">{$coupon.use_start_date}  至  {$coupon.use_end_date}</p>
+        <p class="integral"><b>{$coupon.integral}</b>{$points_name}</p>
+	    <span class="btn" onclick="exchange({$coupon.type_id})">立即兑换</span>
+    </dd>
+</dl>
+{/if}

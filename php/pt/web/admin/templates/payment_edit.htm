@@ -1,0 +1,43 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+      {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>管理员</h2>
+      <div class="tab_navs">
+        <ul>
+          <li class="cur"><a href="javascript:void(0);">管理</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form action="index.php?act=payment" method="post">
+      <table class="table">
+        <tr>
+          <td width="100">支付方式名称</td>
+          <td><input type="text" name="pay_name" value="{$pay.pay_name|escape}" size="40" /></td>
+        </tr>
+        {foreach from=$pay.pay_config item=config key=key}
+        <tr>
+          <td>{$config.label}</td>
+          <td>
+            <input name="cfg_value[]" type="text" value="{$config.value}" size="40" />
+            <input name="cfg_name[]" type="hidden" value="{$config.name}" />
+            <input name="cfg_lang[]" type="hidden" value="{$config.lang}" />
+          </td>
+        </tr>
+        {/foreach}
+      </table>
+      <input type="hidden" name="pay_id" value="{$pay.pay_id}" />
+      <input type="hidden" name="pay_code" value="{$pay.pay_code}" />
+      <input type="hidden" name="op" value="act_edit" />
+      <input type="submit" class="btn" name="Submit" value="确定" />
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}
+</body>
+</html>

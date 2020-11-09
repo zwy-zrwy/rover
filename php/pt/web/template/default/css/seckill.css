@@ -1,0 +1,30 @@
+.seckill-list { background-color: #fff; padding:0 .2rem; }
+.seckill-list dl { border-bottom: #f5f5f5 1px solid; padding:.2rem 0; overflow: hidden; position: relative; }
+.seckill-list dt { position: absolute; left:0; top: .2rem; }
+.seckill-list dt img { width: 2rem; height: 2rem; }
+.seckill-list dd.info-box { padding-left: 2.2rem; }
+.seckill-list dd .time { padding-left: .24rem; padding-bottom: .1rem; font-size: .22rem; color: #eeae0b; position: relative; }
+.seckill-list dd .time:before { position: absolute; left: 0; top: 0; font-family: iconfont; content: "\e654"; font-size: .22rem; }
+.seckill-list dd .join-name { height: .6rem; line-height: .3rem; font-size: .24rem; overflow: hidden; }
+.seckill-list dd .price { line-height: .5rem; }
+.seckill-list dd .price span { padding-right: .2rem; color: #f33; font-size: .32rem; }
+.seckill-list dd .price del { font-size: .22rem; }
+.seckill-list dd .price i { font-size: .15rem;}
+.join-box { display: block; height: .5rem;line-height: .5rem; font-size: 0.22rem;border-radius: 0.06rem; position: relative; overflow: hidden;}
+.join-box:before { position: absolute; left: 0; top:0; font-family: iconfont; content: "\e606"; font-size: .3rem; }
+.join-box .num { padding-left: .4rem; }
+.join-box .btn { display: block; right: -1px; top: -1px; padding: 0 .3rem 0 .2rem; color: #fff; font-size: .26rem; position: absolute; }
+.join-box .btn::after { position: absolute; right: .16rem; top: .18rem; width: .12rem; height: .12rem; border-top: 1px solid #fff; border-right: 1px solid #fff; display: inline-block; transform: rotate(45deg); -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); content: '';}
+
+/*正在进行*/
+.s1 .join-box { border: 1px solid #f33; }
+.s1 .join-box:before,.s1 .join-box .num { color: #f33; }
+.s1 .join-box .btn { background-color:#f33; }
+/*即将开始*/
+.s2 .join-box { border: 1px solid #2ccc8c; }
+.s2 .join-box:before,.s2 .join-box .num { color: #2ccc8c; }
+.s2 .join-box .btn { background-color:#2ccc8c; }
+/*已售罄*/
+.s3 .join-box { border: 1px solid #cdcdcd; }
+.s3 .join-box:before,.s3 .join-box .num { color: #cdcdcd; }
+.s3 .join-box .btn { background-color:#cdcdcd; }

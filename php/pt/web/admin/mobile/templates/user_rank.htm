@@ -1,0 +1,35 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>会员等级</h2>
+    </div>
+    <div class="main_bd">
+
+      <form name="theForm" action="index.php?act=rank&op=post" method="post">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>等级名称</th>
+          <th>积分下限</th>
+          <th>积分上限</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$user_ranks item=rank}
+        <tr>
+          <td><input type="hidden" name="rank_id[]" value="{$rank.rank_id}"/>{$rank.rank_name}</td>
+          <td><input name="min_points[]" type="text" value="{$rank.min_points}" /></td>
+          <td><input name="max_points[]" type="text" value="{$rank.max_points}" /></td>
+        </tr>
+        {/foreach}
+        <tr class="tfoot">
+          <td colspan="4"><input name="submit" type="submit" value="修改" class="btn" /></td>
+        </tr>
+        </tbody>
+      </table>
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

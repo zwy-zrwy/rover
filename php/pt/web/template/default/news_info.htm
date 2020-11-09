@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>{$news_info.title}</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/news.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body>
+{include file="inc/header.htm"}
+<section id="container" class="container pdb" style="display:none">
+    <div class="news_info">
+        <h3>{$news_info.title}</h3>
+        <div class="info"><span>{$news_info.add_time}</span><a href="{$subscribe_url}">{$shop_name}</a></div>
+        <div class="content">
+            {$news_info.content}
+        </div>
+	</div>
+</section>
+<script>
+  window.onload = function() {
+    $('#loading').css('display','none'); 
+    $('#container').css('display','');
+  }
+</script>
+{include file="inc/wx_config.htm"}
+{if $stats_code}{$stats_code}{/if}
+</body>
+</html>

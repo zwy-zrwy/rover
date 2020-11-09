@@ -1,0 +1,51 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>限时抽奖</h2>
+    	<div class="tab_navs">
+    	  <ul>
+    		  <li class="cur"><a href="javascript:void(0);">抽奖管理</a></li>
+    			<li><a href="index.php?act=lottery&amp;op=lottery_add">添加抽奖</a></li>
+    		</ul>
+    	</div>
+	  </div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr class="thead">
+          <th width="80">ID</th>
+          <th>商品名称</th>
+          <th width="160">活动时间</th>
+          <th width="100">状态</th>
+          <th width="100">首页推荐</th>
+          <th width="150">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$lottery_list item=lottery}
+        <tr id="remove_{$lottery.lottery_id}">
+          <td>{$lottery.lottery_id}</td>
+          <td>{$lottery.goods_name}</td>
+          <td>{$lottery.lottery_start_time}<br/>{$lottery.lottery_end_time}</td>
+          <td>{$lottery.status}</td>
+          <td class="binding" width="50">
+            <span><i class="fa {if $lottery.enabled}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_enabled', {$lottery.lottery_id})"></i></span>
+          </td>
+          <td>
+            <a href="index.php?act=lottery&amp;op=view&amp;id={$lottery.lottery_id}">查看</a>
+            <a href="index.php?act=lottery&amp;op=lottery_edit&amp;id={$lottery.lottery_id}">修改</a>
+            <a  href="javascript:" onclick="remove({$lottery.lottery_id}, 'remove')" title="{$lang.remove}"title="{$lang.remove}">删除</a>
+          </td>
+        </tr>
+
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        {$pager}
+      </div>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

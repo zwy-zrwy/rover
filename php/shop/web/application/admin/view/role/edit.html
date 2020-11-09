@@ -1,0 +1,33 @@
+<form action="{:url('admin/role/edit')}" method="post" class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="{$info.name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" >权限</label>
+        <div class="layui-input-block">
+            {volist name='nodes' id='vo'}
+            <input type="checkbox" name="nodes[]" value="{$vo.id}" title="{$vo.name}" {in name="$vo.id" value="$info.nodes"}checked{/in}><br/>
+            {volist name='$vo.sub' id='sub' }
+            <input type="checkbox" name="nodes[]" value="{$sub.id}" title="{$sub.name}" {in name="$sub.id" value="$info.nodes"}checked{/in}>
+            {/volist}<br/><br/>
+            {/volist}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="启用" checked>
+            <input type="radio" name="status" value="0" title="禁用">
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

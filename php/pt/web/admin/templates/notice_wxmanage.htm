@@ -1,0 +1,67 @@
+{include file="header.htm"}
+<div class="main">
+    <div class="col_side">
+        {include file="side_menu.htm"}
+    </div>
+    <div class="col_main">
+      <div class="main_hd">
+        <h2>成团通知</h2>
+        <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">成团通知接收</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight_box">
+        <p class="desc">请用手机微信扫一扫进行扫描二维码绑定。[可绑定多个微信终端]</p>
+      </div>
+      <div class="main_bd">
+
+
+
+
+  <img src="../api/qrcode.php?c=wxmanage">
+
+  <p>已绑定微信消息接收人员</p>
+  {foreach from=$wxmanage item=wxmanage}
+  <p id="m{$wxmanage.id}">{$wxmanage.nickname}<a href="javascript:drop_wxmanage({$wxmanage.id})">删除</a></p>
+  {/foreach}
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+<script>
+function drop_wxmanage(manage_id)
+{
+  layer.confirm('你确认要删除吗？', {
+    btn: ['确认','取消'] //按钮
+  }, function(){
+    var id = manage_id;
+            $.ajax({
+                type: 'GET',
+                data: {id},
+                url: 'index.php?act=notice&op=unbinding',
+                dataType: 'json',
+                success: function(result){
+                   if (result.error > 0)
+                    {
+                       $('#m'+id).remove();
+                       layer.msg(result.message);
+                    }
+                    else
+                    {
+                      layer.msg(result.message);
+                    }     
+                }
+            });
+  });
+}
+</script>
+{include file="footer.htm"}

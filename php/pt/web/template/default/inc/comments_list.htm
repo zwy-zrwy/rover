@@ -1,0 +1,25 @@
+
+<dl>
+  <dt><img src="{$comment.headimgurl}"></dt>
+  <dd class="name">
+    <font>{$comment.nickname}</font>
+    <span>
+      {if $comment.comment_rank eq 1}
+      <i></i>
+      {elseif $comment.comment_rank eq 2}
+      <i></i><i></i>
+      {elseif $comment.comment_rank eq 3}
+      <i></i><i></i><i></i>
+      {elseif $comment.comment_rank eq 4}
+      <i></i><i></i><i></i><i></i>
+      {elseif $comment.comment_rank eq 5}
+      <i></i><i></i><i></i><i></i><i></i>
+      {/if}
+    </span>
+  </dd>
+  <dd class="time">{$comment.add_time}</dd>
+  <dd class="content">{$comment.content}</dd>
+  {if $comment.goods_attr}
+  <dd class="spec">规格：{$comment.goods_attr}</dd>
+  {/if}
+</dl>

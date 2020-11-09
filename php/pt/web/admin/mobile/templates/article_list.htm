@@ -1,0 +1,73 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>文章</h2>
+      <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">管理</a></li>
+          <li><a href="index.php?act=article&amp;op=add">新增</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <div class="top_s">
+        <form action="javascript:searchArticle()" name="searchForm" >
+          <select name="cat_id" >
+            <option value="0">全部分类</option>
+            {foreach from=$cat_select item=cat}
+            <option value="{$cat.cat_id}">{if $cat.cat_value}{$cat.cat_value}{else}{$cat.cat_name}{/if}</option>
+            {/foreach}
+          </select>
+          文章标题 <input type="text" name="keyword" id="keyword" />
+          <input type="submit" value="搜索" class="btn" />
+        </form>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th><input onclick='checkAll(this, "checkboxes")' type="checkbox">
+            编号</th>
+          <th>标题</th>
+          <th>所属分类</th>
+          <th>显示</th>
+          <th>添加时间</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <form method="post" action="index.php?act=article" name="listForm" >
+        <tbody>
+        {foreach from=$article_list item=list}
+        <tr id="remove_{$list.article_id}">
+          <td><span><input name="checkboxes[]" type="checkbox" value="{$list.article_id}" />{$list.article_id}</span></td>
+          <td>
+          {$list.title|escape:html}</td>
+          <td>{$list.cat_name|escape:html}</td>
+          <td class="binding">
+                  
+                      <span><i class="fa {if $list.is_open eq '1'}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_show', {$list.article_id})"></i></span>
+                  
+                  </td>
+          <td>{$list.date}</td>
+          <td>
+            <a href="index.php?act=article&op=edit&id={$list.article_id}">修改</a>&nbsp;
+           <a  href="javascript:" onclick="remove({$list.article_id}, 'remove')">删除</a>
+          </td>
+         </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler">
+          <!---->
+            <input type="hidden" name="op" value="batch" />
+            <input type="hidden" name="type" value="button_remove" />
+            <input type="submit" id="btnSubmit" value="删除" class="btn" />
+          </form>
+        </div>
+        {$pager}
+      </div>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

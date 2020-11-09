@@ -1,0 +1,14 @@
+<div class="store-list">
+  <h2>请选择门店</h2>
+  <ul>
+    {foreach from=$store_list item=store}
+    <li>
+      <a href="index.php?c=flow&a=select_store&id={$store.store_id}">
+        <h3><i class="iconfont">&#xe752;</i>{$store.store_name|escape}&nbsp;&nbsp;{$store.store_mobile}</h3>
+        <p><i class="iconfont">&#xe6c2;</i>{$store.store_address|escape}</p>
+        <span class="iconfont{if $store.store_id eq $store_id} cur{/if}">&#xe623;</span>
+      </a>
+    </li>
+    {/foreach}
+  </ul>
+</div>

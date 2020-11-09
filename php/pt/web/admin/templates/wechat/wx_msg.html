@@ -1,0 +1,37 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>模板消息</h2>
+    </div>
+    <div class="main_bd">
+      <form name="theForm" action="index.php?act=wechat&op=wx_msg_post" method="post">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>类型</th>
+          <th>标题</th>
+          <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$wxmsg item=item}
+        <tr class="hover">
+          <td>{$item.id}<input type="hidden" name="id[]" value="{$item.id}"/></td>
+          <td>{$item.name}</td>
+          <td><input name="title[]" type="text" value="{$item.title}" /></td>
+          <td><input name="note[]" type="text" value="{$item.note}" /></td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <input name="submit" type="submit" value="修改" class="btn" />
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

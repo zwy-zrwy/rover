@@ -1,0 +1,123 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>发货单详情</h2>
+    </div>
+    <div class="main_bd">
+      <table class="table">
+      <form action="index.php?act=delivery" method="post" name="theForm">
+        <tr>
+          <th colspan="2">基本信息</th>
+        </tr>
+        <tr>
+          <td>发货单流水号：{$delivery_order.delivery_sn}</td>
+          <td>发货时间：{$delivery_order.formated_update_time}</td>
+        </tr>
+        <tr>
+          <td>订单编号：{$delivery_order.order_sn}
+          <td>下单时间：{$delivery_order.formated_add_time}</td>
+        </tr>
+        <tr>
+          <td colspan="2">购买用户：{$delivery_order.nickname}</td>
+        </tr>
+        <tr>
+          <td>配送方式：{if $delivery_order.shipping_id > 0}{$delivery_order.shipping_name}{/if}</td>
+          <td>配送费用：{$delivery_order.shipping_fee}</td>
+        </tr>
+        <tr>
+          <td colspan="2">发货单号：{if $delivery_order.status neq 1}<input name="invoice_no" type="text" value="{$delivery_order.invoice_no}" {if $delivery_order.status eq 0 || $node_info} readonly {/if}>{else}{$delivery_order.invoice_no}{/if}</td>
+        </tr>
+        <tr>
+          <th colspan="2">收货人信息</th>
+        </tr>
+        <tr>
+          <td>姓名：{$delivery_order.consignee|escape}</td>
+          <td>电话：{$delivery_order.mobile|escape}</td>
+        </tr>
+        <tr>
+          <td colspan="2">地址：{$delivery_order.region} {$delivery_order.address|escape}</td>
+        </tr>
+        <tr>
+          <td colspan="2">客户留言：{$delivery_order.postscript}</td>
+        </tr>
+      </table>
+
+
+
+      <table class="table">
+        <tr>
+		<th colspan="7">商品信息</th>
+          </tr>
+        <tr>
+          <td>商品名称</td>
+          <td>货号</td>
+          <td>货品号</td>
+          <td>规格</td>
+          <td>发货数量</td>
+        </tr>
+        {foreach from=$goods_list item=goods}
+        <tr>
+          <td>{$goods.goods_name}</td>
+          <td>{$goods.goods_sn}</td>
+          <td>{$goods.product_sn}</td>
+          <td>{$goods.goods_attr|nl2br}</td>
+          <td>{$goods.send_number}</td>
+        </tr>
+        {/foreach}
+      </table>
+
+
+
+      <table class="table">
+        <tr>
+          <th colspan="6">发货操作信息</th>
+        </tr>
+
+        <tr>
+          <td><div align="right">操作者：</div></td>
+          <td colspan="5">{$delivery_order.action_user}</td>
+        </tr>
+        {if $delivery_order.status neq 1}
+        <tr>
+          <td>操作备注</td>
+        <td colspan="5"><textarea name="action_note" cols="80" rows="3" {if $node_info}disabled{/if}></textarea></td>
+        </tr>
+        <tr>
+          <td>当前可执行操作</td>
+          <td colspan="5" align="left">{if $delivery_order.status eq 2}<input name="delivery_confirmed" type="submit" value="发货" class="btn" {if $node_info}disabled{/if}/>&nbsp;&nbsp;{else}<input name="unship" type="submit" value="取消发货" class="btn" {if $node_info}disabled{/if} />{/if}
+              <input name="order_id" type="hidden" value="{$delivery_order.order_id}">
+              <input name="delivery_id" type="hidden" value="{$delivery_order.delivery_id}">
+              <input name="op" type="hidden" value="{$action_act}">
+          </td>
+        </tr>
+        {/if}
+
+        <tr>
+          <th>操作者</th>
+          <th>操作时间</th>
+          <th>订单状态</th>
+          <th>付款状态</th>
+          <th>发货状态</th>
+          <th>备注</th>
+        </tr>
+        {foreach from=$action_list item=action}
+        <tr>
+          <td>{$action.action_user}</td>
+          <td>{$action.action_time}</td>
+          <td>{$action.order_status}</td>
+          <td>{$action.pay_status}</td>
+          <td>{$action.shipping_status}</td>
+          <td>{$action.action_note|nl2br}</td>
+        </tr>
+        {/foreach}
+        </form>
+      </table>
+
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

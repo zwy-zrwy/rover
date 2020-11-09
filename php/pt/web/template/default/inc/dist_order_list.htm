@@ -1,0 +1,20 @@
+<div class="order_item">
+	<div class="mt">
+		{$item.order_sn}
+		<span>{$item.order_status_name}</span>
+	</div>
+	<div class="mc">
+	    <div class="pic"><img src="{$item.goods_img}"></div>
+		<div class="name">
+		  <h3>{$item.goods_name}</h3>
+		  {if $item.goods_attr}
+		  <p>规格：{$item.goods_attr}</p>
+		  {/if}
+		</div>
+		<div class="rbox">
+		  <p class="price">{$item.goods_price}</p>
+		  <p class="num">x{$item.goods_number}</p>
+		</div>
+	</div>
+	<div class="mb">实付:{$item.order_amount} ({if $item.shipping_fee gt 0}含运费{else}免运费{/if}){if $item.goods_comm}<span>佣金：{$item.goods_comm}</span>{/if}{if $item.is_dist eq 1}(已分拥){else}(未分拥){/if}</div>
+</div>

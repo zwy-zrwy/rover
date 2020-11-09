@@ -1,0 +1,51 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>活动管理</h2>
+			<div class="tab_navs">
+			   <ul>
+				  <li class="cur"><a href="javascript:void(0);">活动管理</a></li>
+				</ul>
+			</div>
+	  </div>
+		<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>活动名称</th>
+          <th>活动状态</th>
+          <th>参与类型</th>
+          <th>参与次数</th>
+          <th>兑奖截止</th>
+          <th>操作</th>
+        <tr>
+        </thead>
+        <tbody>
+        {foreach from=$act_list item=act}
+        <tr>
+          <td>{$act.title}</td>
+          <td>{if $act.isopen == 1}进行中{else}已停止{/if}</td>
+          <td>{if $act.type == 1}每日{else}长期{/if}</td>
+          <td>{$act.num}</td>
+          <td>{$act.overymd}</td>
+          <td>
+            <a href="index.php?act=wechat&op=wx_act_edit&aid={$act.aid}">编辑</a>
+            <a href="index.php?act=wechat&op=wx_prize&aid={$act.aid}">奖项</a>
+          </td>
+        </tr>
+        {/foreach}
+        <tbody>
+      </table>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}
+		
+		
+		
+
+

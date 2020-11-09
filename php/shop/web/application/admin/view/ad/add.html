@@ -1,0 +1,43 @@
+<form action="{:url('admin/ad/add')}" method="post" class="layui-form" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label class="layui-form-label">广告名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required  lay-verify="required" placeholder="请输入广告名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片</label>
+        <div class="layui-input-block">
+            <input type="file" name="pic" required  lay-verify="required"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">链接</label>
+        <div class="layui-input-block">
+            <input type="text" name="link"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="启用" checked>
+            <input type="radio" name="status" value="0" title="禁用">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">种类</label>
+        <div class="layui-input-block">
+            <select name="type" lay-verify="required">
+                {volist name='type' id='vo'}
+                <option value="{$vo.id}" >{$vo.name}({$vo.width}*{$vo.height})</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

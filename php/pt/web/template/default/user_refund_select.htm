@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>退款售后</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<body>
+<section class="container">
+  <div class="refund-select">
+    <dl onclick="window.location.href= 'index.php?c=user&a=refund&type=2';">
+      <dt class="buyback"><i></i></dt>
+      <dd>
+        <h3>我要退货退款</h3>
+        <p>已收到货，需要退还已收到的货物</p>
+      </dd>
+    </dl>
+    <dl onclick="window.location.href= 'index.php?c=user&a=refund&type=1';">
+      <dt class="refund"><i></i></dt>
+      <dd>
+        <h3>我要退款 (无需退货)</h3>
+        <p>未收到货，或与商家协商之后申请</p>
+      </dd>
+    </dl>
+  </div>
+</section>
+</body>
+</html>

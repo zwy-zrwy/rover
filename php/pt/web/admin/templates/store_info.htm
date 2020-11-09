@@ -1,0 +1,51 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+      {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>门店管理</h2>
+    <div class="tab_navs">
+        <ul>
+          <li><a href="index.php?act=store&amp;op=store_list">门店管理</a></li>
+          <li class="cur"><a href="javascript:void(0);">添加门店</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="main_bd">
+    <form class="form-horizontal" method="post" action="index.php?act=store" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+    <table class="table">
+      <tr>
+        <td>门店名称</td>
+        <td><input type="text" name="store_name" value="{$store.store_name}" /></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>手机号码</td>
+        <td><input type="text" name="store_mobile" value="{$store.store_mobile}" /></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>详细地址</td>
+        <td><input type="text" name="store_address" value="{$store.store_address}" /></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>门店描述</td>
+        <td><textarea name="store_desc">{$store.store_desc}</textarea></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <input type="submit" class="btn btn-primary" value="提交" />
+          <input type="hidden" name="op" value="{$form_action}" />
+          <input type="hidden" name="id" value="{$store.store_id}" />
+        </td>
+      </tr>
+    </table>
+    </form>
+  </div>
+</div>
+{include file="footer.htm"}

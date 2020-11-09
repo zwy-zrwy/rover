@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <title>登录</title>
+</head>
+<body>
+<form action="{:url('login')}" method="post">
+    用户名：<input type="text" name="username"><br/>
+    密码：<input type="password" name="password"><br/>
+    <input type="hidden" name="openid" value="{$wxinfo.openid}">
+    <input type="hidden" name="nickname" value="{$wxinfo.nickname}">
+    <input type="hidden" name="sex" value="{$wxinfo.sex}">
+    <input type="hidden" name="city" value="{$wxinfo.city}">
+    <input type="hidden" name="province" value="{$wxinfo.province}">
+    <input type="hidden" name="headimgurl" value="{$wxinfo.headimgurl}"><br/>
+    <input type="submit" value="登录"><br/>
+</form>
+<a href="{:url('reg')}">注册</a>
+</body>
+</html>

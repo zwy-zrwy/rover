@@ -1,0 +1,31 @@
+<div id="j_tuan_{$lists.order_id}" class="tuan-item">
+    <!--div class="tuan-stamp">
+        {if $lists.tuan_status eq 1}
+        <i class="ico-stamp ico-stamp-ongoing"></i>
+        {elseif $lists.tuan_status eq 2}
+        <i class="ico-stamp ico-stamp-success"></i>
+        {elseif $lists.tuan_status eq 3 || $lists.tuan_status eq 4}
+        <i class="ico-stamp ico-stamp-fail"></i>
+        {/if}
+    </div-->
+    <div class="goods-img">
+        <a href="{$lists.goods_url}"><img src="{$lists.goods_img}"></a>
+        {if $lists.type eq 'miao'}<label>秒杀</label>{/if}
+    </div>
+    <div class="goods-info">
+        <div class="mt_g_name"><a href="{$lists.goods_url}">{$lists.goods_name}</a></div>
+        <p class="mt_g_price">
+            <span class="mt_g_number">{$lists.tuan_num}人团</span>
+            <span>{$lists.goods_price}</span>
+        </p>
+        <span class="mt_status_txt" id="j_status_{$lists.order_id}">{$lists.tuan_status_lab}</span>
+    </div>
+    <div class="tuan-status">
+        {if $lists.goods_tuan_num<=$lists.tuan_mem_num && $lists.tuan_first eq 1 && $lists.tuan_statu eq 1}
+    
+        <a href="javascript:capa_tuan({$lists.order_id})" id="j_tuan_{$lists.order_id}">立即成团</a>
+        {/if}
+        <a href="index.php?c=share&tuan_id={$lists.tuan_id}">查看团详情</a>
+        <a href="index.php?c=user&a=order_detail&order_id={$lists.order_id}">查看订单详情</a>
+    </div>
+</div>

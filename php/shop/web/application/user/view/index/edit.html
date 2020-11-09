@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息修改</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/jquery-3.4.1.js"></script>
+    <script src="/static/layui/layui.js"></script>
+</head>
+<body>
+<form action="{:url('index/edit')}" method="post" class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="{$user.username}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱</label>
+        <div class="layui-input-block">
+            <input type="email" name="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input" value="{$user.email}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password"  placeholder="请输入新密码(选填)" autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="repassword"  placeholder="请确认密码(选填)" autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$user.id}">
+    <div class="layui-form-item">
+    <div class="layui-input-block">
+        <input type="submit" value="提交" class="layui-btn">
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+    </div>
+</form>
+</body>
+</html>

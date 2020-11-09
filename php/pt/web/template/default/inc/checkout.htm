@@ -1,0 +1,111 @@
+<form action="index.php?c=flow" method="post" name="theForm" id="theForm" onSubmit="return checkOrderForm(this)">
+	<div class="flow-goods">
+    <dl>
+        <dt><img src="{$goods.goods_img}" alt="{$goods.goods_name}"></dt>
+        <dd>
+            <p class="name">{$goods.goods_name}{if $goods.is_shipping}免运费商品{/if}</p>
+            <p class="attr">{if $goods.goods_attr}规格：{$goods.goods_attr}{/if}</p>
+            <p class="price">{$goods.formated_goods_price}{if $is_exchange eq 1}积分{/if}<span>X{$goods.goods_number}</span>
+            </p>
+        </dd>
+    </dl>
+  </div>
+  {if $commission}
+  <div class="commission">团长佣金：<span>{$commission}</span></div>
+  {/if}
+  {if $shipping_num >1}
+  <div class="shipping-method">
+    <ul>
+      {foreach from=$shipping_list item=shipping name=shipping}
+      <li><input name="shipping" type="radio" value="{$shipping.shipping_id}" id="shipping_{$shipping.shipping_id}"{if $order.shipping_id}{if $order.shipping_id eq $shipping.shipping_id} checked="true"{/if}{else}{if $smarty.foreach.shipping.first} checked="true"{/if}{/if} onclick="selectShipping({$shipping.shipping_id})" /><label for="shipping_{$shipping.shipping_id}">{$shipping.shipping_name}</label></li>
+      {/foreach}
+    </ul>
+  </div>
+  {else}
+  <input name="shipping" type="radio" value="{$shipping_id}" checked="true" style="display:none;"/>
+  {/if}
+	<div id="store-info" style="display:none;">
+    {if $store}
+    <div class="store-info">
+      <i class="iconfont">&#xe752;</i>
+      <a href="index.php?c=flow&a=store_list">
+      <h3>{$store.store_name|escape}  {$store.store_mobile|escape}</h3>
+      <p>{$store.store_address|escape}</p>
+      </a>
+    </div>
+    <div class="store-msg">
+      <ul>
+        <li><label>姓名：</label><p><input name="consignee" type="text" placeholder="联系人" value="{$user_row.realname|escape}"></p></li>
+        <li><label>手机：</label><p><input name="mobile" type="text" placeholder="手机号码" value="{$user_row.mobile|escape}"></p></li>
+      </ul>
+    </div>
+    {/if}
+	</div>
+  <div id="address-info" style="display:none;">
+    {if $consignee}
+    <div class="address-info">
+      <i class="iconfont">&#xe6c2;</i>
+      <a href="index.php?c=flow&a=address_list">
+      <h3>{$consignee.consignee|escape}  {$consignee.mobile|escape}</h3>
+      <p>{$consignee.province_name}{$consignee.city_name}{$consignee.district_name}{$consignee.address|escape}</p>
+      </a>
+    </div>
+    {else}
+    <div class="address-add">
+      <i class="iconfont">&#xe6c2;</i>
+      <a href="index.php?c=flow&a=address">请添加收货地址</a>
+    </div>
+    {/if}
+    <input type="hidden" name="address_id" value="{if $consignee.address_id}{$consignee.address_id}{else}0{/if}">
+  </div>
+  <!-- {if $allow_use_bonus && $bonus_list} 是否使用优惠券 -->
+  <div class="coupon" onClick="openCoupon()">
+      优惠券<span id="J_coupon">{if $order.bonus_id}- {$total.bonus}元{else}不使用优惠券{/if}</span>
+  </div>
+
+  <div class="coupon-list fixed">
+    <a href="javascript:;" onClick="closeCoupon()" class="box-close"></a>
+    <h2>选择优惠券</h2>
+    <!-- {foreach from=$bonus_list item=bonus} -->
+    <dl id="coupon_{$bonus.bonus_id}"{if $order.bonus_id eq $bonus.bonus_id} class="on"{/if} onClick="changeBonus({$bonus.bonus_id})">
+      <dt><i class="iconfont">&#xe623;</i></dt>
+      <dd>
+        <h3>{$bonus.bonus_money_formated}</h3>
+        <P>{if $bonus.type_money}订单满{$bonus.type_money}元可使用{else}通用券{/if}</p>
+        <p>有效期 {$bonus.use_start_date} - {$bonus.use_end_date}</p>
+      </dd>
+    </dl>
+    <!-- {/foreach} -->
+    <dl{if $order.bonus_id eq 0} class="on"{/if} id="coupon_0" onClick="changeBonus(0)">
+      <dt><i class="iconfont">&#xe623;</i></dt>
+      <dd><font>暂不使用优惠券</font></dd>
+    </dl>
+  </div>
+  <!-- {/if} 是否使用优惠券 -->
+  <div class="payment-method">
+    <ul>
+      {foreach from=$payment_list item=payment name=payment}
+      <li><input type="radio" name="payment" value="{$payment.pay_id}"{if $order.pay_id}{if $order.pay_id eq $payment.pay_id} checked="true"{/if}{else}{if $smarty.foreach.payment.first} checked="true"{/if}{/if} id="payment_{$payment.pay_id}" onclick="selectPayment({$payment.pay_id})" /><label for="payment_{$payment.pay_id}" class="{$payment.pay_code}">{$payment.pay_name}</label></li>
+      {/foreach}
+    </ul>
+  </div>
+
+  
+  <div class="postscript"><textarea name="postscript" id="postscript" placeholder="订单附言">{$order.postscript|escape}</textarea></div>
+  <div class="flow-bot">
+    <div id="J_total" class="total">{include file="inc/order_total.htm"}</div>
+    <input type="submit" class="topay" value="立即{if $is_exchange eq 1}兑换{else}支付{/if}" />
+    <input type="hidden" name="a" value="done">
+  </div>
+</form>
+<input type="hidden" name="goods_num" value="{$goods_num}">
+<div class="no-area" style="display:none;">您的地区暂不支持配送</div>
+<script>
+  window.onload = function() {
+    var shipping_id = $("input[name='shipping']:checked").val();
+    var payment_id = $("input[name='payment']:checked").val();
+    ShippingHide(shipping_id);
+    selectShipping(shipping_id);
+    selectPayment(payment_id);
+  }
+</script>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/layui.js"></script>
+    <script src="/static/layui/jquery-3.4.1.js"></script>
+</head>
+<body>
+<h2>商品列表</h2>
+<table class="layui-table">
+    <thead>
+    <tr>
+        <th>图片</th><th>名称</th><th>价格</th><th>数量</th><th>小计</th>
+    </tr>
+    </thead>
+    <tbody>
+    {volist name='data' id='vo'}
+    <tr>
+        <td><img src="{$vo.pic}" alt=""></td><td>{$vo.goods_name}</td><td>{$vo.goods_price}</td><td>{$vo.goods_num}</td>
+        <td>￥{$vo.sum_price}</td>
+    </tr>
+    {/volist}
+    <tr>
+        <td colspan="5" style="text-align:right;font-size:24px">总计￥{$total_price}</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>收货地址</h2>
+<form action="{:url('flow/done')}"  method="post" class="layui-form">
+    <input type="hidden" name="sum_price" value="{$total_price}">
+<table class="layui-table">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+    {volist name='address' id='vo'}
+    <tr>
+        <td>
+            <input type="radio" name="address_id" value="{$vo.id}">{$vo.name} <b>联系电话：</b>{$vo.mobile}  <b>地址：</b>{$vo.address}
+        </td>
+    </tr>
+    {/volist}
+    </tbody>
+</table>
+<h2>支付方式</h2>
+    <table class="layui-table">
+        <thead><tr><th></th></tr></thead>
+        <tbody>
+        {volist name='pay' id='vo'}
+        <tr>
+            <td>
+                <input type="radio" name="pay_id" value="{$vo.id}">{$vo.name} <img src="{$vo.pic}" alt="">
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</body>
+<script>
+    layui.use(['layer','jquery','form'], function() {
+        var $ = layui.jquery,
+            layer = layui.layer,form = layui.form;
+    });
+</script>
+</html>

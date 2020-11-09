@@ -1,0 +1,61 @@
+<script src="{$http}res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+wx.config({
+    //debug: true,
+    debug: false,
+    appId: '{$appid}',
+    timestamp: '{$timestamp}',
+    nonceStr: '{$timestamp}',
+    signature: '{$signature}',
+    jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline']
+});
+wx.ready(function () {
+  //分享给朋友
+    wx.onMenuShareAppMessage({
+      title: '{$share.title}',
+      desc: '{$share.desc}',
+      link: '{$share.link}',
+      imgUrl: '{$share.imgUrl}',
+      success: function() {
+        layer.open({content: "分享成功",skin: 'msg',time: 3});
+        statis(1,1);
+      },
+      cancel: function() {
+        layer.open({content: "取消分享",skin: 'msg',time: 3});
+        statis(1,2);
+      }
+    });
+    //朋友圈
+    wx.onMenuShareTimeline({
+      title: '{$share.title}',
+      desc: '{$share.desc}',
+      link: '{$share.link}',
+      imgUrl: '{$share.imgUrl}',
+      success: function() {
+        layer.open({content: "分享成功",skin: 'msg',time: 3});
+        statis(2,1);
+      },
+      cancel: function() {
+        layer.open({content: "取消分享",skin: 'msg',time: 3});
+        statis(2,2);
+      }
+    });
+});
+wx.error(function (res) {
+  //layer.open({content:res.errMsg,skin: 'msg',time: 2});
+});
+function statis(share_type,share_statu){
+    var link = window.location.href;
+    $.ajax({
+        type:"post",//请求类型
+        url: 'index.php?c=index&a=share',
+        data: {link,share_type,share_statu},
+        dataType:"json",//服务器返回结果类型(可有可无)
+        error:function(){//错误处理函数(可有可无)
+            //alert("ajax出错啦");
+        },
+        success:function(data){
+        }
+    });
+}
+</script>

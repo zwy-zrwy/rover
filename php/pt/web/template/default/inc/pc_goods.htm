@@ -1,0 +1,19 @@
+{if $goods.goods_id}
+<li id="j_goods_{$goods.goods_id}">
+  <div class="gdimg">
+    <img class="lazy_{$page}" data-original="{$goods.goods_img}" src="uploads/images/no_picture.jpg">
+    <span>{$goods.min_number}{if $goods.max_number gt $goods.min_number}-{$goods.max_number}{/if}人团</span>
+  </div>
+  <div class="code">
+    <img src="api/qrcode.php?c=goods&id={$goods.goods_id}">
+  </div>
+  <div class="gdinfo">
+	  <h3>{$goods.goods_name}</h3>
+	  <p>
+	    <span class="price">{$goods.tuan_price}</span>
+	    <span class="del">{$goods.market_price}</span>
+	    <span class="sales">已售{$goods.sales}件</span>
+	  </p>
+  </div>
+</li>
+{/if}

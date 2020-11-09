@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>{$shop_name}管理中心</title>
+<link href="static/mobile/login.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="static/js/jquery.min.js"></script>
+<script type="text/javascript" src="static/js/login.js"></script>
+<script language="JavaScript">
+if (window.parent != window)
+{
+  window.top.location.href = location.href;
+}
+</script>
+</head>
+<body>
+
+
+    <form method="post" id="form_login" action="index.php?act=login" name="theForm" >
+        <div class="lock-holder">
+            <div class="form-group pull-left input-username">
+                <label>账号</label>
+                <input name="username" id="user_name" autocomplete="off" type="text" class="input-text" value="" required>
+            </div>
+            <i class="fa fa-ellipsis-h dot-left"></i> <i class="fa fa-ellipsis-h dot-right"></i>
+            <div class="form-group pull-right input-password-box">
+                <label>密码</label>
+                <input name="password" id="password" class="input-text" autocomplete="off" type="password" required pattern="[\S]{6}[\S]*" title="密码不少于6个字符">
+            </div>
+        </div>
+        <div class="submit">
+            {if $gd_version > 0}
+            <span>
+                <div class="code">
+                    <div class="arrow"></div>
+                    <div class="code-img"><img src="index.php?act=captcha&{$random}" name="codeimage" id="codeimage" border="0"/></div>
+                    <a href="JavaScript:void(0);" id="hide" class="close" title="关闭"><i></i></a><a href="JavaScript:void(0);" onclick="javascript:document.getElementById('codeimage').src='index.php?act=captcha&' + Math.random();" class="change" title="{$lang.click_for_another}"><i></i></a>
+                </div>
+                <input name="captcha" type="text" required class="input-code" id="captcha" placeholder="输入验证" pattern="[A-z0-9]{4}" title="验证码为4个字符" autocomplete="off" value="" >
+            </span>
+            {/if}
+            <span>
+                <input type="hidden" name="op" value="signin" />
+                <input class="input-button btn-submit" type="submit" value="登录">
+            </span>
+        </div>
+        <div class="submit2"></div>
+    </form>
+    <div class="bottom">
+        <h6>Copyright 2015-{$now_year} Xarlit Inc.</h6>
+        <h6>Powered by Xarlit</h6>
+    </div>
+</body>
+</html>

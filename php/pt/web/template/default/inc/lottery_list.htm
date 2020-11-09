@@ -1,0 +1,22 @@
+{if $goods.goods_id}
+<dl class="s{$goods.status}">
+  <dt><a href="{$goods.url}"><img class="lazy_{$page}" data-original="{$goods.goods_img}" src="uploads/images/no_picture.jpg"></a></dt>
+  <dd class="info-box">
+    <p class="time">
+      {if $goods.status eq 1}
+      还剩<span class="aotime" data="{$goods.lottery_end_time}"></span>
+      {elseif $goods.status eq 2}
+      {$goods.lottery_start_time}开始
+      {else}
+      {$goods.lottery_end_time}结束
+      {/if}
+    </p>
+    <h3 class="join-name">{$goods.goods_name}</h3>
+    <p class="price">
+      <span>{$goods.lottery_price}</span>
+      <font>{$goods.lottery_tuan_num}人团</font>
+      <a href="{$goods.url}" class="btn">{if $goods.status eq 1}去抽奖{elseif $goods.status eq 2}未开始{elseif $goods.status eq 3}待开奖{elseif $goods.status eq 4}已开奖{/if}</a>
+    </p>
+  </dd>
+</dl>
+{/if}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>我的评论</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/comment.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<script src="{$template_path}js/dropload.min.js?v={$aos_version}"></script>
+
+</head>
+<body>
+<section class="container">
+  <div class="detail-comments">
+    <h3>我的评论<span>共{$count}条评论</span></h3>
+    <div class="comments-list">
+        
+    </div>
+  </div>
+</section>
+<script>
+function drop_comment(comment_id)
+{
+    layer.open({
+        content: ''你确实要彻底删除这条评论吗？'',
+        btn: ['确认', '取消'],
+        shadeClose: false,
+        yes: function(index){
+            var id = comment_id;
+            $.ajax({
+                type: 'GET',
+                data: {id},
+                url: 'index.php?c=user&a=del_comment',
+                dataType: 'json',
+                success: function(result){
+                    if (result.error > 0)
+                    {
+                       $('#comment_'+result.comment_id).remove();
+                    }
+                    else
+                    {
+                        layer.open({content:result.message,skin: 'msg',time: 2});
+                    }
+                }
+            });
+      layer.close(index);
+        }
+    });
+  
+}
+</script>
+<script type="text/javascript">
+  $(function(){
+    var tab1LoadEnd = false;
+    var num = 0;
+    var page= 0;
+    var dropload = $('.container').dropload({
+    scrollArea : window,
+    loadDownFn : function(me){
+        // 加载菜单一的数据
+            page++;
+            var counter = page,last = num,amount = 5;
+            $.ajax({
+                type: 'POST',
+                data: {last,amount},
+                url: 'index.php?c=user&a=comment_list_ajax',
+                dataType: 'json',
+                success: function(data){
+                    var result = '';
+                    
+                    num = amount * counter;
+                    last = num;
+                    if(typeof(data.info)!="undefined"){
+                          for(i = 0; i < data.info.length; i++){
+                              result +=data.info[i];
+                                  
+                          }
+                        }
+                    // 为了测试，延迟1秒加载
+                    setTimeout(function(){
+                        $('.comments-list').append(result);
+                        if(last >= data.count){
+                            // 数据加载完
+                            tab1LoadEnd = true;
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 每次数据加载完，必须重置
+                        me.resetload();
+                    },1);
+
+                },
+                error: function(xhr, type){
+                    //layer.open({content: 'Ajax error!',skin: 'msg',time: 2});
+                    // 即使加载出错，也得重置
+                    me.resetload();
+                }
+            });
+        }
+    })
+})
+</script>
+</body>
+</html>

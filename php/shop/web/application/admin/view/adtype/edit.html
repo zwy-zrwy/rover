@@ -1,0 +1,27 @@
+<form action="{:url('admin/adtype/edit')}" method="post" class="layui-form" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label class="layui-form-label">广告位名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required  lay-verify="required" placeholder="请输入广告位名" autocomplete="off" class="layui-input" value="{$info.name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">宽度</label>
+        <div class="layui-input-block">
+            <input type="text" name="width" required  lay-verify="required"  class="layui-input" value="{$info.width}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">高度</label>
+        <div class="layui-input-block">
+            <input type="text" name="height"  class="layui-input" value="{$info.height}">
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

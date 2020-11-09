@@ -1,0 +1,76 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>调节会员帐户</h2>
+      <p><a class="btn" href="index.php?act=account_log&op=list&user_id={$smarty.get.user_id}">会员帐户变动明细</a></p>
+    </div>
+    <div class="main_bd">
+      <form method="post" action="index.php?act=account_log" name="theForm">
+      <table class="table">
+        <tr>
+          <td>当前会员：</td>
+          <td>{$user.nickname}</td>
+        </tr>
+        <tr>
+          <td>帐户变动原因：</td>
+          <td><textarea  name="change_desc" cols="60" rows="4"></textarea></td>
+        </tr>
+        <tr>
+          <td>可用资金帐户：</td>
+          <td><select name="add_sub_user_money" id="add_sub_user_money">
+            <option value="1" selected="selected">增加</option>
+            <option value="-1">减少</option>
+          </select>
+          <input name="user_money" type="text" id="user_money" value="0" size="10" />
+          当前值：{$user.formated_user_money}</td>
+        </tr>
+        <tr>
+          <td>冻结资金帐户：</td>
+          <td><select name="add_sub_frozen_money" id="add_sub_frozen_money">
+            <option value="1" selected="selected">增加</option>
+            <option value="-1">减少</option>
+          </select>
+            <input name="frozen_money" type="text" id="frozen_money" value="0" size="10" />
+            当前值：{$user.formated_frozen_money}</td>
+        </tr>
+        <tr>
+          <td>等级积分帐户：</td>
+          <td><select name="add_sub_rank_points" id="add_sub_rank_points">
+            <option value="1" selected="selected">增加</option>
+            <option value="-1">减少</option>
+          </select>
+            <input name="rank_points" type="text" id="rank_points" value="0" size="10" />
+            当前值：{$user.rank_points}</td>
+        </tr>
+        <tr>
+          <td>消费积分帐户：</td>
+          <td><select name="add_sub_pay_points" id="add_sub_pay_points">
+            <option value="1" selected="selected">增加</option>
+            <option value="-1">减少</option>
+          </select>
+            <input name="pay_points" type="text" id="pay_points" value="0" size="10" />
+            当前值：{$user.pay_points}</td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            <input type="submit" class="btn" value="确定" />
+            <input type="hidden" name="token" value="{$token}">
+            <input type="hidden" name="op" value="insert" />
+            <input type="hidden" name="user_id" value="{$user.user_id}" />
+        </tr>
+      </table>
+      </form>
+
+
+
+      <div class="pagination">
+        {$pager}
+      </div>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

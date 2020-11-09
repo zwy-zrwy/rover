@@ -1,0 +1,12 @@
+<dl class="coupons-item {if $coupon.goods_id}bgc3{else}{if $coupon.min_goods_amount}bgc1{else}bgc2{/if}{/if}">
+    <dt class="mc-l">
+        <p class="money">{$coupon.type_money}</p>
+        <p class="tit">{if $coupon.goods_id}团长券{else}{if $coupon.min_goods_amount}满减券{else}立减券{/if}{/if}</p>  
+    </dt>
+    <dd class="mc-r">
+        <p class="name">{$coupon.type_name}</p>
+        <p class="desc">{if $coupon.goods_id}仅限开团购买指定产品{else}满{$coupon.min_goods_amount}元可用{/if}</p>
+        <p class="date"><i></i>{$coupon.use_start_date}  至  {$coupon.use_end_date}</p>
+        <span class="btn" onclick="receive({$coupon.type_id})">立即领取</span>
+    </dd>
+</dl>

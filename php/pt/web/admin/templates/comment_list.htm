@@ -1,0 +1,74 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+      {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>商品评论</h2>
+  		<div class="tab_navs">
+  		    <ul>
+  			    <li {if $type eq 1}class="cur"{/if}><a href="index.php?act=comment&op=comment_list">显示中</a></li>
+  				<li {if $type eq 0}class="cur"{/if}><a href="index.php?act=comment&op=comment_list&type=1">隐藏中</a></li>
+  			</ul>
+  		</div>
+  	</div>
+  	<div class="main_bd">
+      <div class="top_s">
+        <form action="javascript:searchComment()" name="searchForm">
+          <label>输入评论内容</label><input type="text" name="keyword" />
+          <input type="submit" class="btn" value="搜索" />
+        </form>
+      </div>
+      <table class="table">
+        <thead>
+        <tr class="thead">
+          <th width="60"><input onclick='selectAll(this, "checkboxes")' type="checkbox">ID</th>
+          <th width="100">用户</th>
+          <th>评论内容</th>
+          <th width="100">评论时间</th>
+          <th width="60">推荐</th>
+          <th width="60">状态</th>
+          <th width="60">操作</th>
+        </tr>
+        </thead>
+        <form method="POST" action="index.php?act=comment" name="listForm" >
+        <tbody>
+        {foreach from=$comment_list item=comment}
+        <tr id="remove_{$comment.comment_id}">
+          <td><input value="{$comment.comment_id}" name="checkboxes[]" type="checkbox">{$comment.comment_id}</td>
+          <td>{$comment.nickname}</td>
+          <td>评论内容：{$comment.content}<br/>评论商品：{$comment.title}</td>
+          <td>{$comment.add_time}</td>
+          <td class="binding">
+            <span><i class="fa {if $comment.is_top eq '1'}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_is_top', {$comment.comment_id})"></i></span> 
+          </td>
+          <td class="binding">
+            <span><i class="fa {if $comment.status eq '1'}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_status', {$comment.comment_id})"></i></span> 
+          </td>
+          <td>
+            <a href="javascript:" onclick="remove({$comment.comment_id}, 'remove')">删除</a>
+          </td>
+        </tr>
+
+          {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler"><!--onsubmit="return confirm_bath()"-->
+          
+            <select name="sel_action">
+              <option value="remove">删除评论</option>
+              <option value="allow">允许显示</option>
+              <option value="deny">禁止显示</option>
+            </select>
+            <input type="hidden" name="op" value="batch" />
+            <input type="submit" name="drop" id="btnSubmit" value="提交" class="btn" />
+          </form>
+        </div>
+        {$pager}
+      </div>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

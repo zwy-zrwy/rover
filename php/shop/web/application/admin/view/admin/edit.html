@@ -1,0 +1,57 @@
+<form action="{:url('admin/admin/edit')}" method="post" class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">原密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" required  lay-verify="required" placeholder="请输入原密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="{$info.username}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password1"  placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password2"  placeholder="确认密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-block">
+            <select name="role_id" lay-verify="required">
+                {if $info.id eq 1}  <option value="1"checked readonly="readonly">超级管理员</option>
+                {else}
+                    {volist name='role' id='vo'}
+                        {if $vo.id neq 1}
+                            <option value="{$vo.id}" {if $vo.id = $info.role_id}checked{/if}>{$vo.name}</option>
+                        {/if}
+                    {/volist}
+                {/if}
+                {/volist}
+            </select>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="启用" {if $info.status eq 1}checked{/if}>
+            <input type="radio" name="status" value="0" title="禁用" {if $info.status neq 1}checked{/if}>
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

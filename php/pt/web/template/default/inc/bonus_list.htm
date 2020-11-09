@@ -1,0 +1,12 @@
+<dl class="coupons-item {if $item.class eq 'not_use' || $item.class eq 'not_start'}{if $item.goods_id}bgc3{else}{if $item.min_goods_amount}bgc1{else}bgc2{/if}{/if}{/if} {$item.class}"{if $item.goods_id} onClick="window.location.href='index.php?c=goods&id={$item.goods_id}'"{/if}>
+    <span></span>
+    <dt class="mc-l">
+        <p class="money">{$item.type_money}</p>
+        <p class="tit">{if $item.goods_id}团长券{else}{if $item.min_goods_amount}满减券{else}立减券{/if}{/if}</p>  
+    </dt>
+    <dd class="mc-r">
+        <p class="name">{$item.type_name}</p>
+        <p class="desc">{if $item.goods_id}仅限开团购买指定产品{else}满{$item.min_goods_amount}元可用{/if}</p>
+        <p class="date"><i></i>{$item.use_startdate}  至  {$item.use_enddate}</p>
+    </dd>
+</dl>

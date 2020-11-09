@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>我的团</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<script src="{$template_path}js/dropload.min.js?v={$aos_version}"></script>
+</head>
+<body>
+{include file="inc/header.htm"}
+<section id="container" class="container pdt pdb" style="display:none">
+    <header class="nav-tab nav-n4 fixed nav-fixed">
+        <a href="javascript:;" class="item cur"><span>全部</span></a>
+        <a href="javascript:;" class="item"><span>拼团中</span></a>
+        <a href="javascript:;" class="item"><span>已成团</span></a>
+        <a href="javascript:;" class="item"><span>拼团失败</span></a>
+    </header>
+    <div class="order-tuan-list"></div>
+    <div class="order-tuan-list"></div>
+    <div class="order-tuan-list"></div>
+    <div class="order-tuan-list"></div>
+    {include file="inc/footer.htm"}
+</section>
+<script>
+$(function(){
+    var itemIndex = 0;
+    var tab1LoadEnd = false;
+    var tab2LoadEnd = false;
+    var tab3LoadEnd = false;
+    var tab4LoadEnd = false;
+
+    // tab
+    $('.nav-tab .item').on('click',function(){
+        var $this = $(this);
+        itemIndex = $this.index();
+        $this.addClass('cur').siblings('.item').removeClass('cur');
+        $('.order-tuan-list').eq(itemIndex).show().siblings('.order-tuan-list').hide();
+
+        // 如果选中菜单一
+        if(itemIndex == '0'){
+
+            // 如果数据没有加载完
+            if(!tab1LoadEnd){
+                // 解锁
+                dropload.unlock();
+                dropload.noData(false);
+            }else{
+                // 锁定
+                dropload.lock('down');
+                dropload.noData();
+            }
+        // 如果选中菜单二
+        }else if(itemIndex == '1'){
+            if(!tab2LoadEnd){
+                // 解锁
+                dropload.unlock();
+                dropload.noData(false);
+            }else{
+                // 锁定
+                dropload.lock('down');
+                dropload.noData();
+            }
+        // 如果选中菜单三
+        }else if(itemIndex == '2'){
+            if(!tab3LoadEnd){
+                // 解锁
+                dropload.unlock();
+                dropload.noData(false);
+            }else{
+                // 锁定
+                dropload.lock('down');
+                dropload.noData();
+            }
+        // 如果选中菜单四
+        }else if(itemIndex == '3'){
+            if(!tab4LoadEnd){
+                // 解锁
+                dropload.unlock();
+                dropload.noData(false);
+            }else{
+                // 锁定
+                dropload.lock('down');
+                dropload.noData();
+            }
+        }
+        // 重置
+        dropload.resetload();
+    });
+
+    var num = 0;
+    var page= 0;
+    var page1= 0;
+    var num1 = 0;
+    var page2= 0;
+    var num2 = 0;
+    var page3= 0;
+    var num3 = 0;
+    var dropload = $('.container').dropload({
+        scrollArea : window,
+        loadDownFn : function(me){
+            // 加载菜单一的数据
+            if(itemIndex == '0'){
+                page++;
+                var counter = page,last = num,amount = 6;
+                $.ajax({
+                    type: 'POST',
+                    data: {last,amount},
+                    url: 'index.php?c=user&a=tuan_list_ajax',
+                    dataType: 'json',
+                    success: function(data){
+                        var result = '';
+                        
+                        num = amount * counter;
+                        last = num;
+                        if(data.info != null){
+                            for(i = 0; i < data.info.length; i++){
+                              result +=data.info[i];
+                                  
+                          }
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            $('.order-tuan-list').eq(0).append(result);
+                            if(last >= data.count){
+                                // 数据加载完
+                                tab1LoadEnd = true;
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },1);
+
+                    },
+                    error: function(xhr, type){
+                        //layer.open({content: 'Ajax error!',skin: 'msg',time: 2});
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            // 加载菜单二的数据
+            }else if(itemIndex == '1'){
+                page1++;
+                var counter = page1,last = num1,amount = 10;
+                $.ajax({
+                    type: 'POST',
+                    data: {last,amount},
+                    url: 'index.php?c=user&a=tuan_list_ajax&status=1',
+                    dataType: 'json',
+                    success: function(data){
+                        var result = '';
+                        
+                        num1 = amount * counter;
+                        last = num1;
+                        if(data.info != null){
+                            for(i = 0; i < data.info.length; i++){
+                              result +=data.info[i];
+                                  
+                          }
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            $('.order-tuan-list').eq(1).append(result);
+                            if(last >= data.count){
+                                // 数据加载完
+                                tab2LoadEnd = true;
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },1);
+
+                    },
+                    error: function(xhr, type){
+                        //layer.open({content: 'Ajax error!',skin: 'msg',time: 2});
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            // 加载菜单三的数据
+            }else if(itemIndex == '2'){
+                page2++;
+                var counter = page2,last = num2,amount = 6;
+                $.ajax({
+                    type: 'POST',
+                    data: {last,amount},
+                    url: 'index.php?c=user&a=tuan_list_ajax&status=2',
+                    dataType: 'json',
+                    success: function(data){
+                        var result = '';
+                        
+                        num2 = amount * counter;
+                        last = num2;
+                        if(data.info != null){
+                            for(i = 0; i < data.info.length; i++){
+                              result +=data.info[i];
+                                  
+                          }
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            $('.order-tuan-list').eq(2).append(result);
+                            if(last >= data.count){
+                                // 数据加载完
+                                tab3LoadEnd = true;
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },1);
+
+                    },
+                    error: function(xhr, type){
+                        //layer.open({content: 'Ajax error!',skin: 'msg',time: 2});
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            // 加载菜单四的数据
+            }else if(itemIndex == '3'){
+                page3++;
+                var counter = page3,last = num3,amount = 5;
+                $.ajax({
+                    type: 'POST',
+                    data: {last,amount},
+                    url: 'index.php?c=user&a=tuan_list_ajax&status=3',
+                    dataType: 'json',
+                    success: function(data){
+                        var result = '';
+                        
+                        num3 = amount * counter;
+                        last = num3;
+                        if(data.info != null){
+                            for(i = 0; i < data.info.length; i++){
+                              result +=data.info[i];
+                                  
+                          }
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            $('.order-tuan-list').eq(3).append(result);
+                            if(last >= data.count){
+                                // 数据加载完
+                                tab4LoadEnd = true;
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },1);
+
+                    },
+                    error: function(xhr, type){
+                        //layer.open({content: 'Ajax error!',skin: 'msg',time: 2});
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            }
+        }
+    });
+});
+function capa_tuan(order_id)
+{
+    layer.open({
+        content: '你确认立即成团',
+        btn: ['确认', '取消'],
+        shadeClose: false,
+        yes: function(index){
+            $.ajax({
+                    type: 'GET',
+                    url: 'index.php?c=user&a=capa_tuan&order_id='+order_id,
+                    dataType: 'json',
+                    success: function(result){
+                        if (result.error == 0)
+                        {
+                           $("#j_status_"+result.order_id).text(result.message);
+                           $('#j_tuan_'+result.order_id).remove();
+                        }
+                        else
+                        {
+                            layer.open({content:result.message,skin: 'msg',time: 2});
+                        }
+                    }   
+                });
+            layer.close(index);
+        }
+    });
+    
+}
+
+function affirm_received(order_id)
+{
+    layer.open({
+        content: '你确认已经收到货物了吗？',
+        btn: ['确认', '取消'],
+        shadeClose: false,
+        yes: function(index){
+            $.ajax({
+                    type: 'POST',
+                    url: 'index.php?c=user&a=affirm_received&order_id=' + order_id,
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.err==0){
+                            $("#j_receive_"+data.order_id).remove();
+                            layer.close(index);
+                        }
+                    }   
+                })
+        }
+    });
+    
+}
+</script>	  
+</body>
+</html>

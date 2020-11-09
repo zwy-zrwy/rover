@@ -1,0 +1,28 @@
+.order-list-Below{width:92.5%;padding-top:13.5px;position:relative;margin:auto;clear:both}
+.order-list-Below h1{font-family:myFirstFont;font-size:13px;color:#333;line-height:1;height:27px;float:left}
+.order-list-Below ul{float:left;padding-left:15px}
+.order-list-Below ul li{float:left;width:28px;height:17px;background:url(../images/pic_heart01.png) no-repeat left top;background-size:17px 17px}
+.order-list-Below ul li.on{background:url(../images/pic_heart02.png) no-repeat left top;background-size:17px 17px}
+.order-list-Below .order-textbox{clear:both}
+.order-list-Below .order-textbox textarea{width:100%;height:2rem;padding:5px;border:none;border:1px solid #bbb;border-radius:4px;font-family:myFirstFont;font-size:13px;color:#ccc}
+.order-button{width:100%;height:60px;padding-top:10px;background:#fff;text-align:center}
+.order-button a{margin:0 auto;display:block;width:92.5%;height:39px;line-height:39px;background:#fff;border:1px solid #ff4d55;border-radius:4px;color:#ff4d55;font-size:14px}
+
+
+/*评论列表*/
+.detail-comments { position: relative; width: 100%; background-color: #fff; margin-bottom: .2rem; }
+.detail-comments h3 {width: 100%; height: .8rem; line-height: .8rem; padding:0 .3rem 0 .2rem; border-bottom: 1px solid #ededed; position: relative; overflow: hidden;}
+.detail-comments h3:after { position: absolute; right: .2rem; top: .34rem; width: .12rem; height: .12rem; border-top: 1px solid #878787; border-right: 1px solid #878787; display: inline-block; transform: rotate(45deg); -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); content: ''; }
+.detail-comments h3 span { float: right; font-size: .26rem; color: #878787;}
+.detail-comments dl {width: 100%; padding:.2rem;border-bottom: 1px solid #ededed; position: relative; overflow: hidden;}
+.detail-comments dl:last-child { border-bottom:none; }
+.detail-comments dt { position: absolute; left:.2rem; top: .16rem; }
+.detail-comments dt img { width: .8rem; height: .8rem; border-radius:50%; background-color: #eee;}
+.detail-comments dd { float: left; width: 100%; }
+.detail-comments .name {  padding-left: 1rem; height:.4rem; line-height:.4rem;}
+.detail-comments .name font { float: left; width: 3rem; overflow: hidden; white-space: nowrap; word-break: break-all; text-overflow: ellipsis; }
+.detail-comments .name span { float: right; display: inline-block;}
+.detail-comments .name span i { width:.26rem;height:.26rem; display: inline-block; position: relative; margin-right: .05rem; background-image: url(../images/comment_rank.png); background-repeat: no-repeat; background-size:.52rem; background-position: -.26rem;}
+.detail-comments .time { padding-left: 1rem; color: #878787;}
+.detail-comments .content { margin-top:.1rem; color: #1a1a1a; word-wrap: break-word;}
+.detail-comments .spec { color: #9c9c9c; margin-top: .06rem; width: 100%; word-break: break-all;}

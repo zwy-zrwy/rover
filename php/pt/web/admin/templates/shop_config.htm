@@ -1,0 +1,89 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+     {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>站点设置</h2>
+			<div class="tab_navs">
+			  <ul>
+				  {foreach from=$group_list item=group name="bar_group"}
+				  <li id="{$group.code}"{if $smarty.foreach.bar_group.iteration eq 1} class="cur"{/if}><a href="javascript:void(0);">{$group.name}</a></li>
+					{/foreach}
+				</ul>
+			</div>
+	  </div>
+	  <div class="main_bd">
+		  <form enctype="multipart/form-data" name="theForm" action="index.php?act=setting&op=post" method="post">
+		  {foreach from=$group_list item=group name="body_group"}
+		  <table class="table" id="{$group.code}"{if $smarty.foreach.body_group.iteration eq 1} style="display:table"{else} style="display:none"{/if}>
+		    <tbody >
+		      {foreach from=$group.vars item=var key=key name=vars}
+		      {include file="shop_config_form.htm"}
+		      {/foreach}
+		    </tbody>
+		  </table>
+		  {/foreach}
+			<input name="submit" type="submit" value="确定" class="btn" />
+		  </form>
+	  </div>
+	</div>
+</div>
+<script src="static/js/region.js"></script>
+<script>
+	$(function() {
+		$('.tab_navs li').click(function() {
+	        var i = $(this).index();
+	        $(this).addClass('cur').siblings().removeClass('cur');
+	        $('.table').eq(i).show().siblings('.table').hide();
+	    });
+		$("#shop_logo").change(function(){
+		    $("#textfield_shop_logo").val($(this).val());
+	    });
+	    $("#wap_logo").change(function(){
+		    $("#textfield_wap_logo").val($(this).val());
+	    });
+	    $("#code_logo").change(function(){
+		    $("#textfield_code_logo").val($(this).val());
+	    });
+	    $("#share_logo").change(function(){
+		    $("#textfield_share_logo").val($(this).val());
+	    });
+	    $("#no_picture").change(function(){
+		    $("#textfield_no_picture").val($(this).val());
+	    });
+		// 上传图片类型
+		$('input[class="type-file-file"]').change(function(){
+	        var filepatd=$(this).val();
+	        var extStart=filepatd.lastIndexOf(".");
+	        var ext=filepatd.substring(extStart,filepatd.lengtd).toUpperCase();		
+		    if(ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+			    layer.msg("图片限于png,gif,jpeg,jpg格式");
+				$(this).attr('value','');
+			    return false;
+		    }
+	    });
+		// 显示隐藏预览图 start
+	    $('.show_image').hover(
+		    function(){
+			    $(this).next().css('display','block');
+		    },
+		    function(){
+			    $(this).next().css('display','none');
+		    }
+	    );
+	});
+</script>
+{include file="footer.htm"}
+
+
+
+
+
+
+
+
+
+
+

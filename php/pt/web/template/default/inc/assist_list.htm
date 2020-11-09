@@ -1,0 +1,14 @@
+{if $goods.goods_id}
+<dl>
+  <dt><a href=""><img class="lazy_{$page}" data-original="{$goods.goods_img}" src="uploads/images/no_picture.jpg"></a></dt>
+  <dd class="info-box">
+    <h3 class="join-name">{$goods.goods_name}</h3>
+    <p class="time">还剩<span class="aotime" data="{$goods.assist_end_time}"></span></p>
+    <p class="info"><font>需{$goods.assist_tuan_num}人助力</font></p>
+    <p class="price">
+      <span>¥0</span>
+      <a href="javascript:openAddress({$goods.assist_id})" class="btn ok">马上抢</a>
+    </p>
+  </dd>
+</dl>
+{/if}

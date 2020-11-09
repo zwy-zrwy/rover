@@ -1,0 +1,59 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>商品分类</h2>
+    	<div class="tab_navs">
+    	  <ul>
+    		  <li class="cur"><a href="javascript:void(0);">分类管理</a></li>
+    			<li><a href="index.php?act=category&amp;op=category_add">添加分类</a></li>
+    		</ul>
+    	</div>
+	  </div>
+    <div class="highlight_box">
+      <p class="desc">删除分类前请先删除分类商品子分类</p>
+    </div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr class="thead">
+          <th width="60">ID</th>
+      	  <th width="100">排序</th>
+          <th>分类名称</th>
+          <th>是否显示</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$cat_info item=cat}
+        <tr class="{$cat.level}" id="remove_{$cat.cat_id}">
+        <td>{$cat.cat_id}</td>
+      	<td>
+      	    <span class="edit" onclick="edit(this, 'edit_sort_order', {$cat.cat_id} ,'category')" class="editable">{$cat.sort_order}</span>
+      	</td>
+      	<td class="w50pre name">
+      	  {if $cat.level gt 0}<img src="static/images/tv-item1.gif"/>{/if}
+            <span class="editable">{$cat.cat_name}</span>
+          </td>
+          <td class="binding">
+                      
+                          <span><i class="fa {if $cat.is_show eq '1'}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_is_show', {$cat.cat_id})"></i></span>
+                      
+                      </td>
+
+
+
+          
+          <td>
+            <a href="index.php?act=category&amp;op=edit&amp;cat_id={$cat.cat_id}">修改</a>
+            <a href="javascript:;" onclick="remove({$cat.cat_id},  'remove')" title="{$lang.remove}">删除</a>
+            
+          </td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

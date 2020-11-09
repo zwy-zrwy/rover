@@ -1,0 +1,14 @@
+<a href="{:url('admin/reply/add')}" class="layui-btn layui-btn-sm layui-btn-warm"><i class="layui-icon">&#xe654;</i>添加</a>
+<table class="layui-table">
+    <thead>
+    <tr><th>ID</th><th>关键字</th><th>内容</th><th>类型</th><th>操作</th></tr></thead>
+    {volist name='data' id='vo'}
+    <tbody><tr>
+        <td>{$vo.id}</td><td>{$vo.keys}</td><td>{$vo.content}</td><td>{$vo.type}</td>
+        <td width="200px" >
+            <a href="{:url('admin/reply/edit',['id'=>$vo.id])}" class="layui-btn layui-btn-sm  layui-btn-normal"><i class="layui-icon">&#xe6b2;</i>编辑</a>
+            <a href="{:url('admin/reply/del',['id'=>$vo.id])}" class="layui-btn  layui-btn-sm layui-btn-danger"><i class="layui-icon">&#xe640;</i>删除</a>
+        </td>
+    </tr></tbody>
+    {/volist}
+</table>

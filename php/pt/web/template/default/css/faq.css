@@ -1,0 +1,9 @@
+.faq_list { background-color: #fff; }
+.faq_list ul { padding: .2rem; }
+.faq_list li { height: .8rem; line-height: .8rem; padding-right: .3rem; border-bottom: #ededed 1px solid; overflow: hidden; position: relative; }
+.faq_list li::after { position: absolute; right: .05rem; top: .3rem; width: .16rem; height: .16rem; border-top: 1px solid #9c9c9c; border-right: 1px solid #9c9c9c; display: inline-block; transform: rotate(45deg); -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); content: '';}
+.faq_list li a { display: block; font-size: .26rem; }
+.faq_info { background-color: #fff; padding: .2rem; }
+.faq_info h3 { line-height: .4rem;  font-size: .28rem; border-bottom: #ededed 1px solid; margin-bottom: .2rem; padding-bottom: .2rem; color: #151515; }
+.faq_info .content { font-size: .26rem; line-height: .4rem; }
+.faq_info .content img { display: block; max-width: 100%; }

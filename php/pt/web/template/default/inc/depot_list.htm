@@ -1,0 +1,14 @@
+<dl>
+    <dt><img src="{$goods.goods_img}" alt="{$goods.goods_name}"></dt>
+    <dd class="info">
+        <p class="name">{$goods.goods_name}{if $goods.is_shipping}免运费商品{/if}</p>
+        <p class="price">单买价：<font>{$goods.shop_price}</font>拼团价：<font>{$goods.tuan_price}</font>
+        </p>
+        
+    </dd>
+    <dd class="comm">
+      <span>单买佣金：<font>{$goods.comm_shop_price}</font></span>
+      <span>拼团佣金：<font>{$goods.comm_tuan_price}</font></span>
+      <a href="index.php?c=goods&id={$goods.goods_id}&u={$user_id}">立即推广</a>
+    </dd>
+</dl>

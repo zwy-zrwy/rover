@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>订单详情</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<script src="{$template_path}js/user.js?v={$aos_version}"></script>
+<script src="{$template_path}js/aotime_day.js?v={$aos_version}"></script>
+</head>
+<body>
+<div class="box-hide"></div>
+<section class="container pdb">
+  <div class="head-block">
+    <dl>
+      <dt class="order-{$order.msg-icon}"></dt>
+      <dd class="details">
+        <h3 class="msg-tag">{$order.msg-tag}</h3>
+        <p class="msg-content">{$order.msg-content}</p>
+      </dd>
+    </dl>
+  </div>
+  {if $order.order_statu eq 5 && $order.shipping_statu gt 0 && $order.shipping_id > 1 && $delivery_info.success}
+  <div class="express-block" onclick="window.location.href= 'index.php?c=user&a=delivery_info&order_sn={$order.order_sn}';">
+    <div class="express-icon">
+      <i class="iconfont">&#xe752;</i>
+    </div>
+    <div class="details">
+      {foreach from=$delivery_info.data item=item name=name}
+      {if $smarty.foreach.name.first}
+      <h3>{if $delivery_info.status eq 3}在途{elseif $delivery_info.status eq 4}揽件{elseif $delivery_info.status eq 5}疑难{elseif $delivery_info.status eq 6}签收{elseif $delivery_info.status eq 7}退签{elseif $delivery_info.status eq 8}派件{elseif $delivery_info.status eq 9}退回{else}物流单号暂无结果{/if}<span>{$item.context}</span></h3>
+      <p>{$item.time}</p>
+      {/if}
+      {/foreach}
+    </div>
+  </div>
+  {/if}
+  <div class="address-block">
+    <dl>
+      <dt><i class="iconfont">{if $order.shipping_id eq 1}&#xe752;{else}&#xe6c2;{/if}</i></dt>
+      <dd>
+        <h3>{$order.consignee|escape}<font>{$order.mobile|escape}</font></h3>
+        <p>{if $order.shipping_id eq 1}{$order.store_name}{else}{$order.area} {$order.address}{/if}</p>
+      </dd>
+    </dl>
+  </div>
+
+  <div class="goods-block">
+    <dl>
+      <dt><img src="{$order.goods_img}"></dt>
+      <dd>
+        <h3>{$order.goods_name}</h3>
+        <p>{if $order.goods_attr}规格：{$order.goods_attr}{/if}</p>
+      </dd>
+      <dd class="rside"><font>{$order.goods_price}</font>x{$order.goods_number}</dd>
+    </dl>
+  </div>
+  <div class="goods-buttons">
+    <div class="top-line"></div>
+    {if $is_refund eq 1 && $is_show eq 1}
+    {if $order.pay_statu eq 2 && ($order.order_statu eq 5 || $order.order_statu eq 1)}
+      {if $order.extension_code neq 'lottery' && $order.extension_code neq 'assist'}
+        {if $order.extension_code neq '' && $order.tuan_status eq 2}
+          <a href="index.php?c=user&a=refund&order_id={$order.order_id}">申请退款</a>
+        {elseif $order.extension_code eq ''}
+          <a href="index.php?c=user&a=refund&order_id={$order.order_id}">申请退款</a>
+        {/if}
+      {/if}
+    {/if}
+    {/if}
+    {if $order.extension_code eq 'tuan'}
+    <a href="index.php?c=share&tuan_id={$order.extension_id}">查看团详情</a>
+    {/if}
+  </div>
+  <div class="currency-block">
+    实付：<i>￥</i><font>{$order.money_paid}</font><span>{if $order.shipping_fee eq '0.00'}(免运费){/if}</span>
+  </div>
+
+  <div class="contact-block">
+    <div class="contact-item">
+      <i class="iconfont">&#xe620;</i>
+      <a href="{if $kefu_select eq 1}http://wpa.qq.com/msgrd?v=3&uin={$kefu}&site=qq&menu=yes&from=message&isappinstalled=0{else}{$kefu}{/if}">联系卖家</a>
+    </div>
+    <div class="contact-item">
+      <i class="iconfont">&#xe7eb;</i>
+      <a href="tel:{$service_phone}">拨打电话</a>
+    </div>
+    <div class="middle-line"></div>
+  </div>
+  <div class="order-detail">
+    <p>订单编号：{$order.order_sn}</p>
+    <p>支付方式：{$order.pay_name}</p>
+    <p>下单时间：{$order.formated_add_time}</p>
+    {if $order.extension_code eq "tuan" && $order.tuan_status > 0}
+    <p>开团时间：{$order.formated_pay_time}</p>
+    {if $order.tuan_status eq 2}
+    <p>成团时间：{$order.formated_suc_tuan_time}</p>
+    {/if}
+    {/if}
+    {if $order.shipping_time}
+    <p>发货时间：{$order.shipping_time}</p>
+    <p>快递方式：{$order.shipping_name}</p>
+    <p>运单编号：{$order.invoice_no}</p>
+    {/if}
+  </div>
+  <div class="bottom-button-block">
+    {if $order.order_statu eq 5 && $order.shipping_statu eq 2 && $order.comment eq 1}
+    <div class="orders-button">
+      <a class="again hard" href="index.php?c=goods&id={$order.goods_id}"></a>
+    </div>
+    <div class="orders-button">
+      <a class="delete hard" href="javascript:;" onclick="cancel_order({$order.order_id},1)"></a>
+    </div>
+    {/if}
+    {if $order.order_statu eq 5 && $order.shipping_statu eq 2 && $order.comment eq 0}
+    <div class="orders-button">
+      <a class="comment hard" href="javascript:;" onclick="comment({$order.goods_id},{$order.order_id})"></a>
+    </div>
+    {/if}
+    {if $order.order_statu eq 1 && $order.pay_statu eq 0}
+    <div class="orders-button">
+      <a class="go-pay hard" href="{$pay_url}"></a>
+    </div>
+    <div class="orders-button">
+      <a class="delete hard" href="javascript:;" onclick="cancel_order({$order.order_id},1)"></a>
+    </div>
+    {/if}
+    {if $order.order_statu eq 1 && $order.pay_statu eq 2 && $order.shipping_statu eq 0 }
+      {if $order.shipping_id eq 1}
+        {if ($order.extension_code eq '' || ($order.extension_code eq 'lottery' && $order.is_luck eq 1))}
+          <div class="orders-button">
+            <a class="veri hard" href="javascript:;" onclick="verification({$order.order_id})"></a>
+          </div>
+        {elseif $order.extension_code neq 'lottery' && $order.extension_code neq '' && $order.tuan_status eq 2}
+          <div class="orders-button">
+            <a class="veri hard" href="javascript:;" onclick="verification({$order.order_id})"></a>
+          </div>
+        {/if}
+      {/if}
+    {/if}
+    {if $order.order_statu eq 5 && $order.shipping_statu eq 1 && $order.shipping_id neq 1}
+    <div class="orders-button">
+      <a id="j_receive_{$order.order_id}" class="confirm-shipment hard" href="javascript:;" onclick="affirm_received({$order.order_id},1)"></a>
+    </div>
+    <div class="orders-button">
+      <a class="shipping hard" href="index.php?c=user&a=delivery_info&order_sn={$order.order_sn}"></a>
+    </div>
+    {/if}
+  </div>
+  {include file="inc/add_comments.htm"}
+  <div class="box-veri">
+      <a class="box-close" href="javascript:void(0)" onClick="verification()" title="关闭"></a>
+      <h3>请出示二维码给核销员</h3>
+      <p class="veri-code"></p>
+  </div>
+</section> 
+</body>
+</html>

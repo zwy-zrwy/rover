@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>{$shop_name}</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/share.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<script src="{$template_path}js/jquery.lazyload.js?v={$aos_version}"></script>
+<script src="{$template_path}js/aotime_day.js?v={$aos_version}"></script>
+</head>
+<body>
+<div class="box-hide"></div>
+<section class="container pdb">
+  <div class="tuan-detail">
+    <a href="index.php?c=share_goods&id={$tuan.goods_id}" class="tuan-info">
+      <div class="tuan-img"><img src="{$tuan.goods_img}"></div>
+      <div class="tuan-text">
+        <p class="tuan-title">{$tuan.goods_name}</p>
+        <div class="tuan-desc">
+          <div class="tuan-tag">{$tuan.tuan_num}人团</div>
+          <span>{$tuan.goods_price}</span>
+          {if $type eq 'lottery'}
+          <div class="tuan-tag">抽奖团</div>
+          {/if}
+        </div>
+        <div class="tuan-stamp">
+          {if $tuan.tuan_status eq 1}
+          <i class="ico-stamp ico-stamp-ongoing"></i>
+          {elseif $tuan.tuan_status eq 2}
+          <i class="ico-stamp ico-stamp-success"></i>
+          {elseif $tuan.tuan_status eq 3}
+          <i class="ico-stamp ico-stamp-fail"></i>
+          {elseif $tuan.tuan_status eq 4}
+          <i class="ico-stamp ico-stamp-fail"></i>
+          {/if}
+        </div>
+      </div>
+    </a>
+    <div class="tuan-time">
+      {if $tuan.tuan_status eq 1}
+      <span>本团将于</span>
+      <span class="aotime" data="{$tuantime}"></span>
+      <span>结束</span>
+      {elseif $tuan.tuan_status eq 2}
+      <span>本团于</span>
+      {$suc_tuan_time}
+      <span>成团</span>
+      {elseif $tuan.tuan_status eq 3}
+      <span>本团于</span>
+      {$tuantime}
+      <span>失败</span>
+      {/if}
+    </div>
+    <div class="tuan-member">
+      {if $tuan.tuan_status eq 1}
+      <p>还差<em>{$difference}人</em>成团，赶快邀请好友加入吧！</p>
+      {elseif $tuan.tuan_status eq 2}
+      <p>拼团成功，{$tuan_mem_num}人已参团</p>
+      {/if}
+      <div class="member-box">
+        {foreach from=$tuan_mem item=item name=tuan_mem}
+        <div class="member-pic"><img src="{$item.headimgurl}">{if $smarty.foreach.tuan_mem.first}<span>团长</span>{/if}</div>
+        {/foreach}
+        {if $difference}
+        {foreach from=$d_num_arr item=item}
+        <div class="member-pic"></div>
+        {/foreach}
+        {/if}
+      </div>
+    </div>
+    {if $tuan_price_num gt 1 && $type eq 'tuan'}
+    <div class="tuan_price_list">
+      <ul>
+        <li><p>团购人数</p><p>团购价格</p></li>
+        {foreach from=$tuan_price_list item=price_list}
+        <li{if $tuan.tuan_num eq $price_list.number} class="cur"{/if}><p>{$price_list.number}人团</p><p>{$price_list.format_price}</p></li>
+        {/foreach}
+      </ul>
+    </div>
+    {/if}
+  </div>
+  <div class="tuan-rule"><a href="#"><img src="images/tuan-rule.png"></a></div>
+  {include file="inc/rand_goods.htm"}
+  <div class="dropload-noData"><span>亲,已经加载完了</span></div>
+</section>  
+<form action="javascript:addToCart({$tuan.goods_id})" method="post" name="AOS_FORMBUY" id="AOS_FORMBUY" >
+  <div class="goods-sku fixed" id="sku">
+    <div class="goodinfo">
+      <dl>
+        <dt><img id="sku_img" src="{$tuan.goods_img}" alt="{$tuan.goods_name|escape:html}"></dt>
+        <dd>
+          <h3>{$tuan.goods_name|escape:html}</h3>
+          <p{if $type neq 'lottery'} id="sku_price"{/if} class="price">{$tuan_price_formated}</p>
+          <p id="sku_value"></p>
+        </dd>
+      </dl>
+      <a href="javascript:;" class="box-close" onclick="skuClose()"></a>
+    </div>
+    <div class="sku-box">
+      {if $goods_sku}
+      <h3>规格</h3>
+      <ul>
+        {foreach from=$goods_sku item=sku key=key}
+        <li><input type="radio" name="sku" value="{$sku.attr_id}"{if $key eq 0} checked{/if} id="sku_{$sku.attr_id}" data-value="{$sku.attr_value}" data-price="{$sku.attr_price}" data-num="{$sku.product_number}" data-img="{$sku.attr_img}" onclick="changeSku({$sku.attr_id})" /><label for="sku_{$sku.attr_id}" id="sku_{$key}">{$sku.attr_value}</label></li>
+        {/foreach}
+      </ul>
+      {/if}
+    </div>
+    <div class="good-num">
+      <h3>购买数量 (库存 <b id="sku_num">{$goods.goods_number}</b>)</h3>
+      <span class="num-plus" onClick="goods_add();"></span>
+      <input name="number" class="num-form" type="text" value="1" id="number" required>
+      <span class="num-minus num-disable" onClick="goods_cut();"></span>
+    </div>
+    <div class="sku-ok"><a href="javascript:;" id="sku-ok">确定</a></div>
+  </div>
+  <input type="hidden" id="rec_type" name="rec_type" value="1" />
+  <input type="hidden" id="tuan_price" name="tuan_price" value="{$tuan_price}" />
+  <input type="hidden" id="qrcode" name="qrcode" value="{$code_logo}" />
+  <input type="hidden" id="canbuy" name="canbuy" value="{$canbuy}" />
+  <input type="hidden" id="subscribe" name="subscribe" value="{insert name='subscribe'}" />
+  <div class="fixed fixopt">
+      <div class="fixopt_item">
+          <a class="fixopt_home" href="index.php">更多拼团</a>
+          {if $tuan.tuan_status eq 1}
+              {if $in_tuan}
+                  <a id="share_button" class="fixopt_btn">还差{$difference}人拼团成功</a>
+              {else}
+                {if $type eq 'miao'}
+                  <a class="fixopt_btn" href="javascript:openSku({$tuan.goods_id},2,'{$tuan_id}','{$act_id}')">我也要参团</a>
+                {elseif $type eq 'lottery'}
+                  <a class="fixopt_btn" href="javascript:openSku({$tuan.goods_id},3,'{$tuan_id}','{$act_id}')">我也要参团</a>
+                {else}
+                  <a class="fixopt_btn" href="javascript:openSku({$tuan.goods_id},1,'{$tuan_id}')">我也要参团</a>
+                {/if}
+              {/if}
+          {else}
+              <a class="fixopt_btn" href="index.php?c=goods&id={$tuan.goods_id}">我{if $in_tuan}再{else}也{/if}开个团</a>
+          {/if}
+      </div>
+  </div>
+</form>
+<!--微信中分享弹层-->
+<div class="wx-mask" id="J_wx_mask"{if $in_tuan && $tuan.tuan_status eq 1} style="display:block"{/if}></div>
+<div class="wx-pane" id="J_wx_pane"{if $in_tuan && $tuan.tuan_status eq 1} style="display:block"{/if}>
+  <div class="wx-guide">
+    <img src="images/wx-tuan-start-success.alpha.png" alt="开团成功">
+    <div class="wx-desc">还<span>差{$difference}人</span>就能成团啦，快邀请<br>小伙伴一起来参团吧！</div>
+  </div>
+</div>
+<script>
+  window.onload = function() {
+    var is_subscribe = $("input[name='subscribe']").val();
+    var canbuy = $("input[name='canbuy']").val();
+    if (canbuy == 1 && is_subscribe == 0){
+      subscribe();
+    } 
+  }
+  $("img.lazy").lazyload({effect: "fadeIn"});
+  var sku = $("input[name='sku']:checked").val();
+  var $wxMask = $("#J_wx_mask");
+  var $wxPane = $("#J_wx_pane");
+  $wxMask.add($wxPane).on("click",function()
+  {
+    $wxMask.hide();
+    $wxPane.hide();
+  });
+  $("#share_button").click(function(){
+    $("#J_wx_mask").toggle();
+    $("#J_wx_pane").toggle();
+  });
+</script>
+{include file="inc/wx_config.htm"}
+{if $stats_code}{$stats_code}{/if}
+</body>
+</html>

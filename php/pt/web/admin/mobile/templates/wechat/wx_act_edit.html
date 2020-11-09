@@ -1,0 +1,81 @@
+{include file="header.htm"}
+<script src="static/js/laydate/laydate.js"></script>
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>活动管理</h2>
+			<div class="tab_navs">
+			   <ul>
+				  <li class="cur"><a href="javascript:void(0);">活动修改</a></li>
+				</ul>
+			</div>
+	  </div>
+		<div class="main_bd">
+      <form name="theForm" method="post" action="index.php?act=wechat&op=wx_act_edit&aid={$act.aid}">
+      <table width="100%">
+        <tbody>
+       <tr>
+          <td >活动标题 :</td>
+          <td><input type="text" name="title" value="{$act.title}"/></td>
+        </tr>
+        <tr>
+          <td >活动介绍 :</td>
+          <td><textarea name="content" rows="5" cols="40">{$act.content}</textarea></td>
+        </tr>
+       <tr>
+          <td >是否启用 :</td>
+          <td>
+            <input type="radio" name="isopen" value="1" {if $act.isopen eq 1}checked{/if} />开启
+            <input type="radio" name="isopen" value="0" {if $act.isopen eq 0}checked{/if} />关闭
+          </td>
+        </tr>
+       <tr>
+          <td >参与次数 :</td>
+          <td><input type="text" name="num" value="{$act.num}" /></td>
+        </tr>
+       <tr>
+          <td>活动类型 :</td>
+          <td>
+            <input type="radio" name="type" value="1" {if $act.type eq 1}checked{/if} />每日（每天有上面的次数）
+            <input type="radio" name="type" value="2" {if $act.type eq 2}checked{/if} />长期（整个活动有上面的次数）
+          </td>
+        </tr>
+        <tr>
+          <td >抽奖形式 :</td>
+          <td>
+            {if $act.tpl eq 1}
+              砸金蛋
+            {elseif $act.tpl eq 2}
+              刮刮卡
+            {elseif $act.tpl eq 3}
+              大转盘
+            {/if}
+          </td>
+        </tr>
+        <tr>
+          <td>活动截至时间:</td>
+          <td>
+            <input name="overymd" type="text" id="use_startdate" value='{$act.overymd}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            <input type="submit" value="确认" class="btn" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    </form>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}
+		
+		
+		
+
+

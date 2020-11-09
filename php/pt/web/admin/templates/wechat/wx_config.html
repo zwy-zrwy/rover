@@ -1,0 +1,69 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>管理员</h2>
+      <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">管理</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form name="theForm" class="wechatForm" method="post" action="index.php?act=wechat&op=wx_config">
+        <table class="table">
+        <tbody>
+        <tr>
+          <td>URL:</td>
+          <td>{$shop_url}api/wechat.php</td>
+        </tr>
+        <tr>
+          <td>Token:</td>
+      	  <td><input type="text" name="token" size="20" value="{$ret.token}" datatype="s"></td>
+        </tr>
+        <tr>
+          <td>AppId:</td>
+          <td><input type="text" name="appid" size="20" value="{$ret.appid}" datatype="s18-18"></td>
+        </tr>
+        <tr>
+          <td>AppSecret:</td>
+          <td><input type="text" name="appsecret" size="32" value="{$ret.appsecret}" datatype="s32-32"></td>
+        </tr>
+        <tr>
+          <td>关注回复类型:</td>
+          <td>
+            <input type="radio" name="followtype" value="1" {if $ret.followtype eq 1}checked="true"{/if}/>文本回复
+            <input type="radio" name="followtype" value="2" {if $ret.followtype eq 2}checked="true"{/if}/>图文回复
+          </td>
+        </tr>
+        <tr>
+          <td>关注文本回复:</td>
+          <td><textarea name="followmsg" rows="5" cols="40">{$ret.followmsg}</textarea></td>
+        </tr>
+        <tr>
+          <td>关注图文回复:</td>
+          <td>
+            <input type="text" name="followkey" value="{$ret.followkey}" placeholder="请输入文章关键字"/>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            <input type="submit" value="提交" class="btn"/>
+          </td>
+        </tr>
+        </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    $(".wechatForm").Validform();
+  });
+</script>    
+
+{include file="footer.htm"}

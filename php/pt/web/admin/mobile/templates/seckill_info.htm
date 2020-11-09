@@ -1,0 +1,119 @@
+{include file="header.htm"}
+<script src="static/js/laydate/laydate.js"></script>
+<div class="main">
+
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>限时秒杀</h2>
+      <div class="tab_navs">
+        <ul>
+          <li><a href="index.php?act=seckill&op=seckill_list">秒杀管理</a></li>
+          <li class="cur"><a href="javascript:void(0);">{if $form_act eq 'insert'}添加秒杀{else}修改秒杀{/if}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form action="index.php?act=seckill" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+      <table class="table">
+      {if $form_act eq 'insert'}
+        <tr>
+          <td>关键字：</td>
+          <td>
+            <input type='text' name='keyword' maxlength="20" value='{$seckill.cat_name|escape:html}' size='27' />
+            <input type="button" value="搜索" class="btn" onclick="searchGoods()" {if $form_action eq 'update'} disabled="true" {/if}>
+          </td>
+        </tr>
+      {/if}
+        <tr>
+          <td>商品名称：</td>
+          <td>
+            <select name="goods_id" id="source_select" >
+              <option {if $seckill.goods_id} value = "{$seckill.goods_id}" {else} value="0" {/if}>{if $seckill.goods_name}{$seckill.goods_name}{else}请先搜索商品生成选项列表{/if}</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>活动日期：</td>
+          <td>
+            <input name="start_date" type="text" id="start_date" value='{$seckill.seck_start_time}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+            -
+            <input name="end_date" type="text" id="end_date" value='{$seckill.seck_end_time}' onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+          </td>
+        </tr>
+        <tr>
+          <td>团购人数：</td>
+          <td><input type="text" name="seck_tuan_num" value='{$seckill.seck_tuan_num}' size="50"></td>
+        </tr>
+        <tr>
+          <td>秒杀价格：</td>
+          <td><input type="text" name="seckill_price" value='{$seckill.seck_price}' size="50">
+          </td>
+        </tr>
+        <tr>
+          <td>秒杀库存：</td>
+          <td><input type="text" name="seckill_number" value='{$seckill.seckill_number}' size="50">
+          </td>
+        </tr>
+        <tr>
+          <td>秒杀规则：</td>
+          <td>
+            <textarea name='seckill_desc' rows="6" cols="48">{$seckill.seck_desc}</textarea>
+          </td>
+        </tr>
+      </table>
+      {if $form_act eq 'update'}
+        <input type="hidden" name="id" value="{$seckill.seckill_id}" />
+      {/if}
+      <input type="submit" class="btn" value="确定" />
+      <input type="hidden" name="op" value="{$form_act}" />
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function searchGoods(){
+    var keywords = $("input[name='keyword']").val();
+    $.ajax({
+      type: 'POST',
+      data: {keywords},
+      url: 'index.php?act=coupon&op=get_goods_list',
+      dataType: 'json',
+      success: function(data){
+        var html="";
+        if (data.error == 0)
+        {
+          html += "<option value='0'>请选择商品</option>"
+          for (i = 0; i < data.content.length; i++)
+          {
+            html += "<option value="+data.content[i].value+">"+data.content[i].text+"</option>";
+          }
+        }
+        $("#source_select").html(html);
+      }
+    });
+  }
+  function select_attr(){
+    var id = $("#source_select").val();
+    $.ajax({
+      type: 'POST',
+      data: {id},
+      url: 'index.php?act=goods&op=goods_attr',
+      dataType: 'json',
+      success: function(data){
+        var html="";
+        if (data.error == 0)
+        {
+          $("#goods_attr").parent().show();
+          for (i = 0; i < data.content.length; i++)
+          {
+            html += "<input  type='checkbox' name='goods_attr[]' value="+data.content[i].attr_id+"  />"+data.content[i].attr_value;
+          }
+        }else{
+          $("#goods_attr").parent().hide();
+        }
+        $("#goods_attr").html(html);
+      }
+    });
+  }
+  </script>
+{include file="footer.htm"}

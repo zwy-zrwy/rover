@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>申请退款</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/refund.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+<body>
+<section class="container pdb">
+{if $type}
+<form action="index.php?c=user&a=do_refund" method="post" enctype="multipart/form-data">
+  <div class="refund-box">
+    <dl>
+      <dt>退款类型</dt>
+      <dd class="select">
+        <select name="back_type">
+          <option value="1" {if $type == 1} selected {/if}>我要退货退款</option>
+          <option value="4" {if $type == 4} selected {/if}>我要退款（无需退货）</option>
+        </select>
+      </dd>
+    </dl>
+    <dl>
+      <dt>退款金额</dt>
+      <dd>{$order.money}</dd>
+    </dl>
+    <dl>
+      <dt>退款原因</dt>
+      <dd class="select">
+        <select name="reason_type">
+          <option value="0">点击选择退款原因</option>
+          <option value="">商品有质量问题</option>
+          <option value="98">没有收到货</option>
+          <option value="99">商品少发漏发发错</option>
+          <option value="100">商品与描述不一致</option>
+          <option value="101">收到商品时有划痕或破损</option>
+          <option value="102">质疑假货</option>
+          <option value="111">其他</option>
+        </select>
+      </dd>
+    </dl>
+    <dl>
+      <dt>退款说明</dt>
+      <dd>
+        <span>您还可以输入170字</span>
+      </dd>
+      <dd class="textarea"><textarea name="back_reason" placeholder="请您详细填写退款说明。（最多170字）"></textarea></dd>
+    </dl>
+    <dl>
+      <dt>联系电话</dt>
+      <dd>
+        <input name="back_mobile" type="tel" placeholder="请输入手机号" value="{$order.mobile}">
+      </dd>
+    </dl>
+  </div>
+  <div class="images-info">
+    <h3>上传凭证<span>（最多三张）</span></h3>
+
+    <div class="img-box">
+      <section class="img-section">
+        <div class="z_photo" >
+             <section class="z_file">
+              <input type="file" name="file[]" id="file" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple />
+             </section>
+         </div>
+       </section>
+    </div>
+    <aside class="mask works-mask">
+      <div class="mask-content">
+        <p class="del-p ">您确定要删除作品图片吗？</p>
+        <p class="check-p"><span class="del-com wsdel-ok">确定</span><span class="wsdel-no">取消</span></p>
+      </div>
+    </aside>
+  </div>
+  <div class="fixed submit-button">
+    <input type="hidden" name="order_id" value="{$order_id}">
+    <input type="submit" value="提交申请">
+  </div>
+</form>
+<script>
+$(function(){
+  var delParent;
+  var defaults = {
+    fileType:["jpg","png","bmp","jpeg","JPG","PNG"], // 上传文件的类型
+    fileSize:1024 * 1024 * 10 // 上传文件的大小 10M
+  };
+    /*点击图片的文本框*/
+  $(".file").change(function(){  
+    var idFile = $(this).attr("id");
+    var file = document.getElementById(idFile);
+    var imgContainer = $(this).parents(".z_photo"); //存放图片的父亲元素
+    var fileList = file.files; //获取的图片文件
+    var input = $(this).parent();//文本框的父亲元素
+    var imgArr = [];
+    //遍历得到的图片文件
+    var numUp = imgContainer.find(".up-section").length;
+    var totalNum = numUp + fileList.length;  //总的数量
+    if(fileList.length > 3 || totalNum > 3 ){
+      layer.open({content:"上传图片数目不可以超过3个，请重新选择",skin: 'msg',time: 2});
+    }
+    else if(numUp < 3){
+      fileList = validateUp(fileList);
+      for(var i = 0;i<fileList.length;i++){
+        var imgUrl = window.URL.createObjectURL(fileList[i]);
+           imgArr.push(imgUrl);
+        var $section = $("<section class='up-section loading'>");
+           imgContainer.prepend($section);
+        var $span = $("<span class='close-upimg'><i></i>").on("click",function(event){
+            event.preventDefault();
+          event.stopPropagation();
+          $(".works-mask").show();
+          delParent = $(this).parent();
+        });   
+        $span.appendTo($section);
+         var $img = $("<img class='up-img up-opcity'>");
+             $img.attr("src",imgArr[i]);
+             $img.appendTo($section);
+         var $p = $("<p class='img-name-p'>");
+             $p.html(fileList[i].name).appendTo($section);
+         var $input = $("<input id='taglocation' name='taglocation' value='' type='hidden'>");
+             $input.appendTo($section);
+         var $input2 = $("<input id='tags' name='tags' value='' type='hidden'/>");
+             $input2.appendTo($section);
+          
+       }
+    }
+    setTimeout(function(){
+             $(".up-section").removeClass("loading");
+       $(".up-img").removeClass("up-opcity");
+     },450);
+     numUp = imgContainer.find(".up-section").length;
+    if(numUp >= 3){
+      $(this).parent().hide();
+    }
+  });
+    $(".z_photo").delegate(".close-upimg","click",function(){
+        $(".works-mask").show();
+        delParent = $(this).parent();
+  });
+    
+  $(".wsdel-ok").click(function(){
+    $(".works-mask").hide();
+    var numUp = delParent.siblings().length;
+    if(numUp < 4){
+      delParent.parent().find(".z_file").show();
+    }
+     delParent.remove();
+  });
+  
+  $(".wsdel-no").click(function(){
+    $(".works-mask").hide();
+  });
+    function validateUp(files){
+      var arrFiles = [];//替换的文件数组
+      for(var i = 0, file; file = files[i]; i++){
+        //获取文件上传的后缀名
+        var newStr = file.name.split("").reverse().join("");
+        if(newStr.split(".")[0] != null){
+            var type = newStr.split(".")[0].split("").reverse().join("");
+            console.log(type+"===type===");
+            if(jQuery.inArray(type, defaults.fileType) > -1){
+              // 类型符合，可以上传
+              if (file.size >= defaults.fileSize) {
+                layer.open({content:file.size,skin: 'msg',time: 2});
+                layer.open({content:'您这个"'+ file.name +'"文件大小过大',skin: 'msg',time: 2}); 
+              } else {
+                // 在这里需要判断当前所有文件中
+                arrFiles.push(file);  
+              }
+            }else{
+              layer.open({content:'您这个"'+ file.name +'"上传类型不符合',skin: 'msg',time: 2});
+            }
+          }else{
+            layer.open({content:'您这个"'+ file.name +'"没有类型, 无法识别',skin: 'msg',time: 2});  
+          }
+      }
+      return arrFiles;
+    } 
+})
+</script>
+{else}
+  <div class="refund-select">
+    <dl onclick="window.location.href= 'index.php?c=user&a=refund&order_id={$order_id}&type=1';">
+      <dt class="buyback"><i></i></dt>
+      <dd>
+        <h3>我要退货退款</h3>
+        <p>已收到货，需要退还已收到的货物</p>
+      </dd>
+    </dl>
+    <dl onclick="window.location.href= 'index.php?c=user&a=refund&order_id={$order_id}&type=4';">
+      <dt class="refund"><i></i></dt>
+      <dd>
+        <h3>我要退款 (无需退货)</h3>
+        <p>未收到货，或与商家协商之后申请</p>
+      </dd>
+    </dl>
+  </div>
+{/if}
+</section>
+</body>
+</html>

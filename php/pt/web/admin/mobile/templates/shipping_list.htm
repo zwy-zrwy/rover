@@ -1,0 +1,48 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>配送方式</h2>
+  	</div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>值</th>
+          <th>启用</th>
+        </tr>
+        </thead>
+        <tbody>
+        <form name="theForm" action="index.php?act=shipping&op=post" method="post">
+        {foreach from=$shipping_list item=shipping}
+        <tr>
+          <td>{$shipping.shipping_id}<input type="hidden" name="shipping_id[]" value="{$shipping.shipping_id}"/></td>
+          <td><input name="shipping_name[]" type="text" value="{$shipping.shipping_name}" /></td>
+          <td>
+            <input name="shipping_code[]" type="text" value="{$shipping.shipping_code}" {if $shipping.shipping_id lt 3}readonly{/if} />
+          </td>
+          <td class="binding" width="50">
+            <span><i class="fa {if $shipping.enabled}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_enabled', {$shipping.shipping_id})"></i></span>
+          </td>
+        </tr>
+        {/foreach}
+        <tr>
+          <td colspan="4">新增一个</td>
+        </tr>
+        <tr>
+          <td><input type="hidden" name="shipping_id[]" value=""/></td>
+          <td><input name="shipping_name[]" type="text" value="" /></td>
+          <td colspan="2"><input name="shipping_code[]" type="text" value="" /></td>
+        </tr>
+        <tr class="tfoot">
+          <td colspan="4"><input name="submit" type="submit" value="修改" class="btn" /></td>
+        </tr>
+        </form>
+        </tbody>
+      </table>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

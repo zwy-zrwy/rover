@@ -1,0 +1,59 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>中奖管理</h2>
+			<div class="tab_navs">
+			   <ul>
+				  <li class="cur"><a href="javascript:void(0);">中奖管理</a></li>
+				</ul>
+			</div>
+	  </div>
+		<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>奖项名称</th>
+          <th>活动名称</th>
+          <th>用户昵称</th>
+          <th>中奖时间</th>
+          <th>兑奖截止</th>
+          <th>中奖代码</th>
+          <th>是否发奖</th>
+        <tr>
+        </thead>
+        <tbody>
+        {foreach from=$win item=item}
+        <tr>
+          <td>{$item.class_name}</td>
+          <td>{$item.title}</td>
+          <td>{$item.nickname}</td>
+          <td>{$item.createymd}</td>
+          <td>{$item.overymd}</td>
+          <td>{$item.code}</td>
+          <td>
+            {if $item.issend == 1}
+              已发
+            {else}
+              <a href="">发奖</a>
+            {/if}
+            <a href="">删除</a>
+          </td>
+        </tr>
+        {/foreach}
+        <tbody>
+      </table>
+      {$pager}
+		</div>
+	</div>
+</div>
+
+{include file="footer.htm"}
+		
+		
+		
+
+

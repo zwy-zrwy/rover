@@ -1,0 +1,25 @@
+<div class="order_item" id="item_{$item.order_id}">
+	<div class="mt">
+		<a href="index.php?c=user&a=order_detail&order_id={$item.order_id}">{$item.order_sn}</a>
+		<span>{$item.order_status_name}</span>
+	</div>
+	<div class="mc">
+	  <a href="index.php?c=user&a=order_detail&order_id={$item.order_id}">
+	    <div class="pic"><img src="{$item.goods_img}"></div>
+			<div class="name">
+			  <h3>{$item.goods_name}</h3>
+			  {if $item.goods_attr}
+			  <p>规格：{$item.goods_attr}</p>
+			  {/if}
+			</div>
+			<div class="rbox">
+			  <p class="price">{$item.goods_price}</p>
+			  <p class="num">x{$item.goods_number}</p>
+			</div>
+		</a>
+	</div>
+	<div class="mb">实付:{$item.money_paid} ({if $item.shipping_fee gt 0}含运费{else}免运费{/if})</div>
+	{if $item.handler}
+	<div class="btn-box">{$item.handler}</div>
+	{/if}
+</div>

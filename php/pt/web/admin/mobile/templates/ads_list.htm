@@ -1,0 +1,56 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>广告管理</h2>
+      <div class="tab_navs">
+        <ul>
+          <li class="cur"><a href="javascript:void(0);">广告管理</a></li>
+          <li><a href="index.php?act=ads&op=add">添加广告</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>广告名称</th>
+          <th>广告图片</th>
+          <th>广告位置</th>
+          <th>开始日期</th>
+          <th>结束日期</th>
+          <th>排序</th>
+          <th>启用</th>
+          <th>操作</th>
+        </thead>
+        <tbody>
+        {foreach from=$ads_list item=list}
+        <tr id="remove_{$list.ad_id}">
+          <td>{$list.ad_name|escape:html}</td>
+          <td><img src="../uploads/ads_img/{$list.ad_code}" width="100"></td>
+          <td>{$list.position_name}</td>
+          <td>{$list.start_date}</td>
+          <td>{$list.end_date}</td>
+          <td width="50"><span class="edit" onclick="edit(this, 'edit_sort_order', {$list.ad_id} ,'ads')">{$list.sort_order}</span></td>
+          <td class="binding" width="50">
+            <span><i class="fa {if $list.enabled}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_enabled', {$list.ad_id})"></i></span>
+          </td>
+          <td>
+            <a href="index.php?act=ads&op=edit&id={$list.ad_id}">修改</a>
+            <a  href="javascript:" onclick="remove({$list.ad_id}, 'remove')">删除</a>
+          </td>
+        </tr>
+        {foreachelse}
+        <tr class="no_data">
+          <td colspan="5">您还没有添加广告</td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        {$pager}
+      </div>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

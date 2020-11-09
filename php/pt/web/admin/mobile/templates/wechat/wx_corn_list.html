@@ -1,0 +1,52 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>消息推送</h2>
+      <div class="tab_navs">
+        <ul>
+          <li><a href="index.php?act=wechat&op=wx_corn">消息推送</a></li>
+          <li class="cur"><a href="javascript:void(0);">推送列表</a></li>
+          <li class=""><a href="index.php?act=wechat&op=wx_user">测试会员</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>编号</th>
+          <th>内容</th>
+          <th>状态</th>
+          <th>发送时间</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <form method="post" action="index.php?act=article" name="listForm" >
+        <tbody>
+        {foreach from=$corn item=item}
+        <tr>
+          <td>{$item.id}</td>
+          <td>
+          {$item.title}</td>
+          <td>{if $item.issend eq 0}等待发送{elseif $item.issend eq 2}发送成功{else}发送失败{/if}</td>
+          <td>{$item.sendymd}</td>
+          <td>
+            {if $item.issend neq 2}
+              <a href="index.php?act=wechat&op=wx_corn&id={$item.id}">修改</a>
+              <a href="index.php?act=wechat&op=do_send&id={$item.id}" target="_blank">测试发送</a>
+              <a href="index.php?act=wechat&op=do_send&id={$item.id}&send_type=1" target="_blank">发送</a>
+            {/if}
+            <a href="index.php?act=wechat&op=wx_corn&id={$item.id}&tag=1">删除</a>
+          </td>
+         </tr>
+        {/foreach}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

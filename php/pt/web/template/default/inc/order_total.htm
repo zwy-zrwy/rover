@@ -1,0 +1,4 @@
+{if $total.exchange_integral}
+应付积分: {$total.exchange_integral}({if $total.shipping_fee > 0}不含运费: {$total.shipping_fee_formated}{else}免运费{/if})
+{else}
+应付款金额: {$total.amount_formated}({if $total.shipping_fee > 0}含运费: {$total.shipping_fee_formated}{else}免运费{/if}){/if}

@@ -1,0 +1,49 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>商品标签</h2>
+  	</div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>简介</th>
+          <th>启用</th>
+        </tr>
+        </thead>
+        <tbody>
+        <form name="theForm" action="index.php?act=label&op=post" method="post">
+        {foreach from=$label_list item=label}
+        <tr>
+          <td>{$label.label_id}<input type="hidden" name="label_id[]" value="{$label.label_id}"/></td>
+          <td><input name="label_name[]" type="text" value="{$label.label_name}" /></td>
+          <td><input name="label_desc[]" type="text" value="{$label.label_desc}" style="width:500px;" /></td>
+          <td class="binding" width="50">
+            <span><i class="fa {if $label.enabled}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_enabled', {$label.label_id})"></i></span>
+          </td>
+        </tr>
+        {/foreach}
+        <tr>
+          <td colspan="4">新增一个</td>
+        </tr>
+        <tr>
+          <td><input type="hidden" name="label_id[]" value=""/></td>
+          <td><input name="label_name[]" type="text" value="" /></td>
+          <td colspan="2"><input name="label_desc[]" type="text" value="" style="width:500px;"/></td>
+        </tr>
+        <tr class="tfoot">
+          <td colspan="4"><input name="submit" type="submit" value="修改" class="btn" /></td>
+        </tr>
+        </form>
+        </tbody>
+      </table>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

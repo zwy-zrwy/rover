@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>佣金提现</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/dist.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" ></link>
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+
+</head>
+<body>
+{include file="inc/header.htm"}
+<section id="container" class="container pdb" style="display:none">
+  <div class="can_use_points">
+      <p class="use_points_tit">可用佣金</p>
+      <p class="points_num">{$surplus_amount}</p>
+      <a href="index.php?c=dist&a=account_raply" class="gain_points">提现</a>
+  </div>
+  <div class="nav-tab nav-n2">
+    <a href="index.php?c=dist&a=comm"{if $action eq "comm"} class="cur"{/if}><span>佣金明细</span></a>
+    <a href="index.php?c=dist&a=cash"{if $action eq "cash"} class="cur"{/if}><span>申请记录</span></a>
+  </div>
+  {if $action eq "account_raply"}
+  <form name="formSurplus" method="post" action="index.php?c=dist" onSubmit="return submitSurplus()">
+
+  <div class="account_deposit">
+    <ul>
+      <li>
+        <span>提现金额</span>
+        <input type="text" name="amount" class="text" value="{$order.amount|escape}">
+      </li>
+      <li>
+        <span>会员备注</span>
+        <input type="text" name="user_note" class="text" value="{$order.user_note|escape}">
+      </li>
+      <li>
+        <input type="hidden" name="surplus_type" value="1" />
+        <input type="hidden" name="a" value="act_account" />
+        <input type="submit" class="bnt" name="submit" value="确定">
+      </li>
+    </ul>
+  </div>
+  </form>
+  {/if}
+  {if $action eq "comm"}
+  <div class="points_log" id="j_jiazai">
+      {foreach from=$account_log item=item}
+      <dl>
+          <dt>
+              <h3>{$item.short_change_desc}</h3>
+              <p>{$item.change_time}</p>
+          </dt>
+          <dd>{if $item.amount > 0} +{/if} {$item.amount}</dd>
+      </dl>
+      {/foreach}
+  </div>
+  {/if}
+  {if $action eq "cash"}
+  <div class="account_log">
+    <ul class="c5" id="j_jiazai">
+      <li>
+        <span>时间</span>
+        <span>类型</span>
+        <span>金额</span>
+        <span>状态</span>
+        <span>操作</span>
+      </li>
+      {foreach from=$account_log item=item}
+      <li id="item_{$item.id}">
+        <span>{$item.add_time}</span>
+        <span>{$item.type}</span>
+        <span>{$item.amount}</span>
+        <span>{$item.pay_status}</span>
+        <span>{$item.handle}{if ($item.is_paid eq 0 && $item.process_type eq 1) || $item.handle}<a href="javascript:drop_cancel({$item.id})">取消</a>{/if}</span>
+    </li>
+      {/foreach}
+    </ul>
+  </div>
+  {/if}
+</section>
+{include file="inc/footer.htm"}
+{if $action eq "cash" || $action eq "comm"}
+<script src="{$template_path}js/dropload.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    var tab1LoadEnd = false;
+    var num = 10;
+    var page= 1;
+    var dropload = $('.container').dropload({
+    scrollArea : window,
+    loadDownFn : function(me){
+        // 加载菜单一的数据
+            page++;
+            var counter = page,last = num,amount = 10;
+            $.ajax({
+                type: 'POST',
+                data: {last,amount,page},
+                url: 'index.php?c=dist&a=do_{$action}',
+                dataType: 'json',
+                success: function(data){
+                    var result = '';
+                    num = amount * counter;
+                    last = num;
+                    if(typeof(data.info)!="undefined"){
+                          for(i = 0; i < data.info.length; i++){
+                              result +=data.info[i];  
+                          }
+                        }
+                    // 为了测试，延迟1秒加载
+                    setTimeout(function(){
+                        $('#j_jiazai').append(result);
+                        //$("img.lazy_"+page).lazyload({effect: "fadeIn"});
+                        if(last >= data.count){
+                            // 数据加载完
+                            tab1LoadEnd = true;
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 每次数据加载完，必须重置
+                        me.resetload();
+                    },1);
+
+                },
+                error: function(xhr, type){
+                    //layer.open({content: 'Ajax error!',skin: 'msg',time: 2});
+                    window.location.reload();
+                    // 即使加载出错，也得重置
+                    me.resetload();
+                }
+            });
+        }
+    })
+})
+</script>
+{/if}  
+</body>
+</html>

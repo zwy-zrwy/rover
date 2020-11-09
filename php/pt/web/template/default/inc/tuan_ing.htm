@@ -1,0 +1,17 @@
+{if $tuan_ing}
+    <div class="tuan-ing">
+        <span class="tuan-tip">以下小伙伴正在发起团购，您可以直接参与</span>
+        <ul>
+            {foreach from=$tuan_ing item=group}
+            <li>
+                <img src="{if $group.headimgurl}{$group.headimgurl}{else}{$template_path}images/empty-head.png{/if}">
+                <div class="tuan-info">
+                    <p>{$group.nickname|truncate:8}<span>还差{$group.difference}人成团</span></p>
+                    <p>{$group.city}<span>剩余<font class="aotime" data="{$group.countdown}"></font>结束</span></p>
+                </div>
+                <a href="index.php?c=share&tuan_id={$group.tuan_id}">去参团</a>
+            </li>
+            {/foreach}
+        </ul>
+    </div>
+{/if}

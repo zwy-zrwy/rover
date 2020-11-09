@@ -1,0 +1,19 @@
+{if $rand_goods}
+<div class="recommend-box">
+  <div class="dropload-noData"><span>你可能会喜欢</span></div>
+  <ul>
+    {foreach from=$rand_goods item=rand}
+    <li>
+      <a href="{$rand.url}">
+        <img class="lazy" data-original="{$rand.goods_img}" src="uploads/images/no_picture.jpg">
+        <p class="name">{$rand.goods_name}</p>
+      </a>
+      <p class="foot">
+        <span class="price">{$rand.tuan_price}</span>
+        <span class="nub">{$rand.sales}人已买</span>
+      </p>
+    </li>
+    {/foreach}
+  </ul>
+</div>
+{/if}

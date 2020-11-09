@@ -1,0 +1,235 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>退货单管理</h2>
+    </div>
+    <div class="main_bd">
+      <table class="table">
+        <tr>
+          <th colspan="4">基本信息</th>
+        </tr>
+        <tr>
+          <td width="18%"><div align="right"><strong>订单号：</strong></div></td>
+         <td width="34%">{$back_order.order_sn}{if $back_order.extension_code eq "group_buy"}<a href="group_buy.php?act=edit&id={$back_order.extension_id}">{$lang.group_buy}</a>{elseif $back_order.extension_code eq "exchange_goods"}<a href="exchange_goods.php?act=edit&id={$back_order.extension_id}">{$lang.exchange_goods}</a>{/if}
+          <td><div align="right"><strong>下单时间：</strong></div></td>
+          <td>{$base_order.add_time}</td>
+        </tr>
+        <tr>
+          <td width="18%"><div align="right"><strong>服务类型：</strong></div></td>
+         <td width="34%">
+          {if $back_order.back_type eq 1}退货{/if}
+          {if $back_order.back_type eq 2}换货{/if}
+          {if $back_order.back_type eq 3}维修{/if}
+          {if $back_order.back_type eq 4}退款（无需退货）{/if}
+         </td>
+          <td><div align="right"><strong>退款方式：</strong></div></td>
+          <td>
+            {if $back_order.back_pay eq 1}退款至账户余额{/if}
+              {if $back_order.back_pay eq 2}原支付方式返回{/if}
+          </td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>购货人：</strong></div></td>
+          <td>{$back_order.user_name}</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>配送方式：</strong></div></td>
+          <td>{if $base_order.shipping_id > 0}{$base_order.shipping_name}{/if} </td>
+          <td><div align="right"><strong>配送费用：</strong></div></td>
+          <td>{$base_order.shipping_fee}</td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>发货单号：</strong></div></td>
+          <td >{$base_order.invoice_no}</td>
+        <td><div align="right"><strong>发货时间：</strong></div></td>
+          <td>{$base_order.shipping_time}</td>
+        </tr>
+      </table>
+
+      <table class="table">
+        <tr>
+          <th colspan="4">退款/退货信息</th>
+          </tr>
+        <tr>
+          <td><div align="right"><strong>申请退货时间：</strong></div></td>
+          <td>{$back_order.formated_add_time}</td>
+          <td><div align="right"><strong>申请人用户名：</strong></div></td>
+          <td>{$back_order.user_name}</td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>换回商品收件人：</strong></div></td>
+          <td>{$back_order.consignee|escape}</td>
+          <td>联系电话：</td>
+          <td>{$base_order.tel}</td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>换回商品收货人地址：</strong></div></td>
+          <td colspan=3>{$back_order.area}{$back_order.address|escape}</td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>退货/维修原因：</strong></div></td>
+          <td colspan=3>{$back_order.back_reason}</td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>用户退回商品所用快递：</strong></div></td>
+          <td>{$back_order.shipping_name|escape}</td>
+          <td><div align="right"><strong>运单号：</strong></div></td>
+          <td>{$back_order.invoice_no}</td>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>图片：</strong></div></td>
+          <td colspan=3>
+          <!--{if $back_order.imgs}
+          <div style="float:left; padding:4px; border:solid #ddd 1px; margin:0 10px 10px 0"><a href="/{$back_order.imgs}" target="_blank"><img height="100" src="/{$back_order.imgs}" /></a></div>
+          {/if}-->
+          <!--{if ($imgs)}-->
+          <!--{foreach from=$imgs item=imgs}-->
+          <div style="float:left; padding:4px; border:solid #ddd 1px; margin:0 10px 10px 0"><a href="../{$imgs}" target="_blank"><img height="100" src="../{$imgs}" /></a></div>
+          <!--{/foreach}-->
+          <!--{/if}-->
+          </td>
+        </tr>
+      </table>
+
+      <table class="table">
+        <tr>
+          <th colspan="7" scope="col">原订单-商品信息</th>
+          </tr>
+        <tr>
+          <td scope="col"><div align="center"><strong>商品名称 [ 品牌 ]</strong></div></td>
+          <td scope="col"><div align="center"><strong>货号</strong></div></td>
+          <td scope="col"><div align="center"><strong>货品号</strong></div></td>
+          <td scope="col"><div align="center"><strong>属性</strong></div></td>
+          <td  colspan=3><div align="center"><strong>发货数量</strong></div></td>
+        </tr>
+       {foreach from=$order_goods item=goods_info}
+       <tr>
+       <td align="center">{$goods_info.goods_name}</td>
+       <td align="center">{$goods_info.goods_sn}</td>
+       <td align="center">{$goods_info.product_sn}</td>
+       <td align="center">{$goods_info.goods_attr}</td>
+       <td align="center" colspan=3>{$goods_info.goods_number}</td>
+       </tr>
+       {/foreach}
+        <tr>
+          <th colspan="7" scope="col">退货-商品信息</th>
+          </tr>
+        <tr>
+          <td scope="col"><div align="center"><strong>商品名称 [ 品牌 ]</strong></div></td>
+          <td scope="col"><div align="center"><strong>货号</strong></div></td>
+          <td scope="col"><div align="center"><strong>货品号</strong></div></td>
+          <td scope="col"><div align="center"><strong>属性</strong></div></td>
+          <td scope="col"><div align="center"><strong>业务</strong></div></td>
+          <td scope="col"><div align="center"><strong>应退金额</strong></div></td>
+          <td scope="col"><div align="center"><strong>发货数量</strong></div></td>
+        </tr>
+        {foreach from=$goods_list item=goods}
+        <tr>
+          <td>
+          
+          {$goods.goods_name} 
+          
+          </td>
+          <td><div align="center">{$goods.goods_sn}</div></td>
+          <td><div align="center">{$goods.product_sn}</div></td>
+          <td><div align="center">{$goods.goods_attr|nl2br}</div></td>
+        <td>
+            {if $back_order.back_type eq 1}退货{/if}
+            {if $back_order.back_type eq 2}换货{/if}
+            {if $back_order.back_type eq 3}维修{/if}
+            {if $back_order.back_type eq 4}退款（无需退货）{/if}  
+        </td>
+        <td>{if $back_order.back_type eq 1}{$goods.back_goods_money}{/if}</td>
+          <td><div align="center">{$goods.back_goods_number}</div></td>
+        </tr>
+        {/foreach}
+      </table>
+
+
+      <form action="index.php?act=back&op=operate" method="post">
+      <table class="table">
+        <tr>
+          <th colspan="2">操作信息</th>
+        </tr>
+        <tr>
+          <td><div align="right"><strong>操作备注：</strong></div></td>
+          <td colspan="4"><textarea name="action_note" cols="80" rows="3"></textarea></td>
+        </tr>
+        <tr>
+          <td><div align="right"></div>
+            <div align="right"><strong>当前可执行操作：</strong> </div>
+          </td>
+          <td colspan="4">
+            {if $back_order.status_back lt 6}
+            {if $back_order.status_back eq 5}
+            {if $operable_list.ok}
+            <input name="ok" type="submit" value="通过申请" class="btn" />
+            {/if}
+            {if $operable_list.no}
+            <input name="no" type="submit" value="拒绝申请" class="btn" />
+            {/if}
+            {else}
+            {if $operable_list.confirm && $back_order.back_type neq 4 && $back_order.status_back eq 0 && ($back_order.status_refund eq 0 || $back_order.status_refund eq 9)}
+            <input name="confirm" type="submit" value="收到用户寄回商品" class="btn" />
+            {/if} 
+            {if ($back_order.back_type eq 4 || ($back_order.back_type eq 1 && ($back_order.status_back eq 1 || $back_order.status_back eq 2))) && ($back_order.status_refund eq 0 || $back_order.status_refund eq 9)}
+            <input name="refund" type="submit" value="去退款" class="btn" />
+            {/if}
+            {if $operable_list.backshipping && $back_order.back_type eq 3 && $back_order.status_back eq 1}
+            <input name="backshipping" type="submit" class="btn" value="换出商品寄出" />
+                {/if}
+
+            {if $operable_list.backfinish && ($back_order.status_refund eq 1 || $back_order.status_back eq 2)}
+            <input name="backfinish" type="submit" value="完成" class="btn" />
+            {/if} 
+            {/if}
+            <input name="after_service" type="submit" value="售后" class="btn" />       
+            <input name="back_id" type="hidden" value="{$smarty.request.back_id}">
+            {else}
+            {if $back_order.status_back eq 6}
+            此单已被管理员拒绝
+            {/if}
+            {if $back_order.status_back eq 7}
+            此单已被系统取消
+            {/if}
+            {if $back_order.status_back eq 8}
+            此单已被用户自行取消
+            {/if}
+            {/if}
+          </td>
+        </tr>
+        <tr>
+          <th>操作者：</th>
+          <th>操作时间</th>
+          <th>退换货状态</th>
+          <th>退款状态</th>
+          <th>备注</th>
+        </tr>
+        {foreach from=$action_list item=action}
+        <tr>
+          <td><div align="center">{$action.action_user}</div></td>
+          <td><div align="center">{$action.action_time}</div></td>
+          <td><div align="center">
+          {if $back_order.back_type eq 4}
+          退款（无需退货）
+          {else}
+          {$action.status_back}
+          {/if}
+          </div></td>
+          <td><div align="center">{$action.status_refund}</div></td>
+          <td>{$action.action_note|nl2br}</td>
+        </tr>
+        {/foreach}
+      </table>
+      </form>
+
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

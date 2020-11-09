@@ -1,0 +1,49 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>会员管理</h2>
+      <div class="tab_navs">
+        <ul>
+          <li><a href="index.php?act=users&op=users_manage">会员管理</a></li>
+          <li><a href="index.php?act=users&op=virtual_member">虚拟会员</a></li>
+          <li class="cur"><a href="javascript:void(0);">{if $form_action eq 'insert'}添加虚拟会员{else}修改虚拟会员{/if}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form action="index.php?act=users" class="categoryForm" method="post" name="theForm" enctype="multipart/form-data">
+      <table class="table">
+        <tr>
+          <td>会员名称：</td>
+          <td>
+            <input type='text' name='nickname' maxlength="20" value='{$user_info.nickname|escape:html}' size='27' datatype="*2-6" ajaxurl="index.php?act=users&op=check_nickname{if $form_act eq 'update'}&user_id={$user_info.user_id}{/if}" />
+          </td>
+        </tr>
+  	    <tr>
+          <td>会员图像：</td>
+          <td>
+            <input type="file" name="headimgurl" id="headimgurl" size="45">
+          </td>
+        </tr> 
+        <tr>
+          <td>地区：</td>
+          <td>
+            <input type="text" name='province' value='{$user_info.province}' placeholder="省份" size="12" />
+            <input type="text" name='city' value='{$user_info.city}' placeholder="城市" size="12" />
+          </td>
+        </tr>
+      </table>
+      <input type="submit" class="btn" value="确定" />
+      <input type="hidden" name="op" value="{$form_act}" />
+      <input type="hidden" name="user_id" value="{$user_info.user_id}" />
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    $(".categoryForm").Validform();
+  });
+</script>
+{include file="footer.htm"}

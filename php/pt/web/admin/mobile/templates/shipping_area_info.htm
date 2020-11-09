@@ -1,0 +1,191 @@
+{include file="header.htm"}
+<script src="static/js/region.js"></script>
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>配送区域</h2>
+      <div class="tab_navs">
+        <ul>
+          <li><a href="index.php?act=shipping_area&amp;op=list">列表</a></li>
+          <li class="cur"><a href="javascript:void(0);">添加</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form method="post" action="index.php?act=shipping_area" name="theForm" onsubmit="return validate()">
+      <table class="table">
+        <tr>
+          <td>配送区域名称</td>
+          <td><input type="text" name="shipping_area_name" maxlength="60" size="30" value="{$shipping_area.shipping_area_name}" /></td>
+        </tr>
+        <tr>
+          <td>费用计算方式</td>
+          <td>
+          <input type="radio"{if $fee_compute_mode != 'by_number' } checked="true"{/if} onclick="compute_mode('weight')" name="fee_compute_mode" value="by_weight" />按重量计算
+          <input type="radio"{if $fee_compute_mode == 'by_number'} checked="true"{/if} onclick="compute_mode('number')" name="fee_compute_mode" value="by_number" />按商品件数计算
+          </td>
+        </tr>
+        {foreach from=$fields item=field}
+        <tr id="{$field.name}" >
+          <td>{$field.label}</td>
+          <td><input type="text" name="{$field.name}"  maxlength="60" size="20" value="{$field.value}" /></td>
+        </tr>
+        {/foreach}
+        <tr>
+          <td>所辖地区</td>
+          <td id="regionCell">
+            {foreach from=$regions item=region key=id}
+            <input type="checkbox" name="regions[]" value="{$id}" checked="true" /> {$region}&nbsp;&nbsp;
+            {/foreach}
+          </td>
+        </tr>
+      </table>
+
+      <table class="table">
+        <tr>
+          <td>
+            <span  style="vertical-align: top">国家：</span>
+            <select name="country" id="selCountries" onchange="region.changed(this, 1, 'selProvinces')" size="10" style="width:80px; height:200px;">
+              {foreach from=$countries item=country}
+              <option value="{$country.region_id}">{$country.region_name|escape:html}</option>
+              {/foreach}
+            </select>
+            <span  style="vertical-align: top">省份：</span>
+            <select name="province" id="selProvinces" onchange="region.changed(this, 2, 'selCities')" size="10" style="width:80px; height:200px;">
+              <option value=''>请选择</option>
+            </select>
+            <span  style="vertical-align: top">城市：</span>
+            <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')" size="10" style="width:80px; height:200px;">
+              <option value=''>请选择</option>
+            </select>
+            <span  style="vertical-align: top">区/县：</span>
+            <select name="district" id="selDistricts" size="10" style="width:130px; height:200px;">
+              <option value=''>请选择</option>
+            </select>
+            <span  style="vertical-align: top"><input type="button" value="+" class="btn" onclick="addRegion()" /></span>
+          </td>
+        </tr>
+      </table >
+
+      <table class="table">
+        <tr>
+          <td colspan="2" align="center">
+            <input type="submit" value="确定" class="btn" />
+            <input type="hidden" name="op" value="{$form_action}" />
+            <input type="hidden" name="id" value="{$shipping_area.shipping_area_id}" />
+          </td>
+        </tr>
+      </table>
+
+      </form>
+
+
+
+
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}
+<script>
+$(function() {
+  {if $fee_compute_mode == 'by_number'}
+    compute_mode('number');
+  {else}
+  compute_mode('weight');
+  {/if}
+  document.forms['theForm'].elements['shipping_area_name'].focus();
+  var selProvinces = document.forms['theForm'].elements['province'];
+  if (selProvinces.selectedIndex <= 0)
+  {
+    selProvinces.selectedIndex = 0;
+  }
+});
+/**
+ * 添加一个区域
+ */
+function addRegion()
+{
+	var selCountry  = document.forms['theForm'].elements['country'];
+    var selProvince = document.forms['theForm'].elements['province'];
+    var selCity     = document.forms['theForm'].elements['city'];
+    var selDistrict = document.forms['theForm'].elements['district'];
+    var regionCell  = document.getElementById("regionCell");
+    
+    if (selDistrict.selectedIndex > 0)
+    {
+        regionId = selDistrict.options[selDistrict.selectedIndex].value;
+        regionName = selDistrict.options[selDistrict.selectedIndex].text;
+    }
+    else
+    {
+        if (selCity.selectedIndex > 0)
+        {
+            regionId = selCity.options[selCity.selectedIndex].value;
+            regionName = selCity.options[selCity.selectedIndex].text;
+        }
+        else
+        {
+            if (selProvince.selectedIndex > 0)
+            {
+                regionId = selProvince.options[selProvince.selectedIndex].value;
+                regionName = selProvince.options[selProvince.selectedIndex].text;
+            }
+            else
+            {
+              
+                if (selCountry.selectedIndex >= 0)
+                {
+                    regionId = selCountry.options[selCountry.selectedIndex].value;
+                    regionName = selCountry.options[selCountry.selectedIndex].text;
+                }
+                else
+                {
+                    return;
+                }
+              
+            }
+        }
+    }
+    
+    // 检查该地区是否已经存在
+    exists = false;
+    for (i = 0; i < document.forms['theForm'].elements.length; i++)
+    {
+      if (document.forms['theForm'].elements[i].type=="checkbox")
+      {
+        if (document.forms['theForm'].elements[i].value == regionId)
+        {
+          exists = true;
+          layer.msg('选定的地区已经存在');
+        }
+      }
+    }
+    // 创建checkbox
+    if (!exists)
+    {
+      regionCell.innerHTML += "<input type='checkbox' name='regions[]' value='" + regionId + "' checked='true' /> " + regionName + "&nbsp;&nbsp;";
+    }
+}
+
+/**
+ * 配送费用计算方式
+ */
+function compute_mode(mode)
+{
+    var base_fee  = document.getElementById("base_fee");
+    var step_fee  = document.getElementById("step_fee");
+    var item_fee  = document.getElementById("item_fee");
+    if(mode == 'number')
+    {
+      item_fee.style.display = '';
+      base_fee.style.display = 'none';
+      step_fee.style.display = 'none';
+    }
+    else
+    {
+      item_fee.style.display = 'none';
+      base_fee.style.display = '';
+      step_fee.style.display = '';
+    }
+}
+</script>

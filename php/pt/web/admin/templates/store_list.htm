@@ -1,0 +1,47 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>门店管理</h2>
+  		<div class="tab_navs">
+  		  <ul>
+  			  <li class="cur"><a href="javascript:void(0);">门店管理</a></li>
+          <li><a href="index.php?act=store&amp;op=store_add">添加门店</a></li>
+  			</ul>
+  		</div>
+	  </div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr class="thead">
+          <th>门店名称</th>
+          <th>手机号码</th>
+          <th>详细地址</th>
+          <th>门店描述</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$store_list item=store}
+        <tr>
+          <td>{$store.store_name|escape:html}</td>
+          <td>{$store.store_mobile}</td>
+          <td>{$store.store_address}</td>
+          <td>{$store.store_desc|nl2br}</td>
+          <td align="center">
+            <a href="index.php?act=store&amp;op=wxmanage&amp;id={$store.store_id}">绑定核销员</a>
+            <a href="index.php?act=store&amp;op=store_edit&amp;id={$store.store_id}">修改</a>
+            <a href="index.php?act=store&op=remove&id={$store.store_id}" onclick="{if(confirm('您确实要删除该门店吗？')){return true;}return false;}">删除</a>
+          </td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+	  {$pager}
+  	</div>
+  </div>
+</div>
+{include file="footer.htm"}

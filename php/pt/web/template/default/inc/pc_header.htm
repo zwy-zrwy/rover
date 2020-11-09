@@ -1,0 +1,13 @@
+<header class="header">
+  <div class="wrap">
+    <h1 class="logo"><img src="uploads/images/{$shop_logo}" /></h1>
+  </div>
+</header>
+<nav class="nav">
+  <ul class="wrap">
+    <li{if $cat_id eq 0} class="cur"{/if}><a href="index.php?c=pc">首页</a></li>
+    {foreach from=$categories item=cat}
+    <li{if $cat.id eq $cat_id} class="cur"{/if}><a href="index.php?c=pc&id={$cat.id}">{$cat.name}</a></li>
+    {/foreach}
+  </ul>
+</nav>

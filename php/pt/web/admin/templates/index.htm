@@ -1,0 +1,134 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_bd">
+      <div class="info_box">
+        <div class="info_hd">
+          <h4>订单统计信息</h4>
+        </div>
+        <div class="info_bd">
+          <ul>
+            <li>
+              <h5>待发货订单</h5>
+              <p><a href="index.php?act=order&op=order_list&status={$status.await_ship}">{$order.await_ship}</a></p>
+            </li>
+            <li>
+              <h5>待支付订单</h5>
+              <p><a href="index.php?act=order&op=order_list&status={$status.await_pay}">{$order.await_pay}</a></p>
+            </li>
+            <li>
+              <h5>已成交订单数</h5>
+              <p><a href="index.php?act=order&op=order_list&status={$status.finished}">{$order.finished}</a></p>
+            </li>
+            <li>
+              <h5>商品总数</h5>
+              <p><a href="index.php?act=goods&op=goods_list">{$goods.total}</a></p>
+            </li>
+            <li>
+              <h5>库存警告商品数</h5>
+              <p><a href="index.php?act=goods&op=goods_list&stock_warning=1">{$goods.warn}</a></p>
+            </li>
+            <li>
+              <h5>未审核评论</h5>
+              <p><a href="index.php?act=comment&op=comment_list&type=1">{$comment_number}</a></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+window.onload = function() {
+  checkAuth('{$shop_domain}{$directory}');
+  checkVersion();
+}
+function checkAuth(domain) {
+  var now_time={$now_time};
+  $.ajax({
+    type: 'POST',
+    data: {domain},
+    url: 'http://ptuan.com.cn/api/auth.php',
+    dataType: 'json',
+    success: function(data){
+      if(typeof(data)!="undefined"){
+        if(data.status)
+        {
+          $(".auth").append('<a href="javascript:upAuth();">已授权</a>');
+          var new_time = parseInt((data.msg.endtime - now_time)/3600/24);
+          if(new_time<7)
+          {
+            $(".auth").append('<font color="red">(还剩'+new_time+'天到期)</font>');
+          }
+          var develop = '';
+          if(data.msg.develop==1)
+          {
+            var develop = '<font color="red">(二次开发)</font>';
+          }
+          var starttime = UnixToDate(data.msg.starttime,'Y-m-d');
+          var endtime = UnixToDate(data.msg.endtime,'Y-m-d');
+          $(".auth").append('<div id="J_upAuth" style="display:none"><ul><li>授权网站：'+data.msg.sitename+develop+'</li><li>授权域名：'+data.msg.domain+'</li><li>开始时间：'+starttime+'</li><li>结束时间：'+endtime+'</li></ul></div>');
+        }
+        else
+        {
+          $(".auth").html('<font color="red">未授权</font>');
+        }
+      }
+    },
+    error: function(){
+      //layer.msg('连接超时');
+    }
+  });
+}
+function checkVersion() {
+  $.ajax({
+    type: 'POST',
+    url: 'http://ptuan.com.cn/api/versions.php?type=pt',
+    dataType: 'json',
+    success: function(data){
+      if(typeof(data)!="undefined"){
+        for(i = 0; i < data.length; i++){
+          if(data[i].releases>{$aos_release}){
+            $(".main_bd").prepend('<div class="update">您正在使用：{$aos_appname} {$aos_version} Release {$aos_release}, 当前有升级补丁：Patch_V'+data[i].versions+'_Release_'+data[i].releases+'<a href="javascript:upCon();">更新内容</a><a href="index.php?act=update&appname='+data[i].appname+'&version='+data[i].versions+'&release='+data[i].releases+'">立即升级</a></div>');
+            $(".main").append('<div id="J_upCon" style="display:none">'+data[i].content+'</div>');
+            return;
+          }       
+        }
+      }
+    },
+    error: function(){
+      //layer.msg('连接超时');
+    }
+  });
+}
+function upAuth()
+{
+  var con = $("#J_upAuth").html();
+  layer.alert(con, {title:'授权信息'});
+}
+function upCon()
+{
+  var con = $("#J_upCon").html();
+  layer.alert(con, {title:'更新内容'});
+}
+function UnixToDate(unixTime, isFull, timeZone) {  
+    if (typeof (timeZone) == 'number'){  
+        unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;  
+    }  
+    var time = new Date(unixTime * 1000);  
+    var ymdhis = "";  
+    ymdhis += time.getUTCFullYear() + "-";  
+    ymdhis += (time.getUTCMonth()+1) + "-";  
+    ymdhis += time.getUTCDate();  
+    if (isFull === true){  
+        ymdhis += " " + time.getUTCHours() + ":";  
+        ymdhis += time.getUTCMinutes() + ":";  
+        ymdhis += time.getUTCSeconds();  
+    }  
+    return ymdhis;  
+}  
+</script>
+{include file="footer.htm"}

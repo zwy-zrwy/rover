@@ -1,0 +1,182 @@
+{include file="header.htm"}
+<div class="main">
+	<div class="col_main">
+		<div class="main_hd">
+			<h2>文章详情</h2>
+		</div>
+		<div class="main_bd">
+
+
+
+    <form  action="index.php?act=article" method="post" enctype="multipart/form-data" name="theForm" onsubmit="return validate();">
+    <table class="table">
+      <tr>
+        <td>文章标题</td>
+        <td><input type="text" name="title" size ="80" value="{$article.title|escape}" /></td>
+      </tr>          
+      <tr>
+        <td>文章分类</td>
+        <td>
+          <select name="cat_id">
+            <option value="0">请选择</option>
+			{foreach from=$cat_select item=cat}
+            <option value="{$cat.cat_id}"{if $article.cat_id eq $cat.cat_id} selected{/if}>{$cat.cat_name}</option>
+			{/foreach}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>是否显示</td>
+        <td>
+        <input type="radio" name="is_open" value="1" {if $article.is_open eq 1}checked{/if}>显示
+      <input type="radio" name="is_open" value="0" {if $article.is_open eq 0}checked{/if}>不显示</td>
+      </tr>
+      <tr>
+        <td>关键字</td>
+        <td><input type="text" name="keywords" maxlength="60" value="{$article.keywords|escape}" /></td>
+      </tr>
+      <tr>
+        <td>网页描述</td>
+        <td><textarea name="description" id="description" cols="40" rows="5">{$article.description|escape}</textarea></td>
+      </tr>
+      <tr>
+        <td>跳转链接</td>
+        <td><input name="link_url" type="text" id="link_url" value="{if $article.link neq ''}{$article.link|escape}{else}http://{/if}" size="80" /></td>
+      </tr>
+      <tr>
+        <td>小图</td>
+        <td>
+            <div class="upimg spic">
+              <input name="spic" type="file" id="up_img_spic" />
+              <img src="{if $article.spic}../uploads/article/{$article.spic}{else}static/images/preview.png{/if}" id="show_img_spic"/>
+              <span></span>
+              <i class="fa fa-edit"></i>
+            </div>
+            小图片建议尺寸：200像素 * 200像素
+        </td>
+      </tr>
+      <tr>
+        <td>大图</td>
+        <td>
+            <div class="upimg bpic">
+              <input name="bpic" type="file" id="up_img_bpic" />
+              <img src="{if $article.bpic}../uploads/article/{$article.bpic}{else}static/images/preview.png{/if}" id="show_img_bpic"/>
+              <span></span>
+              <i class="fa fa-edit"></i>
+            </div>
+            大图片建议尺寸：900像素 * 500像素
+        </td>
+      </tr>
+     <tr>
+	 <td class="narrow-label">文章内容</td>
+	 <td>
+	 <script src='editor/kindeditor-all-min.js'></script>
+    <script>
+			var editor;
+			KindEditor.ready(function(K) {
+				editor = K.create('textarea[name="content"]', {
+					resizeType : 1,
+					allowPreviewEmoticons : false,
+					allowImageUpload : false,
+					items : ['selectall', 'forecolor', 'hilitecolor', 'bold', 'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|', 'emoticons', 'multiimage', 'link', 'source']
+				});
+			});
+    </script>
+    <textarea id="content" name="content" style='width:700px;height:300px;'>{$article.content}</textarea>
+	 </td></tr>
+    </table>
+
+
+      <input type="hidden" name="op" value="{$form_action}" />
+      <input type="hidden" name="old_title" value="{$article.title}"/>
+      <input type="hidden" name="id" value="{$article.article_id}" />
+      <input type="submit" value="确定" class="btn"  />
+
+    </form>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+<script src="static/js/uploadPreview.js"></script>
+<script>
+$(function(){
+  new uploadPreview({UpBtn: "up_img_spic", ImgShow: "show_img_spic"});
+  new uploadPreview({UpBtn: "up_img_bpic", ImgShow: "show_img_bpic"});
+});
+
+$(function(){
+  var delParent;
+  var defaults = {
+    fileType:["jpg","png","jpeg"],   // 上传文件的类型
+    fileSize:1024 * 1024 * 1  // 上传文件的大小 1M
+  };
+  /*点击图片的文本框*/
+  $(".file").change(function(){  
+    var idFile = $(this).attr("id");
+    var itemIndex = $(this).index();
+    var file = document.getElementById(idFile);
+    var uplist = $(this).parents(".uplist"); //存放图片的父亲元素
+    var fileList = file.files; //获取的图片文件
+    var input = $(this).parent();//文本框的父亲元素
+    var imgArr = [];
+
+    fileList = validateUp(fileList);
+    for(var i = 0;i<fileList.length;i++){
+      var imgUrl = window.URL.createObjectURL(fileList[i]);
+        imgArr.push(imgUrl);
+      var $upimg = $("<li class='upimg loading'><span class='opcity'></span>");
+        uplist.prepend($upimg);
+      var $close = $("<a href='javascript:;' class='up-close' title='删除'>").on("click",function(event){
+        delParent = $(this).parent();
+        delParent.remove(); 
+      });   
+      $close.appendTo($upimg);
+      var $trash = $("<i class='fa fa-trash'>");
+      $trash.appendTo($close);
+      var $img = $("<img class='up-img up-opcity'>");
+      $img.attr("src",imgArr[i]);
+      $img.appendTo($upimg);
+    }
+
+    setTimeout(function(){
+      $(".upimg").removeClass("loading");
+      $(".up-img").removeClass("up-opcity");
+    },450);
+  });
+
+  function validateUp(files){
+    var arrFiles = [];//替换的文件数组
+    for(var i = 0, file; file = files[i]; i++){
+      //获取文件上传的后缀名
+      var newStr = file.name.split("").reverse().join("");
+      if(newStr.split(".")[0] != null){
+          var type = newStr.split(".")[0].split("").reverse().join("");
+          console.log(type+"===type===");
+          if(jQuery.inArray(type, defaults.fileType) > -1){
+            // 类型符合，可以上传
+            if (file.size >= defaults.fileSize) {
+              alert(file.size);
+              alert('您这个"'+ file.name +'"文件大小过大');  
+            } else {
+              // 在这里需要判断当前所有文件中
+              arrFiles.push(file);  
+            }
+          }else{
+            alert('您这个"'+ file.name +'"上传类型不符合'); 
+          }
+        }else{
+          alert('您这个"'+ file.name +'"没有类型, 无法识别');  
+        }
+    }
+    return arrFiles;
+  }
+
+})
+</script>
+{include file="footer.htm"}

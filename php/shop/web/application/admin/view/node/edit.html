@@ -1,0 +1,35 @@
+<form action="{:url('admin/node/edit')}" method="post" class="layui-form">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">节点名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="{$data.name}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">控制器</label>
+        <div class="layui-input-block">
+            {if $data.pid eq 0}<input type="text" name="con" disabled="disabled" placeholder="请输入控制器" autocomplete="off" class="layui-input" value="{$data.con}">
+            {else}
+            <input type="text" name="con" required  lay-verify="required" placeholder="请输入控制器" autocomplete="off" class="layui-input" value="{$data.con}">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="启用" {if $data.status eq 1}checked{/if}>
+            <input type="radio" name="status" value="0" title="禁用" {if $data.status neq 1}checked{/if}>
+        </div>
+    </div>
+
+    <input type="hidden" name="id" value="{$data.id}">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

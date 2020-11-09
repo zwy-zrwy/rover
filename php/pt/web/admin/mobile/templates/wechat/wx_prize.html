@@ -1,0 +1,70 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+	    <h2>奖项管理</h2>
+  	</div>
+  	<div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>奖项名称</th>
+          <th>奖品名称</th>
+          <th>奖项状态</th>
+          <th>中奖概率</th>
+          <th>奖项个数</th>
+        </tr>
+        </thead>
+        <tbody>
+        <form name="theForm" action="index.php?act=wechat&op=wx_prize" method="post">
+        {foreach from=$label_list item=label}
+        <tr>
+          <td>
+            <input type="hidden" name="label_id[]" value="{$label.lid}"/>
+            <input name="title[]" type="text" value="{$label.title}" />
+          </td>
+          <td>
+            <input name="awardname[]" type="text" value="{$label.awardname}" />
+          </td>
+          <td class="binding">
+            <span><i class="fa {if $label.isopen}fa-toggle-on{else}fa-toggle-off{/if}" onclick="toggle(this, 'toggle_is_open', {$label.lid})"></i></span>
+          </td>
+          <td>
+            <input name="randnum[]" type="text" value="{$label.randnum}" />%
+          </td>
+          <td>
+            <input name="num[]" type="text" value="{$label.num}" />
+          </td>
+        </tr>
+        {/foreach}
+        <tr>
+          <td colspan="5">新增一个</td>
+        </tr>
+        <tr>
+          <td>
+            <input type="hidden" name="label_id[]" value=""/>
+            <input name="title[]" type="text" value="" />
+          </td>
+          <td><input name="awardname[]" type="text" value="" /></td>
+          <td></td>
+          <td><input name="randnum[]" type="text" value="" />%</td>
+          <td><input name="num[]" type="text" value="" /></td>
+        
+        </tr>
+
+        <tr class="tfoot">
+          <td colspan="5">
+            <input type="hidden" name="aid" value='{$aid}'>
+            <input name="submit" type="submit" value="确定" class="btn" />
+          </td>
+        </tr>
+        </form>
+        </tbody>
+      </table>
+		</div>
+	</div>
+</div>
+{include file="footer.htm"}

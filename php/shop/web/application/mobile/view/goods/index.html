@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="chooseImage">相册</button>
+<button id="startRecord">开始录音</button>
+<button id="stopRecord">停止录音</button>
+<button id="playVoice">播放录音</button>
+<button id="getNetworkType">获取网络信息</button>
+<button id="scanQRCode">扫一扫</button>
+<button id="openAddress">共享收货地址</button>
+<p>{$goods.name}</p>
+<p>￥{$goods.price}</p>
+<p><img src="/uploads/{$goods.pic}" height="80px" width="80px"></p>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="https://www.jq22.com/jquery/jquery-1.9.1.js"></script>
+<script>
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: '{$config.appId}', // 必填，公众号的唯一标识
+        timestamp: {$config.timestamp}, // 必填，生成签名的时间戳
+        nonceStr: '{$config.nonceStr}', // 必填，生成签名的随机串
+        signature: '{$config.signature}',// 必填，签名
+        jsApiList: ['updateAppMessageShareData','updateTimelineShareData','chooseImage','uploadImage','startRecord','stopRecord','playVoice','getNetworkType','scanQRCode','openAddress'] // 必填，需要使用的JS接口列表
+    });
+    wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
+        wx.updateAppMessageShareData({
+            title: '{$goods.name}', // 分享标题
+            desc: '{$goods.content}', // 分享描述
+            link: '{$url}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{$pic}', // 分享图标
+            success: function () {
+                // 设置成功
+            }
+        })
+        wx.updateTimelineShareData({
+            title: '{$goods.name}', // 分享标题
+            link: '{$url}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{$pic}', // 分享图标
+            success: function () {
+                // 设置成功
+            }
+        })
+        $('#chooseImage').click(function () {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    wx.uploadImage({
+                        localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                        }
+                    });
+                }
+            });
+        })
+        $('#startRecord').click(function(){
+            wx.startRecord();
+        })
+        $('#stopRecord').click(function(){
+            wx.stopRecord({
+                success: function (res) {
+                    var localId = res.localId;
+                    wx.playVoice({
+                        localId: localId // 需要播放的音频的本地ID，由stopRecord接口获得
+                    });
+                }
+            });
+        })
+        $('#getNetworkType').click(function(){
+            wx.getNetworkType({
+                success: function (res) {
+                    var networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
+                }
+            });
+        })
+        $('#scanQRCode').click(function () {
+            wx.scanQRCode({
+                needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                }
+            });
+        })
+        $('#openAddress').click(function () {
+            wx.openAddress({
+                success: function (res) {
+                    var userName = res.userName; // 收货人姓名
+                    var postalCode = res.postalCode; // 邮编
+                    var provinceName = res.provinceName; // 国标收货地址第一级地址（省）
+                    var cityName = res.cityName; // 国标收货地址第二级地址（市）
+                    var countryName = res.countryName; // 国标收货地址第三级地址（国家）
+                    var detailInfo = res.detailInfo; // 详细收货地址信息
+                    var nationalCode = res.nationalCode; // 收货地址国家码
+                    var telNumber = res.telNumber; // 收货人手机号码
+                }
+            });
+        })
+    });
+
+</script>
+</body>
+</html>

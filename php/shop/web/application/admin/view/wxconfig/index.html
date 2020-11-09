@@ -1,0 +1,40 @@
+<form action="{:url('wxconfig/index')}" method="post" class="layui-form" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label class="layui-form-label">公众号名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required  lay-verify="required" placeholder="请输入公众号名" autocomplete="off" class="layui-input" value="{$info.name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">appID</label>
+        <div class="layui-input-block">
+            <input type="text" name="appid" required  lay-verify="required" placeholder="请输入appID" autocomplete="off" class="layui-input" value="{$info.appid}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">appsecret</label>
+        <div class="layui-input-block">
+            <input type="text" name="appsecret" required  lay-verify="required" placeholder="请输入appsecret" autocomplete="off" class="layui-input" value="{$info.appsecret}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">token</label>
+        <div class="layui-input-block">
+            <input type="text" name="token" required  lay-verify="required" placeholder="请输入token" autocomplete="off" class="layui-input" value="{$info.token}">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">关注回复</label>
+        <div class="layui-input-block">
+            <textarea name="msg" placeholder="请输入关注回复内容" class="layui-textarea">{$info.msg}</textarea>
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

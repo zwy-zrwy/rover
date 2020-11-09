@@ -1,0 +1,20 @@
+{if $goods.goods_id}
+<dl class="s{$goods.status}">
+  <dt><a href="{$goods.url}"><img class="lazy_{$page}" data-original="{$goods.goods_img}" src="uploads/images/no_picture.jpg"></a></dt>
+  <dd class="info-box">
+    <p class="time">
+      {if $goods.status eq 2}
+      {$goods.seck_start_time}开始
+      {else}
+      还剩<span class="aotime" data="{$goods.seck_end_time}" data-id="{$goods.seckill_id}"></span>
+      {/if}
+    </p>
+    <h3 class="join-name">{$goods.goods_name}</h3>
+    <p class="price"><span>{$goods.seck_price}</span>{if $show_marketprice}<del>{$goods.market_price}</del>{/if}</p>
+    <a href="{$goods.url}" class="join-box">
+      <span class="num">{if $goods.status eq 1 || $goods.status eq 3}剩余{elseif $goods.status eq 2}限量{/if}{$goods.number}件</span>
+      <span class="btn">{if $goods.status eq 1}马上抢{elseif $goods.status eq 2}未开始{else}已抢光{/if}</span>
+    </a>
+  </dd>
+</dl>
+{/if}

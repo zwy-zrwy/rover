@@ -1,0 +1,136 @@
+<a href="{:url('admin/product/add')}" class="layui-btn layui-btn-sm layui-btn-warm"><i class="layui-icon">&#xe654;</i>添加</a>
+<table id="product" lay-filter="test"></table>
+<script>
+    function setVal(d)
+    {
+        return `<div class="layui-form" >
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" required  lay-verify="required" placeholder="请输入商品名" autocomplete="off" class="layui-input" value="${d.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="price" required  lay-verify="required" placeholder="请输入商品价格" autocomplete="off" class="layui-input" value="${d.price}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">库存</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="number" required  lay-verify="required" placeholder="请输入商品库存" autocomplete="off" class="layui-input" value="${d.number}">
+                </div>
+            </div>
+            <input type="hidden" name="id" value="${d.id}">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="submit" value="提交" lay-submit lay-filter="formDemo" class="layui-btn">
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>`
+    }
+</script>
+<script>
+    layui.use(['table','form','jquery'], function(){
+        var table = layui.table,form = layui.form,$ = layui.jquery;
+        //第一个实例
+        table.render({
+            elem: '#product'
+            ,url: "{:url('admin/product/ajax')}" //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:80, sort: true,fixed: 'left'}
+                ,{field: 'pic', title: '图片',width:80, templet:'#imgTpl'}
+                ,{field: 'name', title: '商品名', width:280}
+                ,{field: 'price', title: '价格', width:120,sort: true}
+                ,{field: 'number', title: '库存', width:100}
+                ,{field: 'cname', title: '种类', width: 120,}
+                ,{field: 'status', title: '状态', width: 120,templet:'#statusTpl'}
+                ,{title: '操作', width: 160,toolbar:'#operationTpl'}
+            ]]
+        });
+        form.on('switch(status)', function(data){
+            $.ajax({
+                'url':"{:url('status')}",
+                'data':{'status':data.elem.checked,'id':data.value},
+                'type':'post',
+                'dataType':'json',
+                success:function(res){
+                    layer.msg(res.msg);
+                }
+            })
+        });
+
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            if(layEvent === 'del'){ //删除
+                layer.confirm('真的删除该产品么', function(index){
+                    //向服务端发送删除指令
+                    $.ajax({
+                        'url':"{:url('del')}",
+                        'data':{'id':data.id},
+                        'type':'post',
+                        'dataType':'json',
+                        success:function(res){
+                            if(res.code ==0)
+                            {
+                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                layer.close(index);
+                                layer.msg(res.msg)
+                            }
+                            else
+                            {
+                                layer.msg(res.msg)
+                            }
+                        }
+                    })
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                var content = setVal(data);
+                layer.open({
+                    type: 1,
+                    title: ['商品信息编辑', 'font-size:16px;'],
+                    area: ['500px', '400px'],
+                    maxmin: true,
+                    content: content
+                    //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                });
+                form.on('submit(formDemo)', function(data){
+                    var param = data.field
+                    $.ajax({
+                        'url':"{:url('edit')}",
+                        'data':param,
+                        'type':'post',
+                        'dataType':'json',
+                        success:function(res)
+                        {
+                            if(res.code==0)
+                            {
+                                layer.closeAll();
+                                window.location.reload();
+                                layer.msg(res.msg);
+                            }
+                        }
+                    })
+                });
+            }
+        });
+    });
+</script>
+<script type="text/html" id="imgTpl">
+    <img src="{{d.pic}}" alt="" height="30px">
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="switch" lay-filter="status" lay-skin="switch" lay-text="开启|关闭" value="{{d.id}}" {{#  if(d.status == 1){ }}checked{{#  } }}>
+</script>
+
+<script  type="text/html" id="operationTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon">&#xe640;</i>删除</a>
+</script>
+

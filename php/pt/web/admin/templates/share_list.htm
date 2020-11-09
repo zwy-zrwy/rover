@@ -1,0 +1,62 @@
+{include file="header.htm"}
+<div class="main">
+  <div class="col_side">
+    {include file="side_menu.htm"}
+  </div>
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>分享记录</h2>
+      <div class="tab_navs">
+          <ul>
+            <li class="cur"><a href="javascript:void(0);">管理</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <table class="table">
+        <thead>
+        <tr>
+          <th><input onclick='checkAll(this, "checkboxes")' type="checkbox">
+            编号</th>
+          <th>用户名</th>
+          <th>分享类型</th>
+          <th>分享状态</th>
+          <th>分享时间</th>
+          <th>分享链接</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <form method="post" action="index.php?act=wx_share" name="listForm" >
+        <tbody>
+        {foreach from=$share_list item=list}
+        <tr id="remove_{$list.id}">
+          <td><span><input name="checkboxes[]" type="checkbox" value="{$list.id}" />{$list.id}</span></td>
+          <td>
+          {$list.nickname|escape:html}</td>
+          <td>分享{$list.share_type|escape:html}</td>
+          <td class="binding">
+                 {$list.share_status|escape:html} 
+          </td>
+          <td>{$list.date}</td>
+          <td>{$list.link_url}</td>
+          <td>
+           <a  href="javascript:" onclick="remove({$list.id}, 'remove')">删除</a>
+          </td>
+         </tr>
+        {/foreach}
+        </tbody>
+      </table>
+      <div class="pagination">
+        <div class="handler">
+          <!---->
+            <input type="hidden" name="op" value="batch" />
+            <input type="hidden" name="type" value="button_remove" />
+            <input type="submit" id="btnSubmit" value="删除" class="btn" />
+          </form>
+        </div>
+        {$pager}
+      </div>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

@@ -1,0 +1,69 @@
+{include file="header.htm"}
+<script src="static/js/laydate/laydate.js"></script>
+<div class="main">
+  <div class="col_main">
+    <div class="main_hd">
+      <h2>每日签到</h2>
+      <div class="tab_navs">
+        <ul>
+          <li  class="cur"><a href="javascript:void(0);">签到管理</a></li>
+          <li><a href="index.php?act=sign&op=sign_log_list">签到日志</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main_bd">
+      <form enctype="multipart/form-data" name="theForm" action="index.php?act=sign&op=save_setting" method="post">
+          <table class="table">
+            <tr>
+              <td>签到积分:</td>
+              <td>
+                <input name="sign[sign_points]" type="text" value="{$sign_setting[sign_points]}" />
+                <br />
+                <span id="sign_points_desc" class="notice-span"{if $help_open} style="display:block"{else} style="display:none"{/if}>只要签到就赠送相应的积分数，每天只能签到一次。</span>
+              </td>
+            </tr>
+            <tr>
+              <td>是否递增模式:</td>
+              <td>
+                <label for="sign_type_0"><input id="sign_type_0" name="sign[sign_type]" type="radio" value="0"{if !$sign_setting[sign_type]} checked="checked"{/if} />否</label>
+                <label for="sign_type_1"><input id="sign_type_1" name="sign[sign_type]" type="radio" value="1"{if $sign_setting[sign_type]} checked="checked"{/if} />是</label>
+                <br />
+                <span id="sign_type_desc" class="notice-span" style="display:block">要开启递增模式，则需要同时设置每天递增积分、赠送积分的最大值。<br />
+                递增模式下，连续签到所获得积分为：签到积分+已签到天数*每天递增积分。<br />
+                例：签到积分：5，每天递增积分：1，那么第一天签到就是：5+0*1=5，第二天就是5+1*1=6，以此类推。<br />
+                当达到赠送积分最大值后，则不管再连续签到几天，都只赠送积分最大值对应的积分。</span>
+              </td>
+            </tr>
+            <tr>
+              <td>每天递增积分:<td>
+                <input name="sign[sign_increase_points]" type="text" value="{$sign_setting[sign_increase_points]}" />
+              </td>
+            </tr>
+            <tr>
+              <td>赠送积分最大值:</td>
+              <td>
+                <input name="sign[sign_max_points]" type="text" value="{$sign_setting[sign_max_points]}" size="40" />
+              </td>
+            </tr>
+            <tr>
+              <td>是否保存签到日志:</td>
+              <td>
+                <label for="save_sign_log_0"><input id="save_sign_log_0" name="sign[save_sign_log]" type="radio" value="0"{if !$sign_setting[save_sign_log]} checked="checked"{/if} />否</label>
+                <label for="save_sign_log_1"><input id="save_sign_log_1" name="sign[save_sign_log]" type="radio" value="1"{if $sign_setting[save_sign_log]} checked="checked"{/if} />是</label>
+              </td>
+            </tr>
+            <tr>
+              <td>签到日志保存天数:</td>
+              <td>
+                <input name="sign[save_days_sign_log]" type="text" value="{$sign_setting[save_days_sign_log]}" />
+                <br />
+                <span id="save_days_sign_log_desc" class="notice-span">为每个用户保存签到日志多少天。0表示不限制。</span>
+              </td>
+            </tr>
+          </table>
+          <input name="submit" type="submit" value=" 确定 " class="btn" />
+      </form>
+    </div>
+  </div>
+</div>
+{include file="footer.htm"}

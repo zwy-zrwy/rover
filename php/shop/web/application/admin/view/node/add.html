@@ -1,0 +1,38 @@
+<form action="{:url('admin/node/add')}" method="post" class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择父节点</label>
+        <div class="layui-input-block">
+            <select name="pid" lay-verify="required">
+                <option value="0">顶级分类</option> 
+                {volist name='nodes' id='vo'}
+                <option value="{$vo.id}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">节点名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required  lay-verify="required" placeholder="请输入节点名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">控制器</label>
+        <div class="layui-input-block">
+            <input type="text" name="con" required  lay-verify="required" placeholder="请输入控制器名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="启用" checked>
+            <input type="radio" name="status" value="0" title="禁用">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="提交" class="layui-btn">
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

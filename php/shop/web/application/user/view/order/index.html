@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/layui.js"></script>
+    <title>Document</title>
+</head>
+<body>
+{volist name="data" id='vo'}
+<table class="layui-table">
+    <tbody>
+    <tr colspan="5">
+        <b>订单号：</b>{$vo.order_sn}
+        <b>总价：￥</b>{$vo.sum_price}
+        <b>下单时间：</b>{$vo.add_time|date='Y-m-d H:i:s'}
+        <a href="{:url('info',['id'=>$vo.id])}" style="color:blue">查看订单</a>  {if $vo.pay_status eq 0}<a href="{:url('index/flow/pay',['id'=>$vo.id])}" style="color:red">立即支付</a> {/if}
+    </tr>
+    </tbody>
+    <thead>
+    <tr>
+        <th>图片</th><th>名称</th><th>价格</th><th>数量</th><th>规格</th>
+    </tr>
+    </thead>
+    {volist name='$vo.goods' id='goods'}
+    <tbody>
+    <tr>
+        <td><img src="{$goods.pic}" alt="" height="30px"></td><td>{$goods.goods_name}</td>
+        <td>{$goods.goods_price}</td><td>{$goods.goods_num}</td><td>{$goods.goods_sku}</td>
+    </tr>
+    </tbody>
+    {/volist}
+</table>
+{/volist}
+</body>
+</html>

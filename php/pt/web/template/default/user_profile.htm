@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html id="aos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>用户资料</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="{$template_path}css/common.css?v={$aos_version}" rel="stylesheet" />
+<link href="{$template_path}css/user.css?v={$aos_version}" rel="stylesheet" />
+<script src="{$template_path}js/jquery.min.js?v={$aos_version}"></script>
+<script src="{$template_path}js/common.js?v={$aos_version}"></script>
+</head>
+<body>
+<section class="container pdb">
+  <div class="profile">
+    <dl>
+      <dt>图像</dt>
+      <dd><img src="{$profile.headimgurl}"></dd>
+    </dl>
+    <dl>
+      <dt>昵称</dt>
+      <dd>{$profile.nickname}</dd>
+    </dl>
+    <dl onClick="sheet('realname')">
+      <dt>姓名</dt>
+      <dd><font class="j_realname">{$profile.realname}</font><i></i></dd>
+    </dl>
+    <dl ><!--onClick="sheet('sex')"-->
+      <dt>性别</dt>
+      <dd><font class="j_sex">{if $profile.sex==1}男{elseif $profile.sex==2}女{else}未选择{/if}</font><!--<i></i>--></dd>
+    </dl>
+    <dl onClick="sheet('mobile')">
+      <dt>手机</dt>
+      <dd><font class="j_mobile">{if $profile.mobile}{$profile.mobile}{else}未绑定{/if}</font><i></i></dd>
+    </dl>
+  </div>
+  <a href="index.php?c=user&a=renew" class="updata">更新信息</a>
+  <div class="sheet-box sheet-sex">
+    <h3>设定性别</h3>
+    <ul id="j_sex">
+      <li><i class="iconfont">&#xe652;</i>男</li>
+      <li><i class="iconfont">&#xe651;</i>女</li>
+    </ul>
+    <div class="sheet-footer"><button class="sheet-btn">取消</button></div>
+  </div>
+
+  <div class="sheet-box sheet-realname">
+    <h3>设定姓名</h3>
+    <ul>
+      <li>
+        <label>姓名</label>
+        <input name="realname" type="text" class="txt" value="{$profile.realname}" />
+      </li>
+      <li>
+        <input name="submit" type="submit" class="sub-btn" value="确认修改" onclick="revise_realname()"/>
+      </li>
+    </ul>
+    <div class="sheet-footer"><button class="sheet-btn">取消</button></div>
+  </div>
+  <div class="sheet-box sheet-mobile">
+    <h3>{if $profile.mobile}修改手机{else}绑定手机{/if}</h3>
+    <ul>
+      <li>
+        <label>手机号</label>
+        <input name="mobile" id="mobile" type="text" class="txt" value="" oninput="vailPhone();"/>
+      </li>
+      <li>
+        <label>验证码</label>
+        <input name="code" id="code" type="text" class="txt code" value="" oninput="vailCode();"/>
+        <input type="button" class="code-btn" value="获取验证码" disabled="disabled" onclick="sendCode()">
+      </li>
+      <li>
+        <input name="submit" type="submit" class="sub-btn" disabled="disabled" onclick="revise_mobile()" value="确认修改" />
+      </li>
+    </ul>
+    <div class="sheet-footer"><button class="sheet-btn">取消</button></div>
+  </div>
+</section>
+<script>
+  $("#j_sex li").click(
+    function(){
+      var sex = $(this).index()+1;
+      $.ajax({
+        type: 'POST',
+        data: {sex},
+        url: 'index.php?c=user&a=sex_ajax',
+        dataType: 'json',
+        success: function(data){
+          if(data.err == 0 ){
+            $('.j_sex').text(data.sex);
+            $(".sheet-box").removeClass("sheet-active"); 
+            $(".sheetbg-active").removeClass("sheetbg-active"); 
+            $(".sheetbg").remove(); 
+          }
+
+        }
+    });
+    }
+  );
+  function sheet(type){
+    $(".sheet-"+type).addClass("sheet-active"); 
+    if($(".sheetbg").length>0){
+      $(".sheetbg").addClass("sheetbg-active");
+    }else{
+      $("body").append('<div class="sheetbg"></div>');
+      $(".sheetbg").addClass("sheetbg-active");
+    }
+    $(".sheetbg-active,.sheet-btn").click(function(){
+      $(".sheet-box").removeClass("sheet-active");  
+      setTimeout(function(){
+        $(".sheetbg-active").removeClass("sheetbg-active"); 
+        $(".sheetbg").remove(); 
+      },300);
+    })
+  }
+  function revise_realname(){
+    
+    var realname = $('input[name="realname"]').val();
+    
+    $.ajax({
+        type: 'POST',
+        data: {realname},
+        url: 'index.php?c=user&a=realname_ajax',
+        dataType: 'json',
+        success: function(data){
+          if(data.err == 0 ){
+            $('.j_realname').text(data.realname);
+            $(".sheet-box").removeClass("sheet-active"); 
+            $(".sheetbg-active").removeClass("sheetbg-active"); 
+            $(".sheetbg").remove(); 
+          }
+
+        }
+    });
+  }
+  function revise_mobile(){
+    
+    var mobile = $('input[name="mobile"]').val();
+    var code = $('input[name="code"]').val();
+    
+    $.ajax({
+        type: 'POST',
+        data: {mobile,code},
+        url: 'index.php?c=user&a=mobile_ajax',
+        dataType: 'json',
+        success: function(data){
+          if(data.err == 0 ){
+            $('.j_mobile').text(data.mobile);
+            $(".sheet-box").removeClass("sheet-active"); 
+            $(".sheetbg-active").removeClass("sheetbg-active"); 
+            $(".sheetbg").remove(); 
+          }else{
+            layer.open({content:data.message,skin: 'msg',time: 2});
+          }
+
+        }
+    });
+  }
+  function vailPhone(){
+    var phone = $("#mobile").val();
+    var flag = false;
+    var message = "";
+    var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    if(!myreg.test(phone)){
+      flag = false;
+    }else{
+        flag = true;
+    }
+    if(!flag){
+      //提示错误效果
+      $(".code-btn").attr("disabled",true);
+    }else{
+      //提示正确效果
+      $(".code-btn").attr("disabled",false);
+    }
+    return flag;
+  }
+
+  function vailCode()
+  {
+      var code = $("#code").val();
+      var flag = false;
+      var message = "";
+      if(!/^\d{6}$/.test(code)){
+          //$("#error-tips").text("请输入正确验证码!").show().delay(2000).hide(300);
+      }else{
+          flag = true;
+      }
+    if(!flag){
+      //提示错误效果
+      $(".sub-btn").attr("disabled",true);
+    }else{
+      //提示正确效果
+      $(".sub-btn").attr("disabled",false);
+    }
+      return flag;
+  }
+
+  function sendCode(){
+    var mobile = $('#mobile').val();
+    $.ajax({
+        type: 'GET',
+        data: {mobile},
+        url: 'index.php?c=sms&a=send_code',
+        dataType: 'json',
+        success: function(result){
+          if(result.Code == 'ok')
+          {
+              var code = $('.code-btn');
+              var time = 60;
+              code.attr("disabled",true);
+              var set=setInterval(function(){
+                  code.val(--time+"(s)");
+              }, 1000);
+              setTimeout(function(){
+                  code.attr("disabled",false).val("重新获取验证码");
+                  clearInterval(set);
+              }, 60000);
+          }
+          else
+          {
+			  layer.open({content:result.Message,skin: 'msg',time: 2});
+          }
+        }
+    });
+  }
+  function sendCodeResponse(result)
+  {
+      if(result.success == true)
+      {
+          var code = $('.code-btn');
+          var time = 60;
+          code.attr("disabled",true);
+          var set=setInterval(function(){
+              code.val(--time+"(s)");
+          }, 1000);
+          setTimeout(function(){
+              code.attr("disabled",false).val("重新获取验证码");
+              clearInterval(set);
+          }, 60000);
+      }
+      else
+      {
+          layer.open({content:result.message,skin: 'msg',time: 2});
+      }
+  }
+</script>
+</body>
+</html>

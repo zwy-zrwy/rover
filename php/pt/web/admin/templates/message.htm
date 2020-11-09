@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>{$shop_name}管理中心{if $ur_here} - {$ur_here} {/if}</title>
+<link rel="stylesheet" href="static/css/style.css"/>
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/layer.js"></script>
+<script src="static/js/common.js"></script>
+</head>
+<body>
+<div class="header">
+	<div class="wrap">
+		<h1 class="logo"><a href="./"></a></h1>
+		<div class="account">
+            <ul>
+                <li>您好&nbsp;:&nbsp;<strong>{$admin_name}</strong></li>
+                <li><a href="index.php?act=admin&op=modif"><span>设置</span></a></li>
+                <li><a href="javascript:void(0)" onClick="clearCache()">更新站点缓存</a></li>
+                <li><a href="index.php?act=login&op=logout"><span>退出</span></a></li>
+            </ul>
+		</div>
+	</div>
+</div>
+
+<div class="message">
+<h3>{$msg_detail}</h3>
+{foreach from=$links item=link}
+<p><a href="{$link.href}" {if $link.target}target="{$link.target}"{/if}>{$link.text}</a></p>
+{/foreach}
+</div>
+<script language="JavaScript">
+<!--
+var seconds = 3;
+var defaultUrl = "{$default_url}";
+onload = function()
+{
+  if (defaultUrl == 'javascript:history.go(-1)' && window.history.length == 0)
+  {
+    document.getElementById('redirectionMsg').innerHTML = '';
+    return;
+  }
+}
+function redirection()
+{
+  if (seconds <= 0)
+  {
+    window.clearInterval();
+    return;
+  }
+
+  seconds --;
+  document.getElementById('spanSeconds').innerHTML = seconds;
+
+  if (seconds == 0)
+  {
+    window.clearInterval();
+    location.href = defaultUrl;
+  }
+}
+//-->
+</script>
+</body>
+</html>
